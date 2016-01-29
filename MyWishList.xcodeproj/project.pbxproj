@@ -7,14 +7,24 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8503A0AD1C554F0D00A98D67 /* FBSDKLoginKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8503A0AC1C554F0D00A98D67 /* FBSDKLoginKit.framework */; };
+		8503A0AF1C5552F600A98D67 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8503A0AE1C5552F600A98D67 /* LoginViewController.swift */; };
+		8503A0B21C55878400A98D67 /* HTTPClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8503A0B11C55878400A98D67 /* HTTPClient.swift */; };
+		8503A0B41C55879700A98D67 /* ParseClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8503A0B31C55879700A98D67 /* ParseClient.swift */; };
+		8503A0B61C5587B100A98D67 /* SyncService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8503A0B51C5587B100A98D67 /* SyncService.swift */; };
 		8552B7B51C53D46F0022D41C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8552B7B41C53D46F0022D41C /* AppDelegate.swift */; };
-		8552B7B71C53D46F0022D41C /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8552B7B61C53D46F0022D41C /* ViewController.swift */; };
+		8552B7B71C53D46F0022D41C /* EditWishViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8552B7B61C53D46F0022D41C /* EditWishViewController.swift */; };
 		8552B7BA1C53D46F0022D41C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8552B7B81C53D46F0022D41C /* Main.storyboard */; };
 		8552B7BD1C53D46F0022D41C /* MyWishList.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 8552B7BB1C53D46F0022D41C /* MyWishList.xcdatamodeld */; };
 		8552B7BF1C53D46F0022D41C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8552B7BE1C53D46F0022D41C /* Assets.xcassets */; };
 		8552B7C21C53D46F0022D41C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8552B7C01C53D46F0022D41C /* LaunchScreen.storyboard */; };
 		8552B7CD1C53D46F0022D41C /* MyWishListTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8552B7CC1C53D46F0022D41C /* MyWishListTests.swift */; };
 		8552B7D81C53D46F0022D41C /* MyWishListUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8552B7D71C53D46F0022D41C /* MyWishListUITests.swift */; };
+		8552B7E81C53DA5C0022D41C /* WishListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8552B7E71C53DA5C0022D41C /* WishListViewController.swift */; };
+		8552B7EA1C53DA800022D41C /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8552B7E91C53DA800022D41C /* CoreDataManager.swift */; };
+		8552B7EE1C53DC2A0022D41C /* Wish.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8552B7EC1C53DC2A0022D41C /* Wish.swift */; };
+		8552B7F21C54226B0022D41C /* WishTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8552B7F11C54226B0022D41C /* WishTableViewCell.swift */; };
+		8552B7F51C54643B0022D41C /* FBSDKCoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8552B7F41C54643B0022D41C /* FBSDKCoreKit.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -35,9 +45,14 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		8503A0AC1C554F0D00A98D67 /* FBSDKLoginKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKLoginKit.framework; path = ../../../../../Documents/FacebookSDK/FBSDKLoginKit.framework; sourceTree = "<group>"; };
+		8503A0AE1C5552F600A98D67 /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
+		8503A0B11C55878400A98D67 /* HTTPClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HTTPClient.swift; sourceTree = "<group>"; };
+		8503A0B31C55879700A98D67 /* ParseClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ParseClient.swift; sourceTree = "<group>"; };
+		8503A0B51C5587B100A98D67 /* SyncService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SyncService.swift; sourceTree = "<group>"; };
 		8552B7B11C53D46F0022D41C /* MyWishList.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MyWishList.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8552B7B41C53D46F0022D41C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		8552B7B61C53D46F0022D41C /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		8552B7B61C53D46F0022D41C /* EditWishViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditWishViewController.swift; sourceTree = "<group>"; };
 		8552B7B91C53D46F0022D41C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		8552B7BC1C53D46F0022D41C /* MyWishList.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = MyWishList.xcdatamodel; sourceTree = "<group>"; };
 		8552B7BE1C53D46F0022D41C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -49,6 +64,11 @@
 		8552B7D31C53D46F0022D41C /* MyWishListUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MyWishListUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		8552B7D71C53D46F0022D41C /* MyWishListUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyWishListUITests.swift; sourceTree = "<group>"; };
 		8552B7D91C53D46F0022D41C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		8552B7E71C53DA5C0022D41C /* WishListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WishListViewController.swift; sourceTree = "<group>"; };
+		8552B7E91C53DA800022D41C /* CoreDataManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataManager.swift; sourceTree = "<group>"; };
+		8552B7EC1C53DC2A0022D41C /* Wish.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Wish.swift; sourceTree = "<group>"; };
+		8552B7F11C54226B0022D41C /* WishTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WishTableViewCell.swift; sourceTree = "<group>"; };
+		8552B7F41C54643B0022D41C /* FBSDKCoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKCoreKit.framework; path = ../../../../../Documents/FacebookSDK/FBSDKCoreKit.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,6 +76,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8503A0AD1C554F0D00A98D67 /* FBSDKLoginKit.framework in Frameworks */,
+				8552B7F51C54643B0022D41C /* FBSDKCoreKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -99,13 +121,14 @@
 		8552B7B31C53D46F0022D41C /* MyWishList */ = {
 			isa = PBXGroup;
 			children = (
+				8552B7E51C53D4BA0022D41C /* ViewController */,
+				8552B7E61C53D4CB0022D41C /* Model */,
+				8552B7F31C5464130022D41C /* Frameworks */,
 				8552B7B41C53D46F0022D41C /* AppDelegate.swift */,
-				8552B7B61C53D46F0022D41C /* ViewController.swift */,
 				8552B7B81C53D46F0022D41C /* Main.storyboard */,
 				8552B7BE1C53D46F0022D41C /* Assets.xcassets */,
 				8552B7C01C53D46F0022D41C /* LaunchScreen.storyboard */,
 				8552B7C31C53D46F0022D41C /* Info.plist */,
-				8552B7BB1C53D46F0022D41C /* MyWishList.xcdatamodeld */,
 			);
 			path = MyWishList;
 			sourceTree = "<group>";
@@ -126,6 +149,39 @@
 				8552B7D91C53D46F0022D41C /* Info.plist */,
 			);
 			path = MyWishListUITests;
+			sourceTree = "<group>";
+		};
+		8552B7E51C53D4BA0022D41C /* ViewController */ = {
+			isa = PBXGroup;
+			children = (
+				8503A0AE1C5552F600A98D67 /* LoginViewController.swift */,
+				8552B7E71C53DA5C0022D41C /* WishListViewController.swift */,
+				8552B7B61C53D46F0022D41C /* EditWishViewController.swift */,
+				8552B7F11C54226B0022D41C /* WishTableViewCell.swift */,
+			);
+			name = ViewController;
+			sourceTree = "<group>";
+		};
+		8552B7E61C53D4CB0022D41C /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				8552B7BB1C53D46F0022D41C /* MyWishList.xcdatamodeld */,
+				8552B7E91C53DA800022D41C /* CoreDataManager.swift */,
+				8552B7EC1C53DC2A0022D41C /* Wish.swift */,
+				8503A0B51C5587B100A98D67 /* SyncService.swift */,
+				8503A0B31C55879700A98D67 /* ParseClient.swift */,
+				8503A0B11C55878400A98D67 /* HTTPClient.swift */,
+			);
+			name = Model;
+			sourceTree = "<group>";
+		};
+		8552B7F31C5464130022D41C /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				8503A0AC1C554F0D00A98D67 /* FBSDKLoginKit.framework */,
+				8552B7F41C54643B0022D41C /* FBSDKCoreKit.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -259,8 +315,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8503A0AF1C5552F600A98D67 /* LoginViewController.swift in Sources */,
+				8552B7F21C54226B0022D41C /* WishTableViewCell.swift in Sources */,
+				8503A0B61C5587B100A98D67 /* SyncService.swift in Sources */,
 				8552B7BD1C53D46F0022D41C /* MyWishList.xcdatamodeld in Sources */,
-				8552B7B71C53D46F0022D41C /* ViewController.swift in Sources */,
+				8552B7E81C53DA5C0022D41C /* WishListViewController.swift in Sources */,
+				8552B7B71C53D46F0022D41C /* EditWishViewController.swift in Sources */,
+				8503A0B21C55878400A98D67 /* HTTPClient.swift in Sources */,
+				8503A0B41C55879700A98D67 /* ParseClient.swift in Sources */,
+				8552B7EA1C53DA800022D41C /* CoreDataManager.swift in Sources */,
+				8552B7EE1C53DC2A0022D41C /* Wish.swift in Sources */,
 				8552B7B51C53D46F0022D41C /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -403,6 +467,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				FRAMEWORK_SEARCH_PATHS = (
+					/Users/victorguthrie/Documents/FacebookSDK,
+					"/**",
+				);
 				INFOPLIST_FILE = MyWishList/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.chicovg.wishlist.MyWishList;
@@ -414,6 +482,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				FRAMEWORK_SEARCH_PATHS = (
+					/Users/victorguthrie/Documents/FacebookSDK,
+					"/**",
+				);
 				INFOPLIST_FILE = MyWishList/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.chicovg.wishlist.MyWishList;
@@ -488,6 +560,7 @@
 				8552B7DE1C53D46F0022D41C /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		8552B7DF1C53D46F0022D41C /* Build configuration list for PBXNativeTarget "MyWishListTests" */ = {
 			isa = XCConfigurationList;
@@ -496,6 +569,7 @@
 				8552B7E11C53D46F0022D41C /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		8552B7E21C53D46F0022D41C /* Build configuration list for PBXNativeTarget "MyWishListUITests" */ = {
 			isa = XCConfigurationList;
@@ -504,6 +578,7 @@
 				8552B7E41C53D46F0022D41C /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 
