@@ -16,12 +16,20 @@ class EditWishViewController: UIViewController {
     
     var wishToEdit: Wish?
     
+    var userId: String? {
+        return FBCredentials.sharedInstance.currentFacebookId()
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         if let wish = wishToEdit {
             titleTextField.text = wish.title
             detailTextView.text = wish.detail
+        }
+        
+        if userId == nil {
+            // Error?
         }
     }
 
@@ -40,14 +48,15 @@ class EditWishViewController: UIViewController {
             if let wish = wishToEdit {
                 wish.title = title
                 wish.detail = detail
-                syncService.updateWish(wish)
+                wishService.updateWish(wish)
             } else {
                 let dictionary : [String : AnyObject?] = [
+                    Wish.Keys.userId : userId!,
                     Wish.Keys.title : title,
                     Wish.Keys.detail : detail,
                 ]
                 print("title: \(title) detail: \(detail)")
-                syncService.createWish(dictionary)
+                wishService.createWish(dictionary)
             }
         } else {
             // display and error message
@@ -55,8 +64,8 @@ class EditWishViewController: UIViewController {
         dismissViewControllerAnimated(true) { () -> Void in } 
     }
     
-    var syncService: SyncService {
-        return SyncService.sharedInstance
+    var wishService: WishService {
+        return WishService.sharedInstance
     }
 
 }

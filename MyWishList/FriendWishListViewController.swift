@@ -1,29 +1,33 @@
 //
-//  WishListViewController.swift
+//  FriendWishListViewController.swift
 //  MyWishList
 //
-//  Created by Victor Guthrie on 1/23/16.
+//  Created by Victor Guthrie on 2/14/16.
 //  Copyright © 2016 chicovg. All rights reserved.
 //
 
 import UIKit
 import CoreData
 
-class WishListViewController: UIViewController {
-    
-    let kSegueToEditWish = "segueToEditWish"
-    let kReuseIdentifier = "wishListTableViewCell"
-    
-    @IBOutlet weak var tableView: UITableView!
-    @IBOutlet weak var editButton: UIBarButtonItem!
-    @IBOutlet weak var addButton: UIBarButtonItem!
+class FriendWishListViewController: UIViewController {
 
+    @IBOutlet weak var tableView: UITableView!
+    
+    let kReuseIdentifier = "friendWishListTableViewCell"
+    
+    var userId : String?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
-        setupTableView()
-        registerForSyncNotifications()
+        if let userId = userId {
+            setupTableView()
+            registerForSyncNotifications()
+            WishService.sharedInstance.fetchWishes(byUserId: userId)
+        } else {
+            // Error?
+        }
     }
 
     override func didReceiveMemoryWarning() {
@@ -31,34 +35,10 @@ class WishListViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
-    // MARK: Navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        if let identifier = segue.identifier where identifier == kSegueToEditWish, let editVC = segue.destinationViewController as? EditWishViewController, wish = sender as? Wish {
-            editVC.wishToEdit = wish
-        }
-    }
-    
     // MARK: Actions
-    @IBAction func editWishList(sender: UIBarButtonItem) {
-        if tableView.editing {
-            tableView.setEditing(false, animated: true)
-            editButton.title = "Edit"
-            addButton.enabled = true
-        } else {
-            tableView.setEditing(true, animated: true)
-            editButton.title = "Done"
-            addButton.enabled = false
-        }
-    }
-    
-    @IBAction func addNewWish(sender: UIBarButtonItem) {
-        let index = fetchedResultsController.fetchedObjects?.count
-        performSegueWithIdentifier(kSegueToEditWish, sender: index)
-    }
-    
-    // MARK: Facebook Id
-    var facebookId : String? {
-        return FBCredentials.sharedInstance.currentFacebookId()
+    @IBAction func doneButtonPressed(sender: UIBarButtonItem) {
+        // save edits
+        dismissViewControllerAnimated(true) { () -> Void in }
     }
     
     // MARK: CoreData Context
@@ -70,7 +50,7 @@ class WishListViewController: UIViewController {
     lazy var fetchedResultsController: NSFetchedResultsController = {
         
         let fetchRequest = NSFetchRequest(entityName: Wish.ENTITY_NAME)
-        fetchRequest.predicate = NSPredicate(format: "\(Wish.Keys.userId) == %@", self.facebookId!)
+        fetchRequest.predicate = NSPredicate(format: "\(Wish.Keys.userId) == %@", self.userId!)
         fetchRequest.sortDescriptors = [NSSortDescriptor(key: Wish.Keys.title, ascending: true)]
         
         let fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest,
@@ -80,20 +60,16 @@ class WishListViewController: UIViewController {
         fetchedResultsController.delegate = self
         return fetchedResultsController
     }()
-    
-    var wishService: WishService {
-        return WishService.sharedInstance
-    }
-    
+
 }
 
-extension WishListViewController: NSFetchedResultsControllerDelegate {
+extension FriendWishListViewController: NSFetchedResultsControllerDelegate {
     private func saveContext(){
         CoreDataManager.sharedInstance.saveContext()
     }
     
     private func fetch(){
-        if let facebookId = facebookId {
+        if let _ = userId {
             do {
                 try fetchedResultsController.performFetch()
             } catch {
@@ -101,8 +77,9 @@ extension WishListViewController: NSFetchedResultsControllerDelegate {
                 print("\(saveError)")
             }
         } else {
-            // TODO should we throw an error here and go back?
+            // TODO throw error
         }
+        
     }
     
     func controllerDidChangeContent(controller: NSFetchedResultsController) {
@@ -112,7 +89,7 @@ extension WishListViewController: NSFetchedResultsControllerDelegate {
 }
 
 // MARK: UITableViewDataSource, UITableViewDelegate
-extension WishListViewController : UITableViewDataSource, UITableViewDelegate {
+extension FriendWishListViewController : UITableViewDataSource, UITableViewDelegate {
     
     private func setupTableView(){
         tableView.dataSource = self
@@ -142,33 +119,28 @@ extension WishListViewController : UITableViewDataSource, UITableViewDelegate {
         return cell
     }
     
-    func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
-        if editingStyle == .Delete {
-            // Delete the row from the data source
-            let wish = fetchedResultsController.objectAtIndexPath(indexPath) as! Wish
-            wishService.deleteWish(wish)
-            tableView.reloadData()
-        }
-    }
-
-    // MARK: UITableViewDelegate
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        let wish = fetchedResultsController.objectAtIndexPath(indexPath) as! Wish
-        performSegueWithIdentifier(kSegueToEditWish, sender: wish)
-    }
-    
-    func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
-        return true
-    }
+//    func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
+//        
+//    }
+//    
+//    // MARK: UITableViewDelegate
+//    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+//        let wish = fetchedResultsController.objectAtIndexPath(indexPath) as! Wish
+////        performSegueWithIdentifier(kSegueToEditWish, sender: wish)
+//    }
+//    
+//    func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
+//        return true
+//    }
 }
 
-extension WishListViewController {
+extension FriendWishListViewController {
     func syncNotificationRecieved(notification: NSNotification){
         print(notification.name)
         if let syncResult = notification.object as? SyncResult where syncResult.action == .Fetch && syncResult.entity == Wish.ENTITY_NAME
             && syncResult.status == .Successful {
-            fetch()
-            tableView.reloadData()
+                fetch()
+                tableView.reloadData()
         }
     }
     

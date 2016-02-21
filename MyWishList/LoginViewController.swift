@@ -40,7 +40,9 @@ extension LoginViewController : FBSDKLoginButtonDelegate {
     
     func loginButton(loginButton: FBSDKLoginButton!, didCompleteWithResult result: FBSDKLoginManagerLoginResult!, error: NSError!) {
         if let token = result.token {
-            SyncService.sharedInstance.facebookUserId = token.userID
+            FBCredentials.sharedInstance.token = token
+            WishService.sharedInstance.fetchWishes()
+            FriendService.sharedInstance.fetchFriends()
             dispatch_async(dispatch_get_main_queue(), {() -> Void in
                 let tabVC = self.storyboard!.instantiateViewControllerWithIdentifier("TabViewController")
                 self.presentViewController(tabVC, animated: true, completion: { () -> Void in

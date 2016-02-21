@@ -47,7 +47,8 @@ class ParseClient : HTTPClient {
     */
     func fetchAllWishes(userId: String, completionHandler: (response: ParseResponse) -> Void) {
         let httpHeaders = [parseAppIdHeader: parseAppId, parseRestApiKeyHeader : parseRestApiKey]
-        get("\(baseUrl)?where={\"userId\":\"\(userId)\"}", httpHeaders: httpHeaders) {
+        let escapedParam = "{\"userId\":\"\(userId)\"}".stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.URLQueryAllowedCharacterSet())!
+        get("\(baseUrl)?where=\(escapedParam)", httpHeaders: httpHeaders) {
             data, response, error in
             let httpResponse = self.buildJsonResponse(data, response: response, error: error)
             completionHandler(response: ParseResponse(httpResponse: httpResponse))

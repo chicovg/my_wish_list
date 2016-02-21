@@ -14,21 +14,30 @@ let successHttpErrorMsg = "Successful Response"
 struct HTTPResponse {
     let success: Bool
     var errorMsg: String = unknownHttpErrorMsg
+    var data: NSData?
     var parsedResult: AnyObject?
     
-    init(success: Bool, errorMsg: String, parsedResult: AnyObject?) {
+    init(success: Bool, errorMsg: String, parsedResult: AnyObject?, data: NSData?) {
         self.success = success
         self.errorMsg = errorMsg
         self.parsedResult = parsedResult
+        self.data = data
+    }
+    
+    init(success: Bool, errorMsg: String, parsedResult: AnyObject?) {
+        self.init(success: success, errorMsg: errorMsg, parsedResult: parsedResult, data: nil)
+    }
+    
+    init(success: Bool, errorMsg: String, data: NSData?) {
+        self.init(success: success, errorMsg: errorMsg, parsedResult: nil, data: data)
     }
     
     init(success: Bool, errorMsg: String) {
-       self.init(success: success, errorMsg: errorMsg, parsedResult: nil)
+        self.init(success: success, errorMsg: errorMsg, parsedResult: nil, data: nil)
     }
 }
 
 class HTTPClient {
-    
     
     /**
      Executes a GET request with the specified url and headers
@@ -84,14 +93,14 @@ class HTTPClient {
             }
         }
         
-        return HTTPResponse(success: true, errorMsg: successHttpErrorMsg)
+        return HTTPResponse(success: true, errorMsg: successHttpErrorMsg, data: data)
     }
     
     func buildJsonResponse(data: NSData?, response: NSURLResponse?, error: NSError?) -> HTTPResponse {
         let httpResponse = buildResponse(data, response: response, error: error)
         if (httpResponse.success){
             // check if body can be parsed to Json
-            if let data = data {
+            if let data = httpResponse.data {
                 let parsedResult: AnyObject!
                 do {
                     parsedResult = try NSJSONSerialization.JSONObjectWithData(data, options: .AllowFragments)

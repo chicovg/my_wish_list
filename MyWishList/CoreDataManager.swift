@@ -74,5 +74,18 @@ class CoreDataManager {
         }
         return true
     }
+
+    func queryEntity(withEntityName entityName: String, withPredicatFormat format: String, andArguments args : [AnyObject]?) -> [NSManagedObject]? {
+        let fetchRequest = NSFetchRequest(entityName: entityName)
+        fetchRequest.predicate = NSPredicate(format: format, argumentArray: args)
+        do {
+            let results = try managedObjectContext.executeFetchRequest(fetchRequest)
+            return results as? [NSManagedObject]
+        } catch {
+            let nserror = error as NSError
+            print("Error fetching wish: \(nserror)")
+        }
+        return []
+    }
     
 }

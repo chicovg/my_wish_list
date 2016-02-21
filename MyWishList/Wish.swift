@@ -9,12 +9,9 @@
 import Foundation
 import CoreData
 
-
 class Wish: NSManagedObject {
+    
     static let ENTITY_NAME: String = "Wish"
-}
-
-extension Wish {
     
     struct Keys {
         static let userId = "userId"

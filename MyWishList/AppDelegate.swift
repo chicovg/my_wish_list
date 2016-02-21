@@ -19,6 +19,23 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
         FBSDKApplicationDelegate.sharedInstance().application(application, didFinishLaunchingWithOptions: launchOptions)
+        
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        var initialViewController: UIViewController = UIViewController()
+        
+        if let token = FBSDKAccessToken.currentAccessToken() {
+            FBCredentials.sharedInstance.token = token
+            WishService.sharedInstance.fetchWishes()
+            FriendService.sharedInstance.fetchFriends()
+            
+            initialViewController = storyboard.instantiateViewControllerWithIdentifier("TabViewController")
+        } else {
+            initialViewController = storyboard.instantiateViewControllerWithIdentifier("LoginViewController")
+        }
+        
+        self.window?.rootViewController = initialViewController
+        self.window?.makeKeyAndVisible()
+        
         return true
     }
     
