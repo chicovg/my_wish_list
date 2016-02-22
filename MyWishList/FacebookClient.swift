@@ -22,9 +22,21 @@ class FBCredentials {
     }
 }
 
-class FBClient : HTTPClient {
+class FacebookClient : HTTPClient {
     
-    static let sharedInstance = FBClient()
+    static let sharedInstance = FacebookClient()
+    
+    func getMe(completionHandler: (result: [String: AnyObject]) -> Void) {
+        let params = ["fields": "id,name,picture,friends"]
+        let request = FBSDKGraphRequest(graphPath: "/me", parameters: params)
+        request.startWithCompletionHandler {
+            connection, result, error in
+            if let result = result as? [String : AnyObject] {
+                completionHandler(result: result)
+            }
+            print(result)
+        }
+    }
 
     func getFriends(completionHandler: (result: [String: AnyObject]) -> Void) {
         let params = ["fields": "id,name,picture"]
