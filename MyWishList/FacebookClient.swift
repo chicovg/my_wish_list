@@ -26,33 +26,60 @@ class FacebookClient : HTTPClient {
     
     static let sharedInstance = FacebookClient()
     
-    func getMe(completionHandler: (result: [String: AnyObject]) -> Void) {
-        let params = ["fields": "id,name,picture,friends"]
+    let MAX_PAGE_SIZE = 25
+    
+    func getMe(completionHandler: (result: User?) -> Void) {
+        let params = ["fields": "id,name,picture"]
         let request = FBSDKGraphRequest(graphPath: "/me", parameters: params)
         request.startWithCompletionHandler {
             connection, result, error in
             if let result = result as? [String : AnyObject] {
-                completionHandler(result: result)
+                completionHandler(result: User(fromJson: result))
             }
-            print(result)
         }
     }
-
-    func getFriends(completionHandler: (result: [String: AnyObject]) -> Void) {
-        let params = ["fields": "id,name,picture"]
+    
+    func getFriends(completionHandler: (result: [User]) -> Void) {
+        let params = ["fields": "id,name,picture", "limit": "\(MAX_PAGE_SIZE)"]
         let request = FBSDKGraphRequest(graphPath: "/me/friends", parameters: params)
         request.startWithCompletionHandler {
             connection, result, error in
-            if let result = result as? [String : AnyObject] {
-                completionHandler(result: result)
+            if let result = result as? [String : AnyObject], data = result["data"] as? [[String: AnyObject]] where data.count > 0 {
+                completionHandler(result: self.mapFriends(fromJsonArray: data))
+                
+                if let paging = result["paging"] as? [String : AnyObject],
+                    next = paging["next"] as? String {
+                    self.getAdditonalFriends(next, completionHandler: completionHandler)
+                }
             }
-            print(result)
         }
+    }
+    
+    private func getAdditonalFriends(url: String, completionHandler: (result: [User]) -> Void) {
+        let httpHeaders: [String : String] = [:]
+        get(url, httpHeaders: httpHeaders) {
+            data, response, error in
+            let httpResponse = self.buildJsonResponse(data, response: response, error: error)
+            if let result = httpResponse.parsedResult as? [String : AnyObject], data = result["data"] as? [[String: AnyObject]] where data.count > 0 {
+                completionHandler(result: self.mapFriends(fromJsonArray: data))
+                
+                if let paging = result["paging"] as? [String : AnyObject],
+                    next = paging["next"] as? String {
+                        self.getAdditonalFriends(next, completionHandler: completionHandler)
+                }
+            }
+        }
+    }
+    
+    private func mapFriends(fromJsonArray array: [[String: AnyObject]]) -> [User] {
+        return array.map({ (json: [String: AnyObject]) -> User? in
+            return User(fromJson: json)
+        }).flatMap({ $0 })
     }
     
     func getImage(urlString: String, completionHandler: (response: HTTPResponse) -> Void) {
         let httpHeaders: [String : String] = [:]
-        self.get(urlString, httpHeaders: httpHeaders) {
+        get(urlString, httpHeaders: httpHeaders) {
             data, response, error in
             let httpResponse = self.buildResponse(data, response: response, error: error)
             completionHandler(response: httpResponse)

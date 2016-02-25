@@ -9,32 +9,38 @@
 import UIKit
 import CoreData
 import FBSDKCoreKit
+import FBSDKLoginKit
+
+let tabBarControllerId = "TabBarController"
+let loginViewControllerId = "LoginViewController"
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
 
-
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
         FBSDKApplicationDelegate.sharedInstance().application(application, didFinishLaunchingWithOptions: launchOptions)
         
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        var initialViewController: UIViewController = UIViewController()
-        
         if let token = FBSDKAccessToken.currentAccessToken() {
-            FBCredentials.sharedInstance.token = token
-            WishService.sharedInstance.fetchWishes()
-            FriendService.sharedInstance.fetchFriends()
-            
-            initialViewController = storyboard.instantiateViewControllerWithIdentifier("TabViewController")
+            DataSyncService.sharedInstance.userDidLoginWithFacebook(token.tokenString, handler: { (user, error) -> Void in
+                if let user = user where error == nil {
+                    dispatch_async(dispatch_get_main_queue(), {() -> Void in
+                        self.window?.rootViewController = storyboard.instantiateViewControllerWithIdentifier(tabBarControllerId)
+                        self.window?.makeKeyAndVisible()
+                    })
+                    print("Logged In as \(user.name)")
+                } else {
+                    print("Firebase login failed! \(error)")
+                    FBSDKLoginManager().logOut()
+                }
+            })
         } else {
-            initialViewController = storyboard.instantiateViewControllerWithIdentifier("LoginViewController")
+            self.window?.rootViewController = storyboard.instantiateViewControllerWithIdentifier(loginViewControllerId)
+            self.window?.makeKeyAndVisible()
         }
-        
-        self.window?.rootViewController = initialViewController
-        self.window?.makeKeyAndVisible()
         
         return true
     }
@@ -64,7 +70,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationWillTerminate(application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
         // Saves changes in the application's managed object context before the application terminates.
-        CoreDataManager.sharedInstance.saveContext()
     }
 }
 

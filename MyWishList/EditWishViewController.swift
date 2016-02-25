@@ -14,11 +14,12 @@ class EditWishViewController: UIViewController {
     @IBOutlet weak var titleTextField: UITextField!
     @IBOutlet weak var detailTextView: UITextView!
     
-    var wishToEdit: Wish?
-    
-    var userId: String? {
-        return FBCredentials.sharedInstance.currentFacebookId()
+    var firebaseClient: FirebaseClient {
+        return FirebaseClient.sharedInstance
     }
+    
+    var user: User!
+    var wishToEdit: Wish?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -26,10 +27,6 @@ class EditWishViewController: UIViewController {
         if let wish = wishToEdit {
             titleTextField.text = wish.title
             detailTextView.text = wish.detail
-        }
-        
-        if userId == nil {
-            // Error?
         }
     }
 
@@ -40,32 +37,29 @@ class EditWishViewController: UIViewController {
 
     @IBAction func doneEditing(sender: UIButton) {
         if let title = titleTextField.text {
+            var id : String? = nil
+            if let wish = wishToEdit {
+                id = wish.id
+            }
             var detail: String? = nil
             if let desc = detailTextView.text {
                 detail = desc
             }
             
-            if let wish = wishToEdit {
-                wish.title = title
-                wish.detail = detail
-                wishService.updateWish(wish)
-            } else {
-                let dictionary : [String : AnyObject?] = [
-                    Wish.Keys.userId : userId!,
-                    Wish.Keys.title : title,
-                    Wish.Keys.detail : detail,
-                ]
-                print("title: \(title) detail: \(detail)")
-                wishService.createWish(dictionary)
+            let wish = Wish(id: id, title: title, detail: detail)
+            firebaseClient.save(wish: wish) { (error) -> Void in
+                if let err = error {
+                    // TODO display an error message
+                    print("Save failed: \(err)")
+                } else {
+                    self.dismissViewControllerAnimated(true) { () -> Void in }
+                }
             }
         } else {
-            // display and error message
+            // TODO display an error message
+            print("Title field not populated!")
         }
-        dismissViewControllerAnimated(true) { () -> Void in } 
-    }
-    
-    var wishService: WishService {
-        return WishService.sharedInstance
+        
     }
 
 }

@@ -17,8 +17,28 @@
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dA2-2t-EWF">
+                                <rect key="frame" x="229" y="285" width="142" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="142" id="1VB-Xm-Bgy"/>
+                                    <constraint firstAttribute="height" constant="30" id="tWx-xw-YXN"/>
+                                </constraints>
+                                <state key="normal" title="Login with Facebook"/>
+                                <connections>
+                                    <action selector="didTouchLoginWithFacebook:" destination="BYZ-38-t0r" eventType="touchUpInside" id="uhi-Ci-xvp"/>
+                                </connections>
+                            </button>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="dA2-2t-EWF" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="YEN-zU-Ons"/>
+                            <constraint firstItem="dA2-2t-EWF" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="eJe-mO-ZLP"/>
+                        </constraints>
                     </view>
+                    <connections>
+                        <outlet property="loginWithFacebookButton" destination="dA2-2t-EWF" id="T94-zx-QkY"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
@@ -79,7 +99,13 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
-                    <navigationItem key="navigationItem" id="Z82-MM-w6B"/>
+                    <navigationItem key="navigationItem" id="Z82-MM-w6B">
+                        <barButtonItem key="leftBarButtonItem" title="Log Out" id="Kcu-Nu-14d">
+                            <connections>
+                                <action selector="logout:" destination="HDV-Mw-CpH" id="kyP-5f-fqX"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
                         <outlet property="tableView" destination="bin-sQ-wzn" id="d9d-gb-jIN"/>
                         <segue destination="yTS-fl-Vhr" kind="show" identifier="segueToFriendWishList" id="jbe-07-jOw"/>
@@ -197,9 +223,9 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Wish List" id="tTy-Cp-OXi">
-                        <barButtonItem key="leftBarButtonItem" title="Edit" id="weB-Fc-4Gb">
+                        <barButtonItem key="leftBarButtonItem" title="Log Out" id="weB-Fc-4Gb">
                             <connections>
-                                <action selector="editWishList:" destination="XD2-vB-a9T" id="k0R-8u-Tte"/>
+                                <action selector="logout:" destination="XD2-vB-a9T" id="w4p-UM-4Td"/>
                             </connections>
                         </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="d1a-sZ-yJ0">
@@ -210,7 +236,6 @@
                     </navigationItem>
                     <connections>
                         <outlet property="addButton" destination="d1a-sZ-yJ0" id="L6q-sx-wDU"/>
-                        <outlet property="editButton" destination="weB-Fc-4Gb" id="Rrk-84-jvK"/>
                         <outlet property="tableView" destination="dRg-IA-Rd5" id="rIl-hr-UxW"/>
                         <segue destination="IGp-KX-usZ" kind="presentation" identifier="segueToEditWish" id="82z-Oj-tyf"/>
                     </connections>
@@ -320,7 +345,7 @@
         <!--TabViewController-->
         <scene sceneID="CEs-Dj-sgT">
             <objects>
-                <tabBarController storyboardIdentifier="TabViewController" title="TabViewController" id="9iy-ND-Cav" sceneMemberID="viewController">
+                <tabBarController storyboardIdentifier="TabBarController" title="TabViewController" id="9iy-ND-Cav" sceneMemberID="viewController">
                     <tabBar key="tabBar" contentMode="scaleToFill" id="POZ-zI-oSs">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="49"/>
                         <autoresizingMask key="autoresizingMask"/>

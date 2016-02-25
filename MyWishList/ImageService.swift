@@ -16,8 +16,8 @@ class ImageService {
     
     private var inMemoryCache = NSCache()
     
-    private var facebookClient: FBClient {
-        return FBClient.sharedInstance
+    private var facebookClient: FacebookClient {
+        return FacebookClient.sharedInstance
     }
     
     /** Get image from local cache, if it is not cached, dowload from Flickr */

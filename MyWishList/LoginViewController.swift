@@ -13,12 +13,17 @@ import FBSDKLoginKit
 class LoginViewController: UIViewController {
     
     let kSegueToMainView = "segueToMainView"
+    
+    @IBOutlet weak var loginWithFacebookButton: UIButton!
+    
+    var syncService: DataSyncService {
+        return DataSyncService.sharedInstance
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
-        setupLoginButton()
     }
 
     override func didReceiveMemoryWarning() {
@@ -26,37 +31,43 @@ class LoginViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
 
-}
-
-extension LoginViewController : FBSDKLoginButtonDelegate {
-    
-    private func setupLoginButton(){
-        let loginButton = FBSDKLoginButton()
-        loginButton.readPermissions = ["public_profile", "email", "user_friends"]
-        loginButton.center = self.view.center
-        loginButton.delegate = self
-        self.view.addSubview(loginButton)
-    }
-    
-    func loginButton(loginButton: FBSDKLoginButton!, didCompleteWithResult result: FBSDKLoginManagerLoginResult!, error: NSError!) {
-        if let token = result.token {
-            FBCredentials.sharedInstance.token = token
-            WishService.sharedInstance.fetchWishes()
-            FriendService.sharedInstance.fetchFriends()
-            dispatch_async(dispatch_get_main_queue(), {() -> Void in
-                let tabVC = self.storyboard!.instantiateViewControllerWithIdentifier("TabViewController")
-                self.presentViewController(tabVC, animated: true, completion: { () -> Void in
-                    print("Logged In..")
-                })
-            })
+    @IBAction func didTouchLoginWithFacebook(sender: UIButton) {
+        if syncService.userIsLoggedIn() {
+            logout()
+        } else {
+            loginWithFacebook()
         }
     }
     
-    func loginButtonDidLogOut(loginButton: FBSDKLoginButton!) {
-        
+    func logout() {
+        FBSDKLoginManager().logOut()
     }
     
-    func loginButtonWillLogin(loginButton: FBSDKLoginButton!) -> Bool {
-        return true
+    private func loginWithFacebook(){
+        let facebookLogin = FBSDKLoginManager()
+        facebookLogin.logInWithReadPermissions(["email","public_profile","user_friends"], fromViewController: self) { (facebookResult, facebookError) -> Void in
+            
+            if facebookError != nil {
+                print("Facebook login failed. Error \(facebookError)")
+            } else if facebookResult.isCancelled {
+                print("Facebook login was cancelled.")
+            } else {
+                print("Facebook login succeeded.")
+                let accessToken = FBSDKAccessToken.currentAccessToken().tokenString
+                self.syncService.userDidLoginWithFacebook(accessToken, handler: { (user, error) -> Void in
+                    if let user = user where error == nil {
+                        dispatch_async(dispatch_get_main_queue(), {() -> Void in
+                            let tabVC = self.storyboard?.instantiateViewControllerWithIdentifier(tabBarControllerId)
+                            self.presentViewController(tabVC!, animated: true, completion: { () -> Void in
+                                print("Logged In as \(user.name)")
+                            })
+                        })
+                    } else {
+                        print("Firebase login failed! \(error)")
+                        self.logout()
+                    }
+                })
+            }
+        }
     }
 }
