@@ -17,6 +17,8 @@ class FirebaseClient {
     let FRIENDS_PATH = "friends"
     let WISHES_PATH = "wishes"
     
+    let FACEBOOK_AUTH_PREFIX = "facebook"
+    
     lazy var rootRef: Firebase = {
         Firebase.defaultConfig().persistenceEnabled = true
         let ref = Firebase(url: "my-wishlist.firebaseio.com")
@@ -24,24 +26,45 @@ class FirebaseClient {
         return ref
     }()
     
-    var currentUserRef: Firebase?
-    var currentUser: User? // TODO: do I need this?
-    
-    var currentUserFriendsRef: Firebase? {
-        return currentUserRef?.childByAppendingPath(FRIENDS_PATH)
+    func currentUser() -> User? {
+        if let authData = rootRef.authData {
+            return User(fromFacebookAuthData: authData)
+        }
+        return nil
     }
     
-    var currentUserWishesRef: Firebase? {
-        return currentUserRef?.childByAppendingPath(WISHES_PATH)
+    private func currentUserRef() -> Firebase? {
+        if let user = currentUser() {
+            return rootRef.childByAppendingPath(USERS_PATH).childByAppendingPath(user.id)
+        }
+        return nil
+    }
+    
+    private func currentUserFriendsRef() -> Firebase? {
+        if let user = currentUser() {
+            return rootRef.childByAppendingPath(FRIENDS_PATH).childByAppendingPath(user.id)
+        }
+        return nil
+    }
+
+    private func currentUserWishesRef() -> Firebase? {
+        if let user = currentUser() {
+            return rootRef.childByAppendingPath(WISHES_PATH).childByAppendingPath(user.id)
+        }
+        return nil
+    }
+    
+    private func userWishesRef(user: User) -> Firebase? {
+        return rootRef.childByAppendingPath(WISHES_PATH).childByAppendingPath(user.id)
     }
     
     // MARK: users functions
     func authenticateWithFacebook(accessToken: String, handler: (user: User?, error: NSError?) -> Void) {
-        rootRef.authWithOAuthProvider("facebook", token: accessToken, withCompletionBlock: { error, authData in
+        rootRef.authWithOAuthProvider(FACEBOOK_AUTH_PREFIX, token: accessToken, withCompletionBlock: { error, authData in
             if let authData = authData {
                 print("Logged in! \(authData)")
                 let user = User(fromFacebookAuthData: authData)
-                self.setCurrentUser(user)
+                self.save(user: user)
                 handler(user: user, error: nil)
             } else {
                 print("Login failed. \(error)")
@@ -50,14 +73,8 @@ class FirebaseClient {
         })
     }
     
-    private func setCurrentUser(user: User) {
-        currentUserRef = rootRef.childByAppendingPath(USERS_PATH).childByAppendingPath(user.id)
-        currentUser = user
-        save(user: user)
-    }
-    
     func save(user user: User) {
-        if let ref = currentUserRef {
+        if let ref = currentUserRef() {
             ref.updateChildValues(user.toValuesDictionary())
         } else {
             // handle
@@ -65,10 +82,10 @@ class FirebaseClient {
     }
     
     // MARK: friends functions
-    func save(friendsList friends: [User]) {
-        if let ref = currentUserFriendsRef {
+    func save(facebookFriendsList friends: [User]) {
+        if let ref = currentUserFriendsRef() {
             let friendsValues = friends.reduce([:]) { (var dict, friend) -> [String : [String: AnyObject]] in
-                dict[friend.id] = friend.toValuesDictionary()
+                dict["\(FACEBOOK_AUTH_PREFIX):\(friend.id)"] = friend.toValuesDictionary()
                 return dict
             }
             ref.updateChildValues(friendsValues)
@@ -78,7 +95,7 @@ class FirebaseClient {
     }
     
     func queryFriends(completionHandler: (friends: [User]) -> Void) {
-        if let ref = currentUserFriendsRef {
+        if let ref = currentUserFriendsRef() {
             ref.queryOrderedByChild("name").observeEventType(FEventType.Value) { (snapshot: FDataSnapshot!) -> Void in
                 var friends: [User] = []
                 for item in snapshot.children {
@@ -101,7 +118,7 @@ class FirebaseClient {
     }
     
     func save(wish wish: Wish, completionHandler: (NSError?) -> Void) {
-        if let ref = currentUserWishesRef {
+        if let ref = currentUserWishesRef() {
             if let id = wish.id {
                 ref.childByAppendingPath(id).updateChildValues(wish.toValuesDictionary(), withCompletionBlock: { (error, ref) -> Void in
                     completionHandler(error)
@@ -117,7 +134,7 @@ class FirebaseClient {
     }
     
     func deleteWish(wish wish: Wish, completionHandler: (NSError?) -> Void) {
-        if let ref = currentUserWishesRef {
+        if let ref = currentUserWishesRef() {
             if let wishId = wish.id {
                 ref.childByAppendingPath(wishId).removeValueWithCompletionBlock({ (error, ref) -> Void in
                     completionHandler(error)
@@ -130,21 +147,22 @@ class FirebaseClient {
     }
     
     func queryWishes(completionHandler: (wishes: [Wish]) -> Void) {
-        if let ref = currentUserWishesRef {
-            ref.queryOrderedByChild(Wish.Keys.title).observeEventType(FEventType.Value) { (snapshot: FDataSnapshot!) -> Void in
-                var wishes: [Wish] = []
-                for item in snapshot.children {
-                    wishes.append(Wish(fromFDataSnapshot: item as! FDataSnapshot))
-                }
-                completionHandler(wishes: wishes)
-            }
+        if let ref = currentUserWishesRef() {
+            queryWishes(ref, completionHandler: completionHandler)
         } else {
             completionHandler(wishes: [])
         }
     }
     
     func queryWishes(forUser user: User, completionHandler: (wishes: [Wish]) -> Void) {
-        let ref = rootRef.childByAppendingPath(USERS_PATH).childByAppendingPath(user.id).childByAppendingPath(WISHES_PATH)
+        if let ref = userWishesRef(user) {
+            queryWishes(ref, completionHandler: completionHandler)
+        } else {
+            completionHandler(wishes: [])
+        }
+    }
+    
+    private func queryWishes(ref: Firebase, completionHandler: (wishes: [Wish]) -> Void) {
         ref.queryOrderedByChild(Wish.Keys.title).observeEventType(FEventType.Value) { (snapshot: FDataSnapshot!) -> Void in
             var wishes: [Wish] = []
             for item in snapshot.children {

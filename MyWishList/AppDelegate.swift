@@ -24,18 +24,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         FBSDKApplicationDelegate.sharedInstance().application(application, didFinishLaunchingWithOptions: launchOptions)
         
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        if let token = FBSDKAccessToken.currentAccessToken() {
-            DataSyncService.sharedInstance.userDidLoginWithFacebook(token.tokenString, handler: { (user, error) -> Void in
-                if let user = user where error == nil {
-                    dispatch_async(dispatch_get_main_queue(), {() -> Void in
-                        self.window?.rootViewController = storyboard.instantiateViewControllerWithIdentifier(tabBarControllerId)
-                        self.window?.makeKeyAndVisible()
-                    })
-                    print("Logged In as \(user.name)")
-                } else {
-                    print("Firebase login failed! \(error)")
-                    FBSDKLoginManager().logOut()
-                }
+        if DataSyncService.sharedInstance.userIsLoggedIn() {
+            dispatch_async(dispatch_get_main_queue(), {() -> Void in
+                self.window?.rootViewController = storyboard.instantiateViewControllerWithIdentifier(tabBarControllerId)
+                self.window?.makeKeyAndVisible()
             })
         } else {
             self.window?.rootViewController = storyboard.instantiateViewControllerWithIdentifier(loginViewControllerId)

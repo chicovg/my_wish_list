@@ -9,14 +9,14 @@
 import UIKit
 import CoreData
 
-class EditWishViewController: UIViewController {
+class EditWishViewController: MyWishListParentViewController {
 
     @IBOutlet weak var titleTextField: UITextField!
+    @IBOutlet weak var linkTextField: UITextField!
     @IBOutlet weak var detailTextView: UITextView!
     
-    var firebaseClient: FirebaseClient {
-        return FirebaseClient.sharedInstance
-    }
+    let kEditNavigationItemTitle = "Edit Wish"
+    let kAddNavigationItemTille = "Add to Wish List!"
     
     var user: User!
     var wishToEdit: Wish?
@@ -25,8 +25,11 @@ class EditWishViewController: UIViewController {
         super.viewDidLoad()
         
         if let wish = wishToEdit {
+            navigationItem.title = kEditNavigationItemTitle
             titleTextField.text = wish.title
             detailTextView.text = wish.detail
+        } else {
+            navigationItem.title = kAddNavigationItemTille
         }
     }
 
@@ -35,31 +38,36 @@ class EditWishViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
 
-    @IBAction func doneEditing(sender: UIButton) {
+    @IBAction func doneButtonPressed(sender: UIBarButtonItem) {
         if let title = titleTextField.text {
             var id : String? = nil
             if let wish = wishToEdit {
                 id = wish.id
+            }
+            var link: String? = nil
+            if let linkTxt = linkTextField.text {
+                link = linkTxt
             }
             var detail: String? = nil
             if let desc = detailTextView.text {
                 detail = desc
             }
             
-            let wish = Wish(id: id, title: title, detail: detail)
-            firebaseClient.save(wish: wish) { (error) -> Void in
-                if let err = error {
+            let wish = Wish(id: id, title: title, link: link, detail: detail)
+            syncService.save(wish: wish, handler: { (syncError, saveError) -> Void in
+                if let _ = syncError where syncError == .UserNotLoggedIn {
+                    self.returnToLoginView(shouldLogout: false, showLoggedOutAlert: true)
+                } else if let err = saveError {
                     // TODO display an error message
-                    print("Save failed: \(err)")
+                    print("save failed \(err)")
                 } else {
                     self.dismissViewControllerAnimated(true) { () -> Void in }
                 }
-            }
+            })
         } else {
             // TODO display an error message
             print("Title field not populated!")
         }
-        
     }
 
 }

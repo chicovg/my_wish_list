@@ -9,18 +9,14 @@
 import UIKit
 import CoreData
 
-class FriendWishListViewController: UIViewController {
+class FriendWishListViewController: MyWishListParentViewController {
 
     @IBOutlet weak var tableView: UITableView!
     
     let kReuseIdentifier = "friendWishListTableViewCell"
-    
-    var firebaseClient: FirebaseClient {
-        return FirebaseClient.sharedInstance
-    }
-    
+
     var wishes : [Wish] = []
-    var user : User!
+    var friend : User!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -48,7 +44,10 @@ extension FriendWishListViewController : UITableViewDataSource, UITableViewDeleg
     private func setupTableView(){
         tableView.dataSource = self
         tableView.delegate = self
-        firebaseClient.queryWishes(forUser: user) { (wishes: [Wish]) -> Void in
+        syncService.queryWishes(forUser: friend) { (wishes, syncError) -> Void in
+            if let _ = syncError where syncError == .UserNotLoggedIn {
+                self.returnToLoginView(shouldLogout: false, showLoggedOutAlert: true)
+            }
             self.wishes = wishes
             self.tableView.reloadData()
         }

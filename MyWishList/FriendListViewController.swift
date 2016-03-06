@@ -9,7 +9,7 @@
 import UIKit
 import CoreData
 
-class FriendListViewController: UIViewController {
+class FriendListViewController: MyWishListParentViewController {
     
     let kReuseIdentifier = "friendListTableViewCell"
     let kSegueToFriendWishList = "segueToFriendWishList"
@@ -17,10 +17,6 @@ class FriendListViewController: UIViewController {
     @IBOutlet weak var tableView: UITableView!
     
     var friends: [User] = []
-    
-    var firebaseClient: FirebaseClient {
-        return FirebaseClient.sharedInstance
-    }
     
     var user: User!
     
@@ -39,15 +35,12 @@ class FriendListViewController: UIViewController {
     // MARK: Navigation
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if let identifier = segue.identifier where identifier == kSegueToFriendWishList, let fWishListVC = segue.destinationViewController as? FriendWishListViewController, indexPath = tableView.indexPathForSelectedRow {
-            fWishListVC.user = friends[indexPath.row]
+            fWishListVC.friend = friends[indexPath.row]
         }
     }
+    
     @IBAction func logout(sender: AnyObject) {
-        let loginVC = self.storyboard?.instantiateViewControllerWithIdentifier(loginViewControllerId) as! LoginViewController
-        self.presentViewController(loginVC, animated: true, completion: { () -> Void in
-            loginVC.logout()
-            print("Logged Out..")
-        })
+        returnToLoginView(shouldLogout: true, showLoggedOutAlert: false)
     }
 
 }
@@ -57,10 +50,21 @@ extension FriendListViewController : UITableViewDataSource, UITableViewDelegate 
     private func setupTableView(){
         tableView.dataSource = self
         tableView.delegate = self
-        firebaseClient.queryFriends { (friends) -> Void in
-            self.friends = friends
-            self.tableView.reloadData()
+        syncService.fetchFriends { (syncError) -> Void in
+            if let _ = syncError where syncError == .UserNotLoggedIn {
+                self.returnToLoginView(shouldLogout: false, showLoggedOutAlert: true)
+            } else {
+                self.syncService.queryFriends({ (friends, syncError) -> Void in
+                    if let _ = syncError where syncError == .UserNotLoggedIn {
+                        self.returnToLoginView(shouldLogout: false, showLoggedOutAlert: true)
+                    } else {
+                        self.friends = friends
+                        self.tableView.reloadData()
+                    }
+                })
+            }
         }
+        
     }
 
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
@@ -88,7 +92,6 @@ extension FriendListViewController : UITableViewDataSource, UITableViewDelegate 
     }
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        let friend = friends[indexPath.row]
         performSegueWithIdentifier(kSegueToFriendWishList, sender: nil)
     }
     

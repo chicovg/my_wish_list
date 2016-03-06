@@ -11,13 +11,13 @@
 		85036F741C70F1D0004C13A2 /* ImageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85036F731C70F1D0004C13A2 /* ImageService.swift */; };
 		85036F7A1C7104F3004C13A2 /* FriendTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85036F791C7104F3004C13A2 /* FriendTableViewCell.swift */; };
 		85036F7D1C712C51004C13A2 /* FriendWishListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85036F7C1C712C51004C13A2 /* FriendWishListViewController.swift */; };
-		8503A0AD1C554F0D00A98D67 /* FBSDKLoginKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8503A0AC1C554F0D00A98D67 /* FBSDKLoginKit.framework */; };
 		8503A0AF1C5552F600A98D67 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8503A0AE1C5552F600A98D67 /* LoginViewController.swift */; };
 		8503A0B21C55878400A98D67 /* HTTPClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8503A0B11C55878400A98D67 /* HTTPClient.swift */; };
 		8528B8D91C7A109900B1BD7C /* FirebaseClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8528B8D81C7A109900B1BD7C /* FirebaseClient.swift */; };
 		8528B8DD1C7AC45200B1BD7C /* DataSyncService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8528B8DC1C7AC45200B1BD7C /* DataSyncService.swift */; };
 		8528B8E01C7BE59600B1BD7C /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8528B8DF1C7BE59600B1BD7C /* User.swift */; };
 		8528B8E21C7BEA0F00B1BD7C /* Wish.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8528B8E11C7BEA0F00B1BD7C /* Wish.swift */; };
+		854B56DC1C835FAD00EBEC4F /* MyWishListParentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 854B56DB1C835FAD00EBEC4F /* MyWishListParentViewController.swift */; };
 		8552B7B51C53D46F0022D41C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8552B7B41C53D46F0022D41C /* AppDelegate.swift */; };
 		8552B7B71C53D46F0022D41C /* EditWishViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8552B7B61C53D46F0022D41C /* EditWishViewController.swift */; };
 		8552B7BA1C53D46F0022D41C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8552B7B81C53D46F0022D41C /* Main.storyboard */; };
@@ -27,8 +27,19 @@
 		8552B7D81C53D46F0022D41C /* MyWishListUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8552B7D71C53D46F0022D41C /* MyWishListUITests.swift */; };
 		8552B7E81C53DA5C0022D41C /* WishListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8552B7E71C53DA5C0022D41C /* WishListViewController.swift */; };
 		8552B7F21C54226B0022D41C /* WishTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8552B7F11C54226B0022D41C /* WishTableViewCell.swift */; };
-		8552B7F51C54643B0022D41C /* FBSDKCoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8552B7F41C54643B0022D41C /* FBSDKCoreKit.framework */; };
+		855E5E3D1C8BBDE7007CCE1C /* Firebase.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 855E5E3B1C8BBDE7007CCE1C /* Firebase.framework */; };
+		855E5E3E1C8BBDE7007CCE1C /* Pods_MyWishList.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 855E5E3C1C8BBDE7007CCE1C /* Pods_MyWishList.framework */; };
+		856997241C8B8EFA003642AD /* GetWishLink.js in Resources */ = {isa = PBXBuildFile; fileRef = 856997231C8B8EFA003642AD /* GetWishLink.js */; };
+		8569973F1C8BB80E003642AD /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8528B8DF1C7BE59600B1BD7C /* User.swift */; };
+		856997401C8BB80E003642AD /* Wish.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8528B8E11C7BEA0F00B1BD7C /* Wish.swift */; };
+		856997411C8BB80E003642AD /* FacebookClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8500D4041C6FC428001EA0E7 /* FacebookClient.swift */; };
+		856997421C8BB80E003642AD /* HTTPClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8503A0B11C55878400A98D67 /* HTTPClient.swift */; };
+		856997431C8BB80E003642AD /* FirebaseClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8528B8D81C7A109900B1BD7C /* FirebaseClient.swift */; };
+		856997441C8BB80E003642AD /* DataSyncService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8528B8DC1C7AC45200B1BD7C /* DataSyncService.swift */; };
 		85703DE91C677F320046669D /* FriendListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85703DE81C677F320046669D /* FriendListViewController.swift */; };
+		85814A401C8B883B00440703 /* ActionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85814A3F1C8B883B00440703 /* ActionViewController.swift */; };
+		85814A431C8B883B00440703 /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 85814A411C8B883B00440703 /* MainInterface.storyboard */; };
+		85814A471C8B883B00440703 /* Add To My Wish List.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 85814A3D1C8B883B00440703 /* Add To My Wish List.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		D4B2B76A487C84E85D0492B9 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C6C09340972D1EB21F8EEEE9 /* libPods.a */; };
 		DA09E7021CD912012EBA05D1 /* Pods_MyWishList.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 19225BC6C783F8A76971F667 /* Pods_MyWishList.framework */; };
 /* End PBXBuildFile section */
@@ -48,7 +59,28 @@
 			remoteGlobalIDString = 8552B7B01C53D46F0022D41C;
 			remoteInfo = MyWishList;
 		};
+		855E5E481C8BBF0A007CCE1C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8552B7A91C53D46F0022D41C /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 85814A3C1C8B883B00440703;
+			remoteInfo = "Add To My Wish List";
+		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		85814A021C8B7C9900440703 /* Embed App Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				85814A471C8B883B00440703 /* Add To My Wish List.appex in Embed App Extensions */,
+			);
+			name = "Embed App Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		19225BC6C783F8A76971F667 /* Pods_MyWishList.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MyWishList.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -57,7 +89,6 @@
 		85036F731C70F1D0004C13A2 /* ImageService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageService.swift; sourceTree = "<group>"; };
 		85036F791C7104F3004C13A2 /* FriendTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FriendTableViewCell.swift; sourceTree = "<group>"; };
 		85036F7C1C712C51004C13A2 /* FriendWishListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FriendWishListViewController.swift; sourceTree = "<group>"; };
-		8503A0AC1C554F0D00A98D67 /* FBSDKLoginKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKLoginKit.framework; path = ../../../../../Documents/FacebookSDK/FBSDKLoginKit.framework; sourceTree = "<group>"; };
 		8503A0AE1C5552F600A98D67 /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		8503A0B11C55878400A98D67 /* HTTPClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HTTPClient.swift; sourceTree = "<group>"; };
 		8528B8D81C7A109900B1BD7C /* FirebaseClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FirebaseClient.swift; sourceTree = "<group>"; };
@@ -65,6 +96,7 @@
 		8528B8DC1C7AC45200B1BD7C /* DataSyncService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataSyncService.swift; sourceTree = "<group>"; };
 		8528B8DF1C7BE59600B1BD7C /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		8528B8E11C7BEA0F00B1BD7C /* Wish.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Wish.swift; sourceTree = "<group>"; };
+		854B56DB1C835FAD00EBEC4F /* MyWishListParentViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyWishListParentViewController.swift; sourceTree = "<group>"; };
 		8552B7B11C53D46F0022D41C /* MyWishList.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MyWishList.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8552B7B41C53D46F0022D41C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		8552B7B61C53D46F0022D41C /* EditWishViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditWishViewController.swift; sourceTree = "<group>"; };
@@ -80,8 +112,14 @@
 		8552B7D91C53D46F0022D41C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8552B7E71C53DA5C0022D41C /* WishListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WishListViewController.swift; sourceTree = "<group>"; };
 		8552B7F11C54226B0022D41C /* WishTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WishTableViewCell.swift; sourceTree = "<group>"; };
-		8552B7F41C54643B0022D41C /* FBSDKCoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKCoreKit.framework; path = ../../../../../Documents/FacebookSDK/FBSDKCoreKit.framework; sourceTree = "<group>"; };
+		855E5E3B1C8BBDE7007CCE1C /* Firebase.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Firebase.framework; path = "Pods/../build/Debug-iphoneos/Firebase.framework"; sourceTree = "<group>"; };
+		855E5E3C1C8BBDE7007CCE1C /* Pods_MyWishList.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Pods_MyWishList.framework; path = "Pods/../build/Debug-iphoneos/Pods_MyWishList.framework"; sourceTree = "<group>"; };
+		856997231C8B8EFA003642AD /* GetWishLink.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = GetWishLink.js; sourceTree = "<group>"; };
 		85703DE81C677F320046669D /* FriendListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FriendListViewController.swift; sourceTree = "<group>"; };
+		85814A3D1C8B883B00440703 /* Add To My Wish List.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "Add To My Wish List.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
+		85814A3F1C8B883B00440703 /* ActionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionViewController.swift; sourceTree = "<group>"; };
+		85814A421C8B883B00440703 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainInterface.storyboard; sourceTree = "<group>"; };
+		85814A441C8B883B00440703 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A8AED6C136B7B201295B1364 /* Pods-MyWishList.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MyWishList.release.xcconfig"; path = "Pods/Target Support Files/Pods-MyWishList/Pods-MyWishList.release.xcconfig"; sourceTree = "<group>"; };
 		C6C09340972D1EB21F8EEEE9 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		D26DF7D30E22E3E8C72A85B5 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
@@ -93,8 +131,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8503A0AD1C554F0D00A98D67 /* FBSDKLoginKit.framework in Frameworks */,
-				8552B7F51C54643B0022D41C /* FBSDKCoreKit.framework in Frameworks */,
 				D4B2B76A487C84E85D0492B9 /* libPods.a in Frameworks */,
 				DA09E7021CD912012EBA05D1 /* Pods_MyWishList.framework in Frameworks */,
 			);
@@ -114,12 +150,23 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		85814A3A1C8B883B00440703 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				855E5E3D1C8BBDE7007CCE1C /* Firebase.framework in Frameworks */,
+				855E5E3E1C8BBDE7007CCE1C /* Pods_MyWishList.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
 		1CB7BAF0C276E3B3C2EC8A98 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				855E5E3B1C8BBDE7007CCE1C /* Firebase.framework */,
+				855E5E3C1C8BBDE7007CCE1C /* Pods_MyWishList.framework */,
 				8528B8DA1C7A175E00B1BD7C /* libFirebase.a */,
 				C6C09340972D1EB21F8EEEE9 /* libPods.a */,
 				19225BC6C783F8A76971F667 /* Pods_MyWishList.framework */,
@@ -159,6 +206,7 @@
 			isa = PBXGroup;
 			children = (
 				8552B7B31C53D46F0022D41C /* MyWishList */,
+				85814A3E1C8B883B00440703 /* Add To My Wish List */,
 				8552B7CB1C53D46F0022D41C /* MyWishListTests */,
 				8552B7D61C53D46F0022D41C /* MyWishListUITests */,
 				8552B7B21C53D46F0022D41C /* Products */,
@@ -173,6 +221,7 @@
 				8552B7B11C53D46F0022D41C /* MyWishList.app */,
 				8552B7C81C53D46F0022D41C /* MyWishListTests.xctest */,
 				8552B7D31C53D46F0022D41C /* MyWishListUITests.xctest */,
+				85814A3D1C8B883B00440703 /* Add To My Wish List.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -180,10 +229,10 @@
 		8552B7B31C53D46F0022D41C /* MyWishList */ = {
 			isa = PBXGroup;
 			children = (
-				8552B7E51C53D4BA0022D41C /* ViewController */,
+				8552B7E51C53D4BA0022D41C /* View */,
+				8528B8DE1C7BE56600B1BD7C /* Model */,
 				85036F721C70F13A004C13A2 /* Services */,
 				85036F7B1C71284B004C13A2 /* Client */,
-				8528B8DE1C7BE56600B1BD7C /* Model */,
 				8552B7F31C5464130022D41C /* Frameworks */,
 				8552B7B41C53D46F0022D41C /* AppDelegate.swift */,
 				8552B7B81C53D46F0022D41C /* Main.storyboard */,
@@ -212,27 +261,53 @@
 			path = MyWishListUITests;
 			sourceTree = "<group>";
 		};
-		8552B7E51C53D4BA0022D41C /* ViewController */ = {
+		8552B7E51C53D4BA0022D41C /* View */ = {
 			isa = PBXGroup;
 			children = (
-				8503A0AE1C5552F600A98D67 /* LoginViewController.swift */,
-				8552B7E71C53DA5C0022D41C /* WishListViewController.swift */,
-				8552B7F11C54226B0022D41C /* WishTableViewCell.swift */,
-				8552B7B61C53D46F0022D41C /* EditWishViewController.swift */,
-				85703DE81C677F320046669D /* FriendListViewController.swift */,
-				85036F791C7104F3004C13A2 /* FriendTableViewCell.swift */,
-				85036F7C1C712C51004C13A2 /* FriendWishListViewController.swift */,
+				858149EE1C8B4CF100440703 /* Controller */,
+				858149EF1C8B4D2100440703 /* TableViewCell */,
 			);
-			name = ViewController;
+			name = View;
 			sourceTree = "<group>";
 		};
 		8552B7F31C5464130022D41C /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				8503A0AC1C554F0D00A98D67 /* FBSDKLoginKit.framework */,
-				8552B7F41C54643B0022D41C /* FBSDKCoreKit.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		858149EE1C8B4CF100440703 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				8503A0AE1C5552F600A98D67 /* LoginViewController.swift */,
+				8552B7E71C53DA5C0022D41C /* WishListViewController.swift */,
+				8552B7B61C53D46F0022D41C /* EditWishViewController.swift */,
+				85703DE81C677F320046669D /* FriendListViewController.swift */,
+				85036F7C1C712C51004C13A2 /* FriendWishListViewController.swift */,
+				854B56DB1C835FAD00EBEC4F /* MyWishListParentViewController.swift */,
+			);
+			name = Controller;
+			sourceTree = "<group>";
+		};
+		858149EF1C8B4D2100440703 /* TableViewCell */ = {
+			isa = PBXGroup;
+			children = (
+				8552B7F11C54226B0022D41C /* WishTableViewCell.swift */,
+				85036F791C7104F3004C13A2 /* FriendTableViewCell.swift */,
+			);
+			name = TableViewCell;
+			sourceTree = "<group>";
+		};
+		85814A3E1C8B883B00440703 /* Add To My Wish List */ = {
+			isa = PBXGroup;
+			children = (
+				85814A3F1C8B883B00440703 /* ActionViewController.swift */,
+				85814A411C8B883B00440703 /* MainInterface.storyboard */,
+				85814A441C8B883B00440703 /* Info.plist */,
+				856997231C8B8EFA003642AD /* GetWishLink.js */,
+			);
+			path = "Add To My Wish List";
 			sourceTree = "<group>";
 		};
 		8D7D0F499CF0BE7B46511EC2 /* Pods */ = {
@@ -259,10 +334,12 @@
 				8552B7AF1C53D46F0022D41C /* Resources */,
 				A6D0F277E8BEAB8CA227AD74 /* Copy Pods Resources */,
 				602514DB139D07CA4E9CFE10 /* Embed Pods Frameworks */,
+				85814A021C8B7C9900440703 /* Embed App Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				855E5E491C8BBF0A007CCE1C /* PBXTargetDependency */,
 			);
 			name = MyWishList;
 			productName = MyWishList;
@@ -305,6 +382,23 @@
 			productReference = 8552B7D31C53D46F0022D41C /* MyWishListUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
+		85814A3C1C8B883B00440703 /* Add To My Wish List */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 85814A481C8B883B00440703 /* Build configuration list for PBXNativeTarget "Add To My Wish List" */;
+			buildPhases = (
+				85814A391C8B883B00440703 /* Sources */,
+				85814A3A1C8B883B00440703 /* Frameworks */,
+				85814A3B1C8B883B00440703 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Add To My Wish List";
+			productName = "Add To My Wish List";
+			productReference = 85814A3D1C8B883B00440703 /* Add To My Wish List.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -326,6 +420,9 @@
 						CreatedOnToolsVersion = 7.2;
 						TestTargetID = 8552B7B01C53D46F0022D41C;
 					};
+					85814A3C1C8B883B00440703 = {
+						CreatedOnToolsVersion = 7.2.1;
+					};
 				};
 			};
 			buildConfigurationList = 8552B7AC1C53D46F0022D41C /* Build configuration list for PBXProject "MyWishList" */;
@@ -344,6 +441,7 @@
 				8552B7B01C53D46F0022D41C /* MyWishList */,
 				8552B7C71C53D46F0022D41C /* MyWishListTests */,
 				8552B7D21C53D46F0022D41C /* MyWishListUITests */,
+				85814A3C1C8B883B00440703 /* Add To My Wish List */,
 			);
 		};
 /* End PBXProject section */
@@ -370,6 +468,15 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		85814A3B1C8B883B00440703 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				856997241C8B8EFA003642AD /* GetWishLink.js in Resources */,
+				85814A431C8B883B00440703 /* MainInterface.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -433,6 +540,7 @@
 				8528B8E21C7BEA0F00B1BD7C /* Wish.swift in Sources */,
 				8552B7E81C53DA5C0022D41C /* WishListViewController.swift in Sources */,
 				85036F7D1C712C51004C13A2 /* FriendWishListViewController.swift in Sources */,
+				854B56DC1C835FAD00EBEC4F /* MyWishListParentViewController.swift in Sources */,
 				8528B8D91C7A109900B1BD7C /* FirebaseClient.swift in Sources */,
 				8552B7B71C53D46F0022D41C /* EditWishViewController.swift in Sources */,
 				8528B8E01C7BE59600B1BD7C /* User.swift in Sources */,
@@ -462,6 +570,20 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		85814A391C8B883B00440703 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8569973F1C8BB80E003642AD /* User.swift in Sources */,
+				856997401C8BB80E003642AD /* Wish.swift in Sources */,
+				856997411C8BB80E003642AD /* FacebookClient.swift in Sources */,
+				856997421C8BB80E003642AD /* HTTPClient.swift in Sources */,
+				856997431C8BB80E003642AD /* FirebaseClient.swift in Sources */,
+				856997441C8BB80E003642AD /* DataSyncService.swift in Sources */,
+				85814A401C8B883B00440703 /* ActionViewController.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -474,6 +596,11 @@
 			isa = PBXTargetDependency;
 			target = 8552B7B01C53D46F0022D41C /* MyWishList */;
 			targetProxy = 8552B7D41C53D46F0022D41C /* PBXContainerItemProxy */;
+		};
+		855E5E491C8BBF0A007CCE1C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 85814A3C1C8B883B00440703 /* Add To My Wish List */;
+			targetProxy = 855E5E481C8BBF0A007CCE1C /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -492,6 +619,14 @@
 				8552B7C11C53D46F0022D41C /* Base */,
 			);
 			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+		85814A411C8B883B00440703 /* MainInterface.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				85814A421C8B883B00440703 /* Base */,
+			);
+			name = MainInterface.storyboard;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -585,6 +720,7 @@
 			baseConfigurationReference = DF40D0134D7283177080F398 /* Pods-MyWishList.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					/Users/victorguthrie/Documents/FacebookSDK,
 					"/Users/victorguthrie/Code/iOS/UdacityNanodegree/MyWishList/Pods/Firebase/**",
@@ -605,6 +741,7 @@
 			baseConfigurationReference = A8AED6C136B7B201295B1364 /* Pods-MyWishList.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					/Users/victorguthrie/Documents/FacebookSDK,
 					"/Users/victorguthrie/Code/iOS/UdacityNanodegree/MyWishList/Pods/Firebase/**",
@@ -668,6 +805,36 @@
 			};
 			name = Release;
 		};
+		85814A491C8B883B00440703 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/build/Debug-iphoneos",
+				);
+				INFOPLIST_FILE = "Add To My Wish List/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.chicovg.wishlist.MyWishList.Add-To-My-Wish-List";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		85814A4A1C8B883B00440703 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/build/Debug-iphoneos",
+				);
+				INFOPLIST_FILE = "Add To My Wish List/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.chicovg.wishlist.MyWishList.Add-To-My-Wish-List";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -703,6 +870,15 @@
 			buildConfigurations = (
 				8552B7E31C53D46F0022D41C /* Debug */,
 				8552B7E41C53D46F0022D41C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		85814A481C8B883B00440703 /* Build configuration list for PBXNativeTarget "Add To My Wish List" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				85814A491C8B883B00440703 /* Debug */,
+				85814A4A1C8B883B00440703 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

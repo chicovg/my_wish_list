@@ -38,36 +38,28 @@ class LoginViewController: UIViewController {
             loginWithFacebook()
         }
     }
-    
+
     func logout() {
-        FBSDKLoginManager().logOut()
+        syncService.logoutFromFacebook()
     }
     
     private func loginWithFacebook(){
-        let facebookLogin = FBSDKLoginManager()
-        facebookLogin.logInWithReadPermissions(["email","public_profile","user_friends"], fromViewController: self) { (facebookResult, facebookError) -> Void in
-            
-            if facebookError != nil {
-                print("Facebook login failed. Error \(facebookError)")
-            } else if facebookResult.isCancelled {
-                print("Facebook login was cancelled.")
+        syncService.loginWithFacebook(self) { (error) -> Void in
+            if let err = error where err == .UserLoginFailed {
+                // todo display error
+                print("Login failed")
             } else {
-                print("Facebook login succeeded.")
-                let accessToken = FBSDKAccessToken.currentAccessToken().tokenString
-                self.syncService.userDidLoginWithFacebook(accessToken, handler: { (user, error) -> Void in
-                    if let user = user where error == nil {
-                        dispatch_async(dispatch_get_main_queue(), {() -> Void in
-                            let tabVC = self.storyboard?.instantiateViewControllerWithIdentifier(tabBarControllerId)
-                            self.presentViewController(tabVC!, animated: true, completion: { () -> Void in
-                                print("Logged In as \(user.name)")
-                            })
-                        })
-                    } else {
-                        print("Firebase login failed! \(error)")
-                        self.logout()
-                    }
+                dispatch_async(dispatch_get_main_queue(), {() -> Void in
+                    let tabVC = self.storyboard?.instantiateViewControllerWithIdentifier(tabBarControllerId)
+                    self.presentViewController(tabVC!, animated: true, completion: { () -> Void in
+                        print("Logged In as \(user.name)")
+                    })
                 })
             }
         }
+    }
+    
+    func showLoggedOutAlert() {
+        
     }
 }

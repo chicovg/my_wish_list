@@ -9,7 +9,7 @@
 import UIKit
 import CoreData
 
-class WishListViewController: UIViewController {
+class WishListViewController: MyWishListParentViewController {
     
     let kSegueToEditWish = "segueToEditWish"
     let kReuseIdentifier = "wishListTableViewCell"
@@ -18,11 +18,6 @@ class WishListViewController: UIViewController {
     @IBOutlet weak var editButton: UIBarButtonItem!
     @IBOutlet weak var addButton: UIBarButtonItem!
     
-    var firebaseClient: FirebaseClient {
-        return FirebaseClient.sharedInstance
-    }
-    
-    var user: User!
     var wishes: [Wish] = []
 
     override func viewDidLoad() {
@@ -42,7 +37,6 @@ class WishListViewController: UIViewController {
         if let identifier = segue.identifier where identifier == kSegueToEditWish,
             let editVC = segue.destinationViewController as? EditWishViewController,
             indexPath = tableView.indexPathForSelectedRow {
-            editVC.user = user
             editVC.wishToEdit = wishes[indexPath.row]
         }
     }
@@ -65,11 +59,7 @@ class WishListViewController: UIViewController {
     }
     
     @IBAction func logout(sender: AnyObject) {
-        let loginVC = self.storyboard?.instantiateViewControllerWithIdentifier(loginViewControllerId) as! LoginViewController
-        self.presentViewController(loginVC, animated: true, completion: { () -> Void in
-            loginVC.logout()
-            print("Logged Out..")
-        })
+        returnToLoginView(shouldLogout: true, showLoggedOutAlert: false)
     }
     
 }
@@ -80,7 +70,10 @@ extension WishListViewController : UITableViewDataSource, UITableViewDelegate {
     private func setupTableView(){
         tableView.dataSource = self
         tableView.delegate = self
-        firebaseClient.queryWishes() { (wishes: [Wish]) -> Void in
+        syncService.queryWishes { (wishes, syncError) -> Void in
+            if let _ = syncError where syncError == .UserNotLoggedIn {
+                self.returnToLoginView(shouldLogout: false, showLoggedOutAlert: true)
+            }
             self.wishes = wishes
             self.tableView.reloadData()
         }
@@ -106,14 +99,16 @@ extension WishListViewController : UITableViewDataSource, UITableViewDelegate {
         if editingStyle == .Delete {
             // Delete the row from the data source
             let wish = wishes[indexPath.row]
-            firebaseClient.deleteWish(wish: wish) { (error) -> Void in
-                if let err = error{
+            syncService.deleteWish(wish, handler: { (syncError, deleteError) -> Void in
+                if let _ = syncError where syncError == .UserNotLoggedIn {
+                    self.returnToLoginView(shouldLogout: false, showLoggedOutAlert: true)
+                } else if let err = deleteError {
                     print("delete failed \(err)")
                 } else {
                     self.wishes.removeAtIndex(indexPath.row)
                     self.tableView.reloadData()
                 }
-            }
+            })
         }
     }
 

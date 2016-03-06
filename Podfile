@@ -5,6 +5,8 @@ use_frameworks!
 
 target 'MyWishList' do
    pod 'Firebase', '>= 2.5.0'
+   pod 'FBSDKCoreKit', '>= 4.10.0'
+   pod 'FBSDKLoginKit', '>= 4.10.0'
 end
 
 target 'MyWishListTests' do

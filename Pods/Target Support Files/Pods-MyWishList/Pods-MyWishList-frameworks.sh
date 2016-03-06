@@ -84,8 +84,14 @@ strip_invalid_archs() {
 
 
 if [[ "$CONFIGURATION" == "Debug" ]]; then
+  install_framework "Pods-MyWishList/Bolts.framework"
+  install_framework "Pods-MyWishList/FBSDKCoreKit.framework"
+  install_framework "Pods-MyWishList/FBSDKLoginKit.framework"
   install_framework "Pods-MyWishList/Firebase.framework"
 fi
 if [[ "$CONFIGURATION" == "Release" ]]; then
+  install_framework "Pods-MyWishList/Bolts.framework"
+  install_framework "Pods-MyWishList/FBSDKCoreKit.framework"
+  install_framework "Pods-MyWishList/FBSDKLoginKit.framework"
   install_framework "Pods-MyWishList/Firebase.framework"
 fi

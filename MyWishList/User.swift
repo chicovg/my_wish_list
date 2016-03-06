@@ -40,7 +40,9 @@ struct User {
     }
     
     init(fromFacebookAuthData authData: FAuthData){
-        self.init(id: authData.uid, name: authData.providerData["displayName"] as! String, pictureUrl: authData.providerData["profileImageURL"] as! String)
+        self.init(id: authData.uid,
+            name: authData.providerData["displayName"] as! String,
+            pictureUrl: authData.providerData["profileImageURL"] as! String)
     }
     
     init(fromFDataSnapshot snapshot: FDataSnapshot){

@@ -7,26 +7,28 @@
 //
 
 import Foundation
-import FBSDKCoreKit
-
-class FBCredentials {
-    static let sharedInstance = FBCredentials()
-    
-    var token: FBSDKAccessToken?
-    
-    func currentFacebookId() -> String? {
-        if let token = token {
-            return token.userID
-        }
-        return nil
-    }
-}
+import FBSDKLoginKit
 
 class FacebookClient : HTTPClient {
     
     static let sharedInstance = FacebookClient()
     
     let MAX_PAGE_SIZE = 25
+    
+    func currentAccessToken() -> FBSDKAccessToken? {
+        return FBSDKAccessToken.currentAccessToken()
+    }
+    
+    func login(viewController: UIViewController, handler: (result: FBSDKLoginManagerLoginResult!, error: NSError!) -> Void) {
+        let facebookLogin = FBSDKLoginManager()
+        facebookLogin.logInWithReadPermissions(["email","public_profile","user_friends"], fromViewController: viewController) { (facebookResult, facebookError) -> Void in
+            handler(result: facebookResult, error: facebookError)
+        }
+    }
+    
+    func logout() {
+        FBSDKLoginManager().logOut()
+    }
     
     func getMe(completionHandler: (result: User?) -> Void) {
         let params = ["fields": "id,name,picture"]

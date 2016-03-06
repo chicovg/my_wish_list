@@ -9,54 +9,6 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "MyWishList/AppDelegate.swift"
-            timestampString = "478054188.85602"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "41"
-            endingLineNumber = "41"
-            landmarkName = "application(_:didFinishLaunchingWithOptions:)"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "MyWishList/AppDelegate.swift"
-            timestampString = "478054188.85602"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "29"
-            endingLineNumber = "29"
-            landmarkName = "application(_:didFinishLaunchingWithOptions:)"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "MyWishList/LoginViewController.swift"
-            timestampString = "478054188.85602"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "58"
-            endingLineNumber = "58"
-            landmarkName = "loginWithFacebook()"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
             filePath = "MyWishList/LoginViewController.swift"
             timestampString = "478051340.03496"
             startingColumnNumber = "9223372036854775807"
@@ -70,7 +22,7 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "MyWishList/LoginViewController.swift"
@@ -86,64 +38,16 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "MyWishList/LoginViewController.swift"
-            timestampString = "478054188.85602"
+            filePath = "MyWishList/FirebaseClient.swift"
+            timestampString = "478904080.395834"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "48"
-            endingLineNumber = "48"
-            landmarkName = "loginWithFacebook()"
-            landmarkType = "5">
-            <Locations>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "MyWishList.LoginViewController.(loginWithFacebook in _DB53B751412ADCB7CA162EDEC50AF121) (MyWishList.LoginViewController)() -&gt; ()"
-                  moduleName = "MyWishList"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/victorguthrie/Code/iOS/UdacityNanodegree/MyWishList/MyWishList/LoginViewController.swift"
-                  timestampString = "478054981.07571"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "48"
-                  endingLineNumber = "48"
-                  offsetFromSymbolStart = "36">
-               </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "MyWishList.LoginViewController.((loginWithFacebook in _DB53B751412ADCB7CA162EDEC50AF121) (MyWishList.LoginViewController) -&gt; () -&gt; ()).(closure #1)"
-                  moduleName = "MyWishList"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/victorguthrie/Code/iOS/UdacityNanodegree/MyWishList/MyWishList/LoginViewController.swift"
-                  timestampString = "478054981.075812"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "50"
-                  endingLineNumber = "50"
-                  offsetFromSymbolStart = "23">
-               </Location>
-            </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "MyWishList/LoginViewController.swift"
-            timestampString = "478054188.85602"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "50"
-            endingLineNumber = "50"
-            landmarkName = "loginWithFacebook()"
+            startingLineNumber = "108"
+            endingLineNumber = "108"
+            landmarkName = "queryFriends(_:)"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -153,46 +57,30 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "MyWishList/LoginViewController.swift"
-            timestampString = "478054188.85602"
+            filePath = "MyWishList/FirebaseClient.swift"
+            timestampString = "478904080.395834"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "66"
-            endingLineNumber = "66"
-            landmarkName = "loginWithFacebook()"
+            startingLineNumber = "107"
+            endingLineNumber = "107"
+            landmarkName = "queryFriends(_:)"
             landmarkType = "5">
-            <Locations>
-               <Location
-                  shouldBeEnabled = "No"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "MyWishList.LoginViewController.((loginWithFacebook in _DB53B751412ADCB7CA162EDEC50AF121) (MyWishList.LoginViewController) -&gt; () -&gt; ()).(closure #1).(closure #1)"
-                  moduleName = "MyWishList"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/victorguthrie/Code/iOS/UdacityNanodegree/MyWishList/MyWishList/LoginViewController.swift"
-                  timestampString = "478051378.913129"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "58"
-                  endingLineNumber = "58"
-                  offsetFromSymbolStart = "142">
-               </Location>
-               <Location
-                  shouldBeEnabled = "No"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "MyWishList.LoginViewController.((loginWithFacebook in _DB53B751412ADCB7CA162EDEC50AF121) (MyWishList.LoginViewController) -&gt; () -&gt; ()).(closure #1).(closure #1).(closure #1)"
-                  moduleName = "MyWishList"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/victorguthrie/Code/iOS/UdacityNanodegree/MyWishList/MyWishList/LoginViewController.swift"
-                  timestampString = "478051378.91325"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "59"
-                  endingLineNumber = "59"
-                  offsetFromSymbolStart = "15">
-               </Location>
-            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "MyWishList/FirebaseClient.swift"
+            timestampString = "478904080.395834"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "104"
+            endingLineNumber = "104"
+            landmarkName = "queryFriends(_:)"
+            landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -202,11 +90,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "MyWishList/FriendListViewController.swift"
-            timestampString = "478053424.497044"
+            timestampString = "478891595.566524"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "62"
-            endingLineNumber = "62"
+            startingLineNumber = "54"
+            endingLineNumber = "54"
             landmarkName = "setupTableView()"
             landmarkType = "5">
          </BreakpointContent>
@@ -217,76 +105,44 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "MyWishList/EditWishViewController.swift"
-            timestampString = "478055254.386586"
+            filePath = "MyWishList/FriendListViewController.swift"
+            timestampString = "478891640.944152"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "39"
-            endingLineNumber = "39"
-            landmarkName = "doneEditing(_:)"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "MyWishList/EditWishViewController.swift"
-            timestampString = "478055276.476441"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "49"
-            endingLineNumber = "49"
-            landmarkName = "doneEditing(_:)"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "MyWishList/EditWishViewController.swift"
-            timestampString = "478055278.178314"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "50"
-            endingLineNumber = "50"
-            landmarkName = "doneEditing(_:)"
+            startingLineNumber = "53"
+            endingLineNumber = "53"
+            landmarkName = "setupTableView()"
             landmarkType = "5">
             <Locations>
                <Location
                   shouldBeEnabled = "No"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
-                  symbolName = "MyWishList.EditWishViewController.doneEditing (MyWishList.EditWishViewController)(__ObjC.UIButton) -&gt; ()"
+                  symbolName = "MyWishList.FriendListViewController.(setupTableView in _1738D0693A14E525C8893FA18941F19E) (MyWishList.FriendListViewController)() -&gt; ()"
                   moduleName = "MyWishList"
                   usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/victorguthrie/Code/iOS/UdacityNanodegree/MyWishList/MyWishList/EditWishViewController.swift"
-                  timestampString = "478055278.18013"
+                  urlString = "file:///Users/victorguthrie/Code/iOS/UdacityNanodegree/MyWishList/MyWishList/FriendListViewController.swift"
+                  timestampString = "478892018.602516"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "50"
-                  endingLineNumber = "50"
-                  offsetFromSymbolStart = "2519">
+                  startingLineNumber = "53"
+                  endingLineNumber = "53"
+                  offsetFromSymbolStart = "360">
                </Location>
                <Location
                   shouldBeEnabled = "No"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
-                  symbolName = "MyWishList.EditWishViewController.(doneEditing (MyWishList.EditWishViewController) -&gt; (__ObjC.UIButton) -&gt; ()).(closure #1)"
+                  symbolName = "MyWishList.FriendListViewController.((setupTableView in _1738D0693A14E525C8893FA18941F19E) (MyWishList.FriendListViewController) -&gt; () -&gt; ()).(closure #1)"
                   moduleName = "MyWishList"
                   usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/victorguthrie/Code/iOS/UdacityNanodegree/MyWishList/MyWishList/EditWishViewController.swift"
-                  timestampString = "478055278.180251"
+                  urlString = "file:///Users/victorguthrie/Code/iOS/UdacityNanodegree/MyWishList/MyWishList/FriendListViewController.swift"
+                  timestampString = "478892018.602719"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "51"
-                  endingLineNumber = "51"
-                  offsetFromSymbolStart = "19">
+                  startingLineNumber = "54"
+                  endingLineNumber = "54"
+                  offsetFromSymbolStart = "23">
                </Location>
             </Locations>
          </BreakpointContent>
@@ -297,13 +153,29 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "MyWishList/EditWishViewController.swift"
-            timestampString = "478055293.823826"
+            filePath = "MyWishList/FriendWishListViewController.swift"
+            timestampString = "478891888.332463"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "51"
-            endingLineNumber = "51"
-            landmarkName = "doneEditing(_:)"
+            startingLineNumber = "48"
+            endingLineNumber = "48"
+            landmarkName = "setupTableView()"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "MyWishList/FirebaseClient.swift"
+            timestampString = "478904080.395834"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "159"
+            endingLineNumber = "159"
+            landmarkName = "queryWishes(forUser:completionHandler:)"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
