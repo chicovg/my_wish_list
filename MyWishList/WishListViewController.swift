@@ -35,9 +35,12 @@ class WishListViewController: MyWishListParentViewController {
     // MARK: Navigation
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if let identifier = segue.identifier where identifier == kSegueToEditWish,
-            let editVC = segue.destinationViewController as? EditWishViewController,
-            indexPath = tableView.indexPathForSelectedRow {
-            editVC.wishToEdit = wishes[indexPath.row]
+            let editVC = segue.destinationViewController as? EditWishViewController {
+                if let indexPath = sender as? NSIndexPath {
+                    editVC.wishToEdit = wishes[indexPath.row]
+                } else {
+                    editVC.wishToEdit = nil
+                }
         }
     }
     
@@ -114,7 +117,7 @@ extension WishListViewController : UITableViewDataSource, UITableViewDelegate {
 
     // MARK: UITableViewDelegate
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        performSegueWithIdentifier(kSegueToEditWish, sender: nil)
+        performSegueWithIdentifier(kSegueToEditWish, sender: indexPath)
     }
     
     func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {

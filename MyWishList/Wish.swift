@@ -25,6 +25,7 @@ struct Wish {
     init(id: String?, title: String, link: String?, detail: String?){
         self.id = id
         self.title = title
+        self.link = link
         self.detail = detail
     }
     

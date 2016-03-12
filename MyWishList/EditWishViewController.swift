@@ -14,6 +14,8 @@ class EditWishViewController: MyWishListParentViewController {
     @IBOutlet weak var titleTextField: UITextField!
     @IBOutlet weak var linkTextField: UITextField!
     @IBOutlet weak var detailTextView: UITextView!
+    @IBOutlet weak var navItem: UINavigationItem!
+    @IBOutlet weak var saveButton: UIBarButtonItem!
     
     let kEditNavigationItemTitle = "Edit Wish"
     let kAddNavigationItemTille = "Add to Wish List!"
@@ -24,12 +26,16 @@ class EditWishViewController: MyWishListParentViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        titleTextField.delegate = self
+        
         if let wish = wishToEdit {
-            navigationItem.title = kEditNavigationItemTitle
+            navItem.title = kEditNavigationItemTitle
             titleTextField.text = wish.title
+            linkTextField.text = wish.link
             detailTextView.text = wish.detail
         } else {
-            navigationItem.title = kAddNavigationItemTille
+            navItem.title = kAddNavigationItemTille
+            saveButton.enabled = false
         }
     }
 
@@ -61,7 +67,7 @@ class EditWishViewController: MyWishListParentViewController {
                     // TODO display an error message
                     print("save failed \(err)")
                 } else {
-                    self.dismissViewControllerAnimated(true) { () -> Void in }
+                    self.dismissViewControllerAnimated(true, completion: { () -> Void in})
                 }
             })
         } else {
@@ -70,5 +76,21 @@ class EditWishViewController: MyWishListParentViewController {
         }
     }
 
+    @IBAction func cancelButtonPressed(sender: UIBarButtonItem) {
+        self.dismissViewControllerAnimated(true, completion: { () -> Void in})
+    }
+}
+
+extension EditWishViewController : UITextFieldDelegate {
+    func textFieldDidEndEditing(textField: UITextField) {
+        if textField == titleTextField {
+            if let titleText = textField.text where NSString(string: titleText).length > 0 {
+                saveButton.enabled = true
+            } else {
+                saveButton.enabled = false
+            }
+        }
+        
+    }
 }
 

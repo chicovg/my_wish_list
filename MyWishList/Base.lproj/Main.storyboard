@@ -76,7 +76,7 @@
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ThT-np-KZF">
                                                     <rect key="frame" x="76" y="19" width="516" height="21"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                             </subviews>
@@ -142,14 +142,14 @@
                                                     <rect key="frame" x="15" y="6" width="31.5" height="19.5"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="16"/>
-                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Subtitle" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="pvX-gK-eZ5">
                                                     <rect key="frame" x="15" y="25.5" width="40.5" height="13.5"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="11"/>
-                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                             </subviews>
@@ -237,14 +237,14 @@
                     <connections>
                         <outlet property="addButton" destination="d1a-sZ-yJ0" id="L6q-sx-wDU"/>
                         <outlet property="tableView" destination="dRg-IA-Rd5" id="rIl-hr-UxW"/>
-                        <segue destination="IGp-KX-usZ" kind="show" identifier="segueToEditWish" id="82z-Oj-tyf"/>
+                        <segue destination="IGp-KX-usZ" kind="presentation" identifier="segueToEditWish" id="82z-Oj-tyf"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Tp2-GF-iKY" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1697" y="954"/>
         </scene>
-        <!--Add to Wish List!-->
+        <!--Edit Wish View Controller-->
         <scene sceneID="7Rr-zN-KZ5">
             <objects>
                 <viewController id="IGp-KX-usZ" customClass="EditWishViewController" customModule="MyWishList" customModuleProvider="target" sceneMemberID="viewController">
@@ -256,8 +256,28 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
+                            <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="BIh-5N-YwG">
+                                <rect key="frame" x="0.0" y="20" width="600" height="44"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="44" id="1mE-RW-w3Z"/>
+                                </constraints>
+                                <items>
+                                    <navigationItem title="Title" id="dQa-3I-aYP">
+                                        <barButtonItem key="leftBarButtonItem" title="Cancel" id="MwE-2Z-eUJ">
+                                            <connections>
+                                                <action selector="cancelButtonPressed:" destination="IGp-KX-usZ" id="Ply-eh-GWa"/>
+                                            </connections>
+                                        </barButtonItem>
+                                        <barButtonItem key="rightBarButtonItem" title="Save" style="done" id="Ltg-Jc-tVN">
+                                            <connections>
+                                                <action selector="doneButtonPressed:" destination="IGp-KX-usZ" id="pxE-md-yaG"/>
+                                            </connections>
+                                        </barButtonItem>
+                                    </navigationItem>
+                                </items>
+                            </navigationBar>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="4mj-rL-2uY">
-                                <rect key="frame" x="20" y="86" width="560" height="256"/>
+                                <rect key="frame" x="20" y="100" width="560" height="256"/>
                                 <subviews>
                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Title" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="fG4-mw-ebI">
                                         <rect key="frame" x="0.0" y="0.0" width="560" height="30"/>
@@ -289,21 +309,19 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstAttribute="trailingMargin" secondItem="4mj-rL-2uY" secondAttribute="trailing" id="FNR-IR-XPc"/>
-                            <constraint firstAttribute="leadingMargin" secondItem="4mj-rL-2uY" secondAttribute="leading" id="Np9-hp-JKw"/>
-                            <constraint firstItem="4mj-rL-2uY" firstAttribute="top" secondItem="3r6-CN-wBm" secondAttribute="bottom" constant="22" id="qpH-7c-kOz"/>
+                            <constraint firstAttribute="leadingMargin" secondItem="4mj-rL-2uY" secondAttribute="leading" id="gJf-fK-Ogx"/>
+                            <constraint firstItem="BIh-5N-YwG" firstAttribute="top" secondItem="3r6-CN-wBm" secondAttribute="bottom" id="gcw-eh-M7J"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="BIh-5N-YwG" secondAttribute="trailing" constant="-20" id="mbs-rf-u3J"/>
+                            <constraint firstItem="BIh-5N-YwG" firstAttribute="leading" secondItem="odh-Et-yiI" secondAttribute="leadingMargin" constant="-20" id="rmg-S5-w0N"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="4mj-rL-2uY" secondAttribute="trailing" id="sPd-t8-2pm"/>
+                            <constraint firstItem="4mj-rL-2uY" firstAttribute="top" secondItem="BIh-5N-YwG" secondAttribute="bottom" constant="36" id="ueg-y1-McV"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="Add to Wish List!" id="SD3-Co-ymA">
-                        <barButtonItem key="leftBarButtonItem" title="Done" style="done" id="6dM-yi-fCK">
-                            <connections>
-                                <action selector="doneButtonPressed:" destination="IGp-KX-usZ" id="6B0-2z-NwK"/>
-                            </connections>
-                        </barButtonItem>
-                    </navigationItem>
                     <connections>
                         <outlet property="detailTextView" destination="rKq-pj-ERu" id="19N-PR-AgM"/>
                         <outlet property="linkTextField" destination="lO0-VQ-HnN" id="2dR-xT-xLg"/>
+                        <outlet property="navItem" destination="dQa-3I-aYP" id="Qn2-Wy-qAd"/>
+                        <outlet property="saveButton" destination="Ltg-Jc-tVN" id="2gy-SF-O3l"/>
                         <outlet property="titleTextField" destination="fG4-mw-ebI" id="jof-MO-igT"/>
                     </connections>
                 </viewController>

@@ -5,9 +5,8 @@
 //  Created by Victor Guthrie on 2/21/16.
 //  Copyright © 2016 chicovg. All rights reserved.
 //
-//  Orchestrates data synchronization between facebook and firebase,
-//
-//
+//  Orchestrates the interaction between the view layer and multiple 3rd party
+//      clients (firebase, facebook, etc)
 
 import Foundation
 import FBSDKCoreKit
@@ -29,6 +28,19 @@ class DataSyncService {
         return FirebaseClient.sharedInstance
     }
     
+    var keychainClient: KeychainClient {
+        return KeychainClient.sharedInstance
+    }
+    
+    // MARK: Auth functions
+    func userIsLoggedIn() -> Bool {
+        guard let _ = facebookClient.currentAccessToken(), _ = firebaseClient.currentUser() else {
+            return false
+        }
+        return true
+    }
+    
+    // MARK: Facebook Auth
     func loginWithFacebook(viewController: UIViewController, handler: (error: DataSyncError?) -> Void) {
         facebookClient.login(viewController) { (facebookResult, facebookError) -> Void in
             if facebookError != nil {
@@ -41,12 +53,12 @@ class DataSyncService {
                 print("Facebook login succeeded.")
                 let accessToken = FBSDKAccessToken.currentAccessToken().tokenString
                 self.userDidLoginWithFacebook(accessToken, handler: { (user, error) -> Void in
-                    if let _ = user where error == nil {
-                        handler(error: nil)
-                    } else {
+                    if let error = error {
                         print("Firebase login failed! \(error)")
                         self.logoutFromFacebook()
                         handler(error: .UserLoginFailed)
+                    } else {
+                        handler(error: nil)
                     }
                 })
             }
@@ -57,24 +69,18 @@ class DataSyncService {
         facebookClient.logout()
     }
     
-    func userIsLoggedIn() -> Bool {
-        if let _ = facebookClient.currentAccessToken(), _ = firebaseClient.currentUser() {
-            return true
-        } else {
-            return false
-        }
-    }
-    
     func userDidLoginWithFacebook(token: String, handler: (user: User?, error: NSError?) -> Void){
         firebaseClient.authenticateWithFacebook(token) { (user, error) -> Void in
-            if let user = user {
+            if let error = error {
+                handler(user: nil, error: error)
+            } else {
+                self.keychainClient.saveAccessToken(token)
+                handler(user: user, error: nil)
+                
                 // TODO remove, this is test data!
                 for i in 1...10 {
                     self.firebaseClient.save(wish: Wish(id: "wish\(i)", title: "test \(i)", link: "", detail: "test \(i) detail"))
                 }
-                handler(user: user, error: nil)
-            } else {
-                handler(user: nil, error: error)
             }
         }
     }
@@ -118,7 +124,7 @@ class DataSyncService {
     }
     
     
-    // MARK: friends functions
+    // MARK: Friends functions
     func fetchFriends(handler: (syncError: DataSyncError?) -> Void) {
         if userIsLoggedIn() {
             facebookClient.getFriends({ (friends) -> Void in

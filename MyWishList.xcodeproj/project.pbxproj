@@ -7,12 +7,16 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		633EE83B64ACC8C96DD9283A /* Pods_Add_To_My_Wish_List.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A9C8E881CBD315D156BE347 /* Pods_Add_To_My_Wish_List.framework */; };
 		8500D4051C6FC428001EA0E7 /* FacebookClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8500D4041C6FC428001EA0E7 /* FacebookClient.swift */; };
 		85036F741C70F1D0004C13A2 /* ImageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85036F731C70F1D0004C13A2 /* ImageService.swift */; };
 		85036F7A1C7104F3004C13A2 /* FriendTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85036F791C7104F3004C13A2 /* FriendTableViewCell.swift */; };
 		85036F7D1C712C51004C13A2 /* FriendWishListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85036F7C1C712C51004C13A2 /* FriendWishListViewController.swift */; };
 		8503A0AF1C5552F600A98D67 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8503A0AE1C5552F600A98D67 /* LoginViewController.swift */; };
 		8503A0B21C55878400A98D67 /* HTTPClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8503A0B11C55878400A98D67 /* HTTPClient.swift */; };
+		851B07D91C946FB30089F0D5 /* KeychainClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 851B07D81C946FB30089F0D5 /* KeychainClient.swift */; };
+		851B07DA1C946FB30089F0D5 /* KeychainClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 851B07D81C946FB30089F0D5 /* KeychainClient.swift */; };
+		851B07DB1C9474690089F0D5 /* FirebaseClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8528B8D81C7A109900B1BD7C /* FirebaseClient.swift */; };
 		8528B8D91C7A109900B1BD7C /* FirebaseClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8528B8D81C7A109900B1BD7C /* FirebaseClient.swift */; };
 		8528B8DD1C7AC45200B1BD7C /* DataSyncService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8528B8DC1C7AC45200B1BD7C /* DataSyncService.swift */; };
 		8528B8E01C7BE59600B1BD7C /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8528B8DF1C7BE59600B1BD7C /* User.swift */; };
@@ -32,10 +36,6 @@
 		856997241C8B8EFA003642AD /* GetWishLink.js in Resources */ = {isa = PBXBuildFile; fileRef = 856997231C8B8EFA003642AD /* GetWishLink.js */; };
 		8569973F1C8BB80E003642AD /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8528B8DF1C7BE59600B1BD7C /* User.swift */; };
 		856997401C8BB80E003642AD /* Wish.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8528B8E11C7BEA0F00B1BD7C /* Wish.swift */; };
-		856997411C8BB80E003642AD /* FacebookClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8500D4041C6FC428001EA0E7 /* FacebookClient.swift */; };
-		856997421C8BB80E003642AD /* HTTPClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8503A0B11C55878400A98D67 /* HTTPClient.swift */; };
-		856997431C8BB80E003642AD /* FirebaseClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8528B8D81C7A109900B1BD7C /* FirebaseClient.swift */; };
-		856997441C8BB80E003642AD /* DataSyncService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8528B8DC1C7AC45200B1BD7C /* DataSyncService.swift */; };
 		85703DE91C677F320046669D /* FriendListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85703DE81C677F320046669D /* FriendListViewController.swift */; };
 		85814A401C8B883B00440703 /* ActionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85814A3F1C8B883B00440703 /* ActionViewController.swift */; };
 		85814A431C8B883B00440703 /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 85814A411C8B883B00440703 /* MainInterface.storyboard */; };
@@ -91,6 +91,9 @@
 		85036F7C1C712C51004C13A2 /* FriendWishListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FriendWishListViewController.swift; sourceTree = "<group>"; };
 		8503A0AE1C5552F600A98D67 /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		8503A0B11C55878400A98D67 /* HTTPClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HTTPClient.swift; sourceTree = "<group>"; };
+		851B07D41C8E8A110089F0D5 /* Add To My Wish List.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = "Add To My Wish List.entitlements"; sourceTree = "<group>"; };
+		851B07D51C8E8A260089F0D5 /* MyWishList.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = MyWishList.entitlements; sourceTree = "<group>"; };
+		851B07D81C946FB30089F0D5 /* KeychainClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeychainClient.swift; sourceTree = "<group>"; };
 		8528B8D81C7A109900B1BD7C /* FirebaseClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FirebaseClient.swift; sourceTree = "<group>"; };
 		8528B8DA1C7A175E00B1BD7C /* libFirebase.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libFirebase.a; path = "Pods/../build/Debug-iphoneos/libFirebase.a"; sourceTree = "<group>"; };
 		8528B8DC1C7AC45200B1BD7C /* DataSyncService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataSyncService.swift; sourceTree = "<group>"; };
@@ -120,10 +123,13 @@
 		85814A3F1C8B883B00440703 /* ActionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionViewController.swift; sourceTree = "<group>"; };
 		85814A421C8B883B00440703 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainInterface.storyboard; sourceTree = "<group>"; };
 		85814A441C8B883B00440703 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		8A9C8E881CBD315D156BE347 /* Pods_Add_To_My_Wish_List.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Add_To_My_Wish_List.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A8AED6C136B7B201295B1364 /* Pods-MyWishList.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MyWishList.release.xcconfig"; path = "Pods/Target Support Files/Pods-MyWishList/Pods-MyWishList.release.xcconfig"; sourceTree = "<group>"; };
 		C6C09340972D1EB21F8EEEE9 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		D11A4346295D816813ADB95E /* Pods-Add To My Wish List.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Add To My Wish List.release.xcconfig"; path = "Pods/Target Support Files/Pods-Add To My Wish List/Pods-Add To My Wish List.release.xcconfig"; sourceTree = "<group>"; };
 		D26DF7D30E22E3E8C72A85B5 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		DF40D0134D7283177080F398 /* Pods-MyWishList.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MyWishList.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MyWishList/Pods-MyWishList.debug.xcconfig"; sourceTree = "<group>"; };
+		E5BA797E3F6265C3A12466C4 /* Pods-Add To My Wish List.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Add To My Wish List.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Add To My Wish List/Pods-Add To My Wish List.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -156,6 +162,7 @@
 			files = (
 				855E5E3D1C8BBDE7007CCE1C /* Firebase.framework in Frameworks */,
 				855E5E3E1C8BBDE7007CCE1C /* Pods_MyWishList.framework in Frameworks */,
+				633EE83B64ACC8C96DD9283A /* Pods_Add_To_My_Wish_List.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -170,6 +177,7 @@
 				8528B8DA1C7A175E00B1BD7C /* libFirebase.a */,
 				C6C09340972D1EB21F8EEEE9 /* libPods.a */,
 				19225BC6C783F8A76971F667 /* Pods_MyWishList.framework */,
+				8A9C8E881CBD315D156BE347 /* Pods_Add_To_My_Wish_List.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -189,6 +197,7 @@
 				8500D4041C6FC428001EA0E7 /* FacebookClient.swift */,
 				8503A0B11C55878400A98D67 /* HTTPClient.swift */,
 				8528B8D81C7A109900B1BD7C /* FirebaseClient.swift */,
+				851B07D81C946FB30089F0D5 /* KeychainClient.swift */,
 			);
 			name = Client;
 			sourceTree = "<group>";
@@ -229,6 +238,7 @@
 		8552B7B31C53D46F0022D41C /* MyWishList */ = {
 			isa = PBXGroup;
 			children = (
+				851B07D51C8E8A260089F0D5 /* MyWishList.entitlements */,
 				8552B7E51C53D4BA0022D41C /* View */,
 				8528B8DE1C7BE56600B1BD7C /* Model */,
 				85036F721C70F13A004C13A2 /* Services */,
@@ -302,6 +312,7 @@
 		85814A3E1C8B883B00440703 /* Add To My Wish List */ = {
 			isa = PBXGroup;
 			children = (
+				851B07D41C8E8A110089F0D5 /* Add To My Wish List.entitlements */,
 				85814A3F1C8B883B00440703 /* ActionViewController.swift */,
 				85814A411C8B883B00440703 /* MainInterface.storyboard */,
 				85814A441C8B883B00440703 /* Info.plist */,
@@ -317,6 +328,8 @@
 				D26DF7D30E22E3E8C72A85B5 /* Pods.release.xcconfig */,
 				DF40D0134D7283177080F398 /* Pods-MyWishList.debug.xcconfig */,
 				A8AED6C136B7B201295B1364 /* Pods-MyWishList.release.xcconfig */,
+				E5BA797E3F6265C3A12466C4 /* Pods-Add To My Wish List.debug.xcconfig */,
+				D11A4346295D816813ADB95E /* Pods-Add To My Wish List.release.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -386,9 +399,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 85814A481C8B883B00440703 /* Build configuration list for PBXNativeTarget "Add To My Wish List" */;
 			buildPhases = (
+				EA84FD6BB1C7888217F4EF09 /* Check Pods Manifest.lock */,
 				85814A391C8B883B00440703 /* Sources */,
 				85814A3A1C8B883B00440703 /* Frameworks */,
 				85814A3B1C8B883B00440703 /* Resources */,
+				57D9F95D16566951DFC3E622 /* Embed Pods Frameworks */,
+				28AB6AB00035C7D9640E5502 /* Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -411,6 +427,12 @@
 				TargetAttributes = {
 					8552B7B01C53D46F0022D41C = {
 						CreatedOnToolsVersion = 7.2;
+						DevelopmentTeam = 49D7CLEGDK;
+						SystemCapabilities = {
+							com.apple.Keychain = {
+								enabled = 1;
+							};
+						};
 					};
 					8552B7C71C53D46F0022D41C = {
 						CreatedOnToolsVersion = 7.2;
@@ -422,6 +444,12 @@
 					};
 					85814A3C1C8B883B00440703 = {
 						CreatedOnToolsVersion = 7.2.1;
+						DevelopmentTeam = 49D7CLEGDK;
+						SystemCapabilities = {
+							com.apple.Keychain = {
+								enabled = 1;
+							};
+						};
 					};
 				};
 			};
@@ -483,6 +511,21 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		28AB6AB00035C7D9640E5502 /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Add To My Wish List/Pods-Add To My Wish List-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		2F8001731E75937CFC9074E5 /* Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -496,6 +539,21 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		57D9F95D16566951DFC3E622 /* Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Add To My Wish List/Pods-Add To My Wish List-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		602514DB139D07CA4E9CFE10 /* Embed Pods Frameworks */ = {
@@ -528,6 +586,21 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-MyWishList/Pods-MyWishList-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
+		EA84FD6BB1C7888217F4EF09 /* Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -544,6 +617,7 @@
 				8528B8D91C7A109900B1BD7C /* FirebaseClient.swift in Sources */,
 				8552B7B71C53D46F0022D41C /* EditWishViewController.swift in Sources */,
 				8528B8E01C7BE59600B1BD7C /* User.swift in Sources */,
+				851B07D91C946FB30089F0D5 /* KeychainClient.swift in Sources */,
 				8503A0B21C55878400A98D67 /* HTTPClient.swift in Sources */,
 				85036F7A1C7104F3004C13A2 /* FriendTableViewCell.swift in Sources */,
 				8528B8DD1C7AC45200B1BD7C /* DataSyncService.swift in Sources */,
@@ -574,12 +648,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				851B07DB1C9474690089F0D5 /* FirebaseClient.swift in Sources */,
 				8569973F1C8BB80E003642AD /* User.swift in Sources */,
 				856997401C8BB80E003642AD /* Wish.swift in Sources */,
-				856997411C8BB80E003642AD /* FacebookClient.swift in Sources */,
-				856997421C8BB80E003642AD /* HTTPClient.swift in Sources */,
-				856997431C8BB80E003642AD /* FirebaseClient.swift in Sources */,
-				856997441C8BB80E003642AD /* DataSyncService.swift in Sources */,
+				851B07DA1C946FB30089F0D5 /* KeychainClient.swift in Sources */,
 				85814A401C8B883B00440703 /* ActionViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -720,6 +792,7 @@
 			baseConfigurationReference = DF40D0134D7283177080F398 /* Pods-MyWishList.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = MyWishList/MyWishList.entitlements;
 				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					/Users/victorguthrie/Documents/FacebookSDK,
@@ -741,6 +814,7 @@
 			baseConfigurationReference = A8AED6C136B7B201295B1364 /* Pods-MyWishList.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = MyWishList/MyWishList.entitlements;
 				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					/Users/victorguthrie/Documents/FacebookSDK,
@@ -807,7 +881,9 @@
 		};
 		85814A491C8B883B00440703 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = E5BA797E3F6265C3A12466C4 /* Pods-Add To My Wish List.debug.xcconfig */;
 			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = "Add To My Wish List/Add To My Wish List.entitlements";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/build/Debug-iphoneos",
@@ -822,7 +898,9 @@
 		};
 		85814A4A1C8B883B00440703 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = D11A4346295D816813ADB95E /* Pods-Add To My Wish List.release.xcconfig */;
 			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = "Add To My Wish List/Add To My Wish List.entitlements";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/build/Debug-iphoneos",

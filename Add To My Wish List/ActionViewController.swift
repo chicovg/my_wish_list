@@ -8,6 +8,7 @@
 
 import UIKit
 import MobileCoreServices
+import SimpleKeychain
 
 class ActionViewController: UIViewController {
     
@@ -16,10 +17,7 @@ class ActionViewController: UIViewController {
     @IBOutlet weak var detailsTextView: UITextView!
     
     let kWishUrlKey = "documentUrl"
-    
-    var syncService: DataSyncService {
-        return DataSyncService.sharedInstance
-    }
+    let TOKEN_KEY = "firebaseToken"
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -39,6 +37,9 @@ class ActionViewController: UIViewController {
                 })
             })
         }
+        
+        let tokenSaved = A0SimpleKeychain(service: "Auth0", accessGroup: "com.chicovg.wishlist").stringForKey(TOKEN_KEY)
+        print("\(tokenSaved)")
     }
 
     override func didReceiveMemoryWarning() {
@@ -51,27 +52,19 @@ class ActionViewController: UIViewController {
     }
 
     @IBAction func save(sender: UIBarButtonItem) {
-        if syncService.userIsLoggedIn() {
-            handleSaveWish()
-        } else {
-            syncService.loginWithFacebook(self, handler: { (error) -> Void in
-                if let err = error where err == .UserLoginFailed {
-                    // TODO display error msg
-                    print("Login failed")
+        if let accessToken = KeychainClient.sharedInstance.currentAccessToken() {
+            FirebaseClient.sharedInstance.authenticateWithFacebook(accessToken, handler: { (user, error) -> Void in
+                if let error = error {
+                    // display error message
                 } else {
-                    self.handleSaveWish()
+                    self.saveWish({ (success) -> Void in
+                        if success {
+                            // TODO show conformation
+                            self.extensionContext!.completeRequestReturningItems(self.extensionContext!.inputItems, completionHandler: nil)
+                        }
+                    })
                 }
             })
-        }
-    }
-
-    private func handleSaveWish() {
-        saveWish { (success) -> Void in
-            if(success) {
-                self.extensionContext!.completeRequestReturningItems(self.extensionContext!.inputItems, completionHandler: nil)
-            } else {
-                // TODO display error msg
-            }
         }
     }
     
@@ -87,16 +80,8 @@ class ActionViewController: UIViewController {
             }
             
             let wish = Wish(title: title, link: link, detail: detail)
-            syncService.save(wish: wish, handler: { (syncError, saveError) -> Void in
-                if let _ = syncError where syncError == .UserNotLoggedIn {
-                    
-                } else if let err = saveError {
-                    print("save failed \(err)")
-                    handler(success: false)
-                } else {
-                    handler(success: true)
-                }
-            })
+            FirebaseClient.sharedInstance.save(wish: wish)
+            handler(success: true)
         } else {
             print("Title field not populated!")
             handler(success: false)

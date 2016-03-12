@@ -18,7 +18,7 @@ class FirebaseClient {
     let WISHES_PATH = "wishes"
     
     let FACEBOOK_AUTH_PREFIX = "facebook"
-    
+        
     lazy var rootRef: Firebase = {
         Firebase.defaultConfig().persistenceEnabled = true
         let ref = Firebase(url: "my-wishlist.firebaseio.com")
@@ -58,14 +58,14 @@ class FirebaseClient {
         return rootRef.childByAppendingPath(WISHES_PATH).childByAppendingPath(user.id)
     }
     
-    // MARK: users functions
+    // MARK: user functions
     func authenticateWithFacebook(accessToken: String, handler: (user: User?, error: NSError?) -> Void) {
         rootRef.authWithOAuthProvider(FACEBOOK_AUTH_PREFIX, token: accessToken, withCompletionBlock: { error, authData in
             if let authData = authData {
                 print("Logged in! \(authData)")
                 let user = User(fromFacebookAuthData: authData)
                 self.save(user: user)
-                handler(user: user, error: nil)
+                handler(user: user,error: nil)
             } else {
                 print("Login failed. \(error)")
                 handler(user: nil, error: error)

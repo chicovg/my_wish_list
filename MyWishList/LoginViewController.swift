@@ -49,10 +49,10 @@ class LoginViewController: UIViewController {
                 // todo display error
                 print("Login failed")
             } else {
-                dispatch_async(dispatch_get_main_queue(), {() -> Void in
-                    let tabVC = self.storyboard?.instantiateViewControllerWithIdentifier(tabBarControllerId)
-                    self.presentViewController(tabVC!, animated: true, completion: { () -> Void in
-                        print("Logged In as \(user.name)")
+                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                    let tabVC = self.storyboard?.instantiateViewControllerWithIdentifier(tabBarControllerId) as! UITabBarController
+                    self.presentViewController(tabVC, animated: true, completion: { () -> Void in
+                        print("Logged in successfully!")
                     })
                 })
             }

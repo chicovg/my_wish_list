@@ -10,16 +10,19 @@ PODS:
   - FBSDKLoginKit (4.10.0):
     - FBSDKCoreKit
   - Firebase (2.5.1)
+  - SimpleKeychain (0.7.0)
 
 DEPENDENCIES:
   - FBSDKCoreKit (>= 4.10.0)
   - FBSDKLoginKit (>= 4.10.0)
   - Firebase (>= 2.5.0)
+  - SimpleKeychain
 
 SPEC CHECKSUMS:
   Bolts: f52a250053bb517ca874523c3913776359ab3def
   FBSDKCoreKit: 13bec8373fb3af94d44daf2aa1e0958687897fbd
   FBSDKLoginKit: d3d4a2e9d31954deb00bfea964167a05ca1ea976
   Firebase: 3565ea88b830f28f2c77ecc524622bc71a20d085
+  SimpleKeychain: b50cef3b87939d480ea1143425c00f5b4b70fe21
 
 COCOAPODS: 0.39.0
