@@ -14,7 +14,10 @@ class FriendWishListViewController: MyWishListParentViewController {
     @IBOutlet weak var tableView: UITableView!
     
     let kReuseIdentifier = "friendWishListTableViewCell"
+    
+    let searchController = UISearchController(searchResultsController: nil)
 
+    var allWishes : [Wish] = []
     var wishes : [Wish] = []
     var friend : User!
     
@@ -23,6 +26,7 @@ class FriendWishListViewController: MyWishListParentViewController {
 
         // Do any additional setup after loading the view.
         setupTableView()
+        setupSearchController()
     }
 
     override func didReceiveMemoryWarning() {
@@ -48,8 +52,20 @@ extension FriendWishListViewController : UITableViewDataSource, UITableViewDeleg
             if let _ = syncError where syncError == .UserNotLoggedIn {
                 self.returnToLoginView(shouldLogout: false, showLoggedOutAlert: true)
             }
-            self.wishes = wishes
+            self.allWishes = wishes
+            self.updateWishes()
             self.tableView.reloadData()
+        }
+    }
+    
+    private func updateWishes() {
+        if let searchText = searchController.searchBar.text where
+            searchController.active && searchController.searchBar.text != "" {
+            self.wishes = allWishes.filter({ (wish) -> Bool in
+                return wish.title.lowercaseString.containsString(searchText.lowercaseString)
+            })
+        } else {
+            self.wishes = allWishes
         }
     }
     
@@ -67,6 +83,40 @@ extension FriendWishListViewController : UITableViewDataSource, UITableViewDeleg
         cell.textLabel?.text = wish.title
         cell.detailTextLabel?.text = wish.detail
         return cell
+    }
+    
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        let wish = wishes[indexPath.row]
+        let alert = UIAlertController(title: "Grant Wish?", message: "Do you want to grant this wish for your friend?", preferredStyle: UIAlertControllerStyle.Alert)
+        alert.addAction(UIAlertAction(title: "Not now", style: UIAlertActionStyle.Cancel, handler: nil))
+        alert.addAction(UIAlertAction(title: "Yes", style: UIAlertActionStyle.Default, handler: { (action) -> Void in
+            self.syncService.grantWish(self.friend.id, wishId: wish.id!, handler: { (syncError, saveError) -> Void in
+                if let _ = syncError where syncError == .UserNotLoggedIn {
+                    self.returnToLoginView(shouldLogout: false, showLoggedOutAlert: true)
+                } else if let err = saveError {
+                    self.displayErrorAlert("There was an issue updating your friend's wish list", actionHandler: { (action) in }, presentHandler: {})
+                    print("save failed \(err)")
+                }
+            })
+        }))
+        presentViewController(alert, animated: true, completion: nil)
+    }
+}
+
+// MARK  UISearchResultsUpdating
+extension FriendWishListViewController : UISearchResultsUpdating {
+    private func setupSearchController() {
+        searchController.searchResultsUpdater = self
+        searchController.dimsBackgroundDuringPresentation = false
+        searchController.obscuresBackgroundDuringPresentation = false
+        searchController.hidesNavigationBarDuringPresentation = false
+        definesPresentationContext = true
+        tableView.tableHeaderView = searchController.searchBar
+    }
+    
+    func updateSearchResultsForSearchController(searchController: UISearchController) {
+        updateWishes()
+        tableView.reloadData()
     }
 }
 

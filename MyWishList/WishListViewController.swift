@@ -14,17 +14,22 @@ class WishListViewController: MyWishListParentViewController {
     let kSegueToEditWish = "segueToEditWish"
     let kReuseIdentifier = "wishListTableViewCell"
     
+    let searchController = UISearchController(searchResultsController: nil)
+    
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var editButton: UIBarButtonItem!
     @IBOutlet weak var addButton: UIBarButtonItem!
     
+    var allWishes: [Wish] = []
     var wishes: [Wish] = []
-
+    var grantedWishes: [Wish] = []
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
         setupTableView()
+        setupSearchController()
     }
 
     override func didReceiveMemoryWarning() {
@@ -37,7 +42,7 @@ class WishListViewController: MyWishListParentViewController {
         if let identifier = segue.identifier where identifier == kSegueToEditWish,
             let editVC = segue.destinationViewController as? EditWishViewController {
                 if let indexPath = sender as? NSIndexPath {
-                    editVC.wishToEdit = wishes[indexPath.row]
+                    editVC.wishToEdit = wishAtIndexPath(indexPath)
                 } else {
                     editVC.wishToEdit = nil
                 }
@@ -77,22 +82,53 @@ extension WishListViewController : UITableViewDataSource, UITableViewDelegate {
             if let _ = syncError where syncError == .UserNotLoggedIn {
                 self.returnToLoginView(shouldLogout: false, showLoggedOutAlert: true)
             }
-            self.wishes = wishes
+            
+            self.allWishes = wishes
+            self.updateWishes()
             self.tableView.reloadData()
         }
     }
     
+    private func updateWishes() {
+        if let searchText = searchController.searchBar.text where
+            searchController.active && searchController.searchBar.text != "" {
+            let filteredWishes = allWishes.filter({ (wish) -> Bool in
+                return wish.title.lowercaseString.containsString(searchText.lowercaseString)
+            })
+            wishes = filteredWishes.filter({ (wish) -> Bool in return !wish.granted})
+            grantedWishes = filteredWishes.filter({ (wish) -> Bool in return wish.granted})
+        } else {
+            wishes = allWishes.filter({ (wish) -> Bool in return !wish.granted})
+            grantedWishes = allWishes.filter({ (wish) -> Bool in return wish.granted})
+        }
+    }
+    
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        return 1
+        return grantedWishes.count > 0
+            ? (wishes.count > 0 ? 2 : 1)
+            : (wishes.count > 0 ? 1 : 0)
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return wishes.count
+        return section == 0 && wishes.count > 0
+            ? wishes.count
+            : grantedWishes.count
+    }
+    
+    func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        return section == 0 && wishes.count > 0
+            ? "Wished"
+            : "Granted"
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier(kReuseIdentifier, forIndexPath: indexPath)
-        let wish = wishes[indexPath.row]
+        let wish = wishAtIndexPath(indexPath)
+        if wish.granted {
+            cell.imageView?.image = UIImage(named: "Checkmark")
+        } else {
+            cell.imageView?.image = UIImage(named: "Checkmark-unchecked")
+        }
         cell.textLabel?.text = wish.title
         cell.detailTextLabel?.text = wish.detail
         return cell
@@ -100,19 +136,21 @@ extension WishListViewController : UITableViewDataSource, UITableViewDelegate {
     
     func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
         if editingStyle == .Delete {
-            // Delete the row from the data source
-            let wish = wishes[indexPath.row]
+            let wish = wishAtIndexPath(indexPath)
             syncService.deleteWish(wish, handler: { (syncError, deleteError) -> Void in
                 if let _ = syncError where syncError == .UserNotLoggedIn {
                     self.returnToLoginView(shouldLogout: false, showLoggedOutAlert: true)
                 } else if let err = deleteError {
                     print("delete failed \(err)")
-                } else {
-                    self.wishes.removeAtIndex(indexPath.row)
-                    self.tableView.reloadData()
                 }
             })
         }
+    }
+    
+    private func wishAtIndexPath(indexPath: NSIndexPath) -> Wish {
+        return indexPath.section == 0 && wishes.count > 0
+            ? wishes[indexPath.row]
+            : grantedWishes[indexPath.row]
     }
 
     // MARK: UITableViewDelegate
@@ -122,6 +160,23 @@ extension WishListViewController : UITableViewDataSource, UITableViewDelegate {
     
     func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
         return true
+    }
+}
+
+// MARK  UISearchResultsUpdating
+extension WishListViewController : UISearchResultsUpdating {
+    private func setupSearchController() {
+        searchController.searchResultsUpdater = self
+        searchController.dimsBackgroundDuringPresentation = false
+        searchController.obscuresBackgroundDuringPresentation = false
+        searchController.hidesNavigationBarDuringPresentation = false
+        definesPresentationContext = true
+        tableView.tableHeaderView = searchController.searchBar
+    }
+    
+    func updateSearchResultsForSearchController(searchController: UISearchController) {
+        updateWishes()
+        tableView.reloadData()
     }
 }
 

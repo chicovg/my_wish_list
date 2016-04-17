@@ -58,7 +58,7 @@ class ImageService {
     private func imageWithPath(path: String) -> UIImage? {
         if let image = inMemoryCache.objectForKey(path) as? UIImage {
             return image
-        } else if let data = NSData(contentsOfFile: path) {
+        } else if let data = NSKeyedUnarchiver.unarchiveObjectWithFile(path) as? NSData {
             return UIImage(data: data)
         }
         
@@ -69,7 +69,7 @@ class ImageService {
         if let image = image {
             inMemoryCache.setObject(image, forKey: path)
             let data = UIImagePNGRepresentation(image)!
-            data.writeToFile(path, atomically: true)
+            NSKeyedArchiver.archiveRootObject(data, toFile: path)
         } else {
             inMemoryCache.removeObjectForKey(path)
             do {

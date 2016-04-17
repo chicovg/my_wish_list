@@ -25,5 +25,11 @@ class MyWishListParentViewController: UIViewController {
             }
         })
     }
+    
+    func displayErrorAlert(message: String, actionHandler: ((UIAlertAction) -> Void), presentHandler: (() -> Void)) {
+        let alert = UIAlertController(title: "Error", message: message, preferredStyle: UIAlertControllerStyle.Alert)
+        alert.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.Default, handler: actionHandler))
+        presentViewController(alert, animated: true, completion: presentHandler)
+    }
 
 }

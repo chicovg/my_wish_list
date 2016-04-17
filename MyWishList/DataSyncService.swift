@@ -76,11 +76,6 @@ class DataSyncService {
             } else {
                 self.keychainClient.saveAccessToken(token)
                 handler(user: user, error: nil)
-                
-                // TODO remove, this is test data!
-                for i in 1...10 {
-                    self.firebaseClient.save(wish: Wish(id: "wish\(i)", title: "test \(i)", link: "", detail: "test \(i) detail"))
-                }
             }
         }
     }
@@ -122,6 +117,16 @@ class DataSyncService {
             handler(syncError: DataSyncError.UserNotLoggedIn, saveError: nil)
         }
     }
+    func grantWish(userId: String, wishId: String, handler: (syncError: DataSyncError?, saveError: NSError?) -> Void) {
+        if userIsLoggedIn() {
+            firebaseClient.grantWish(userId, wishId: wishId, completionHandler: { (saveError) -> Void in
+                handler(syncError: nil, saveError: saveError)
+            })
+        } else {
+            handler(syncError: DataSyncError.UserNotLoggedIn, saveError: nil)
+        }
+    }
+    
     
     
     // MARK: Friends functions

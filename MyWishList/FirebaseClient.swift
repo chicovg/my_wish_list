@@ -54,8 +54,8 @@ class FirebaseClient {
         return nil
     }
     
-    private func userWishesRef(user: User) -> Firebase? {
-        return rootRef.childByAppendingPath(WISHES_PATH).childByAppendingPath(user.id)
+    private func userWishesRef(userId: String) -> Firebase? {
+        return rootRef.childByAppendingPath(WISHES_PATH).childByAppendingPath(userId)
     }
     
     // MARK: user functions
@@ -84,7 +84,8 @@ class FirebaseClient {
     // MARK: friends functions
     func save(facebookFriendsList friends: [User]) {
         if let ref = currentUserFriendsRef() {
-            let friendsValues = friends.reduce([:]) { (var dict, friend) -> [String : [String: AnyObject]] in
+            let friendsValues = friends.reduce([:]) { (dictionary, friend) -> [String : [String: AnyObject]] in
+                var dict = dictionary
                 dict["\(FACEBOOK_AUTH_PREFIX):\(friend.id)"] = friend.toValuesDictionary()
                 return dict
             }
@@ -143,7 +144,6 @@ class FirebaseClient {
         } else {
             // handle
         }
-        
     }
     
     func queryWishes(completionHandler: (wishes: [Wish]) -> Void) {
@@ -155,7 +155,7 @@ class FirebaseClient {
     }
     
     func queryWishes(forUser user: User, completionHandler: (wishes: [Wish]) -> Void) {
-        if let ref = userWishesRef(user) {
+        if let ref = userWishesRef(user.id) {
             queryWishes(ref, completionHandler: completionHandler)
         } else {
             completionHandler(wishes: [])
@@ -169,6 +169,12 @@ class FirebaseClient {
                 wishes.append(Wish(fromFDataSnapshot: item as! FDataSnapshot))
             }
             completionHandler(wishes: wishes)
+        }
+    }
+    
+    func grantWish(userId: String, wishId: String, completionHandler: (NSError?) -> Void) {
+        if let ref = userWishesRef(userId) {
+            ref.childByAppendingPath(wishId).updateChildValues([Wish.Keys.granted : true])
         }
     }
     

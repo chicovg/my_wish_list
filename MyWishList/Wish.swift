@@ -15,26 +15,33 @@ struct Wish {
         static let title = "title"
         static let link = "link"
         static let detail = "detail"
+        static let granted = "granted"
     }
     
     var id: String?
     let title: String
     var link: String?
     var detail: String?
+    var granted: Bool
     
-    init(id: String?, title: String, link: String?, detail: String?){
+    init(id: String?, title: String, link: String?, detail: String?, granted: Bool){
         self.id = id
         self.title = title
         self.link = link
         self.detail = detail
+        self.granted = granted
     }
     
-    init(title: String){
-        self.init(id: nil, title: title, link: nil, detail: nil)
+    init(id: String?, title: String, link: String?, detail: String?){
+        self.init(id: id, title: title, link: link, detail: detail, granted: false)
     }
     
     init(title: String, link: String?, detail: String?){
-        self.init(id: nil, title: title, link: link, detail: detail)
+        self.init(id: nil, title: title, link: link, detail: detail, granted: false)
+    }
+    
+    init(title: String){
+        self.init(id: nil, title: title, link: nil, detail: nil, granted: false)
     }
     
     init(fromFDataSnapshot snapshot: FDataSnapshot){
@@ -46,10 +53,16 @@ struct Wish {
         if snapshot.hasChild(Keys.link) {
             self.link = snapshot.childSnapshotForPath(Keys.link).value as? String
         }
+        if snapshot.hasChild(Keys.granted) {
+            self.granted = snapshot.childSnapshotForPath(Keys.granted).value as! Bool
+        } else {
+            self.granted = false
+        }
     }
     
     func toValuesDictionary() -> [String : AnyObject] {
-        var dict = [Keys.title : self.title]
+        var dict: [String : AnyObject] = [Keys.title : self.title,
+                                        Keys.granted : self.granted]
         if let detail = self.detail {
             dict[Keys.detail] = detail
         }

@@ -26,7 +26,7 @@ class EditWishViewController: MyWishListParentViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        titleTextField.delegate = self
+        setupTextFields()
         
         if let wish = wishToEdit {
             navItem.title = kEditNavigationItemTitle
@@ -46,9 +46,11 @@ class EditWishViewController: MyWishListParentViewController {
 
     @IBAction func doneButtonPressed(sender: UIBarButtonItem) {
         if let title = titleTextField.text {
-            var id : String? = nil
+            var id: String? = nil
+            var granted: Bool = false
             if let wish = wishToEdit {
                 id = wish.id
+                granted = wish.granted
             }
             var link: String? = nil
             if let linkTxt = linkTextField.text {
@@ -59,7 +61,7 @@ class EditWishViewController: MyWishListParentViewController {
                 detail = desc
             }
             
-            let wish = Wish(id: id, title: title, link: link, detail: detail)
+            let wish = Wish(id: id, title: title, link: link, detail: detail, granted: granted)
             syncService.save(wish: wish, handler: { (syncError, saveError) -> Void in
                 if let _ = syncError where syncError == .UserNotLoggedIn {
                     self.returnToLoginView(shouldLogout: false, showLoggedOutAlert: true)
@@ -70,15 +72,25 @@ class EditWishViewController: MyWishListParentViewController {
                     self.dismissViewControllerAnimated(true, completion: { () -> Void in})
                 }
             })
-        } else {
-            // TODO display an error message
-            print("Title field not populated!")
         }
     }
 
     @IBAction func cancelButtonPressed(sender: UIBarButtonItem) {
         self.dismissViewControllerAnimated(true, completion: { () -> Void in})
     }
+    
+    private func setupTextFields(){
+        titleTextField.delegate = self
+        
+        let borderColor = UIColor(red: 0.48, green: 0.72, blue: 0.67, alpha: 1.0).CGColor
+        titleTextField.layer.borderColor = borderColor
+        titleTextField.layer.borderWidth = 1.0
+        linkTextField.layer.borderColor = borderColor
+        linkTextField.layer.borderWidth = 1.0
+        detailTextView.layer.borderColor = borderColor
+        detailTextView.layer.borderWidth = 1.0
+    }
+    
 }
 
 extension EditWishViewController : UITextFieldDelegate {

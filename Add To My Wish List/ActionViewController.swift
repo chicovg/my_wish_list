@@ -15,12 +15,15 @@ class ActionViewController: UIViewController {
     @IBOutlet weak var titleTextField: UITextField!
     @IBOutlet weak var linkTextField: UITextField!
     @IBOutlet weak var detailsTextView: UITextView!
+    @IBOutlet weak var saveButton: UIBarButtonItem!
     
     let kWishUrlKey = "documentUrl"
     let TOKEN_KEY = "firebaseToken"
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        setupTextFields()
         
         let extensionItem = extensionContext?.inputItems.first as? NSExtensionItem
         let itemProvider = extensionItem?.attachments?.first as? NSItemProvider
@@ -41,11 +44,6 @@ class ActionViewController: UIViewController {
         let tokenSaved = A0SimpleKeychain(service: "Auth0", accessGroup: "com.chicovg.wishlist").stringForKey(TOKEN_KEY)
         print("\(tokenSaved)")
     }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
     
     @IBAction func cancel(sender: UIBarButtonItem) {
         self.extensionContext!.completeRequestReturningItems(self.extensionContext!.inputItems, completionHandler: nil)
@@ -54,13 +52,12 @@ class ActionViewController: UIViewController {
     @IBAction func save(sender: UIBarButtonItem) {
         if let accessToken = KeychainClient.sharedInstance.currentAccessToken() {
             FirebaseClient.sharedInstance.authenticateWithFacebook(accessToken, handler: { (user, error) -> Void in
-                if let error = error {
-                    // display error message
+                if error != nil {
+                    self.displayExtensionReturningAlert("Not Logged In!", message: "Please log in via the MyWishList app first!", actionLabel: "Ok")
                 } else {
                     self.saveWish({ (success) -> Void in
                         if success {
-                            // TODO show conformation
-                            self.extensionContext!.completeRequestReturningItems(self.extensionContext!.inputItems, completionHandler: nil)
+                            self.displayExtensionReturningAlert("Success!", message: "The item was added to your wish list!", actionLabel: "Great!")
                         }
                     })
                 }
@@ -82,10 +79,39 @@ class ActionViewController: UIViewController {
             let wish = Wish(title: title, link: link, detail: detail)
             FirebaseClient.sharedInstance.save(wish: wish)
             handler(success: true)
-        } else {
-            print("Title field not populated!")
-            handler(success: false)
         }
     }
     
+    private func setupTextFields(){
+        titleTextField.delegate = self
+        
+        let borderColor = UIColor(red: 0.48, green: 0.72, blue: 0.67, alpha: 1.0).CGColor
+        titleTextField.layer.borderColor = borderColor
+        titleTextField.layer.borderWidth = 1.0
+        linkTextField.layer.borderColor = borderColor
+        linkTextField.layer.borderWidth = 1.0
+        detailsTextView.layer.borderColor = borderColor
+        detailsTextView.layer.borderWidth = 1.0
+    }
+    
+    private func displayExtensionReturningAlert(title: String, message: String, actionLabel: String){
+        let alert = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.Alert)
+        alert.addAction(UIAlertAction(title: actionLabel, style: UIAlertActionStyle.Default, handler: { (action) -> Void in
+            self.extensionContext!.completeRequestReturningItems(self.extensionContext!.inputItems, completionHandler: nil)
+        }))
+        presentViewController(alert, animated: true, completion: nil)
+    }
+}
+
+extension ActionViewController : UITextFieldDelegate {
+    func textFieldDidEndEditing(textField: UITextField) {
+        if textField == titleTextField {
+            if let titleText = textField.text where NSString(string: titleText).length > 0 {
+                saveButton.enabled = true
+            } else {
+                saveButton.enabled = false
+            }
+        }
+        
+    }
 }

@@ -14,8 +14,11 @@ class FriendListViewController: MyWishListParentViewController {
     let kReuseIdentifier = "friendListTableViewCell"
     let kSegueToFriendWishList = "segueToFriendWishList"
     
+    let searchController = UISearchController(searchResultsController: nil)
+    
     @IBOutlet weak var tableView: UITableView!
     
+    var allFriends: [User] = []
     var friends: [User] = []
     
     var user: User!
@@ -24,7 +27,8 @@ class FriendListViewController: MyWishListParentViewController {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
-        setupTableView()        
+        setupTableView()
+        setupSearchController()
     }
 
     override func didReceiveMemoryWarning() {
@@ -58,13 +62,24 @@ extension FriendListViewController : UITableViewDataSource, UITableViewDelegate 
                     if let _ = syncError where syncError == .UserNotLoggedIn {
                         self.returnToLoginView(shouldLogout: false, showLoggedOutAlert: true)
                     } else {
-                        self.friends = friends
+                        self.allFriends = friends
+                        self.updateFriends()
                         self.tableView.reloadData()
                     }
                 })
             }
         }
-        
+    }
+    
+    private func updateFriends() {
+        if let searchText = searchController.searchBar.text where
+            searchController.active && searchController.searchBar.text != "" {
+            friends = allFriends.filter({ (friend) -> Bool in
+                return friend.name.lowercaseString.containsString(searchText.lowercaseString)
+            })
+        } else {
+            friends = allFriends
+        }
     }
 
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
@@ -95,4 +110,21 @@ extension FriendListViewController : UITableViewDataSource, UITableViewDelegate 
         performSegueWithIdentifier(kSegueToFriendWishList, sender: nil)
     }
     
+}
+
+// MARK  UISearchResultsUpdating
+extension FriendListViewController : UISearchResultsUpdating {
+    private func setupSearchController() {
+        searchController.searchResultsUpdater = self
+        searchController.dimsBackgroundDuringPresentation = false
+        searchController.obscuresBackgroundDuringPresentation = false
+        searchController.hidesNavigationBarDuringPresentation = false
+        definesPresentationContext = true
+        tableView.tableHeaderView = searchController.searchBar
+    }
+    
+    func updateSearchResultsForSearchController(searchController: UISearchController) {
+        updateFriends()
+        tableView.reloadData()
+    }
 }
