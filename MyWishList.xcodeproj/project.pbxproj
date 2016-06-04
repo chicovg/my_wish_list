@@ -39,6 +39,10 @@
 		855E5E3E1C8BBDE7007CCE1C /* Pods_MyWishList.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 855E5E3C1C8BBDE7007CCE1C /* Pods_MyWishList.framework */; };
 		856488E51D03D5D8001C9D05 /* SF-UI-Display-Semibold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 856488E31D03D5D8001C9D05 /* SF-UI-Display-Semibold.otf */; };
 		856488E61D03D5D8001C9D05 /* SF-UI-Display-Heavy.otf in Resources */ = {isa = PBXBuildFile; fileRef = 856488E41D03D5D8001C9D05 /* SF-UI-Display-Heavy.otf */; };
+		856488E91D03DAA0001C9D05 /* Pods-MyWishList.debug.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = DF40D0134D7283177080F398 /* Pods-MyWishList.debug.xcconfig */; };
+		856488EA1D03DAA3001C9D05 /* Pods-MyWishList.release.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = A8AED6C136B7B201295B1364 /* Pods-MyWishList.release.xcconfig */; };
+		856488EC1D03DAAA001C9D05 /* Pods-Add To My Wish List.release.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = D11A4346295D816813ADB95E /* Pods-Add To My Wish List.release.xcconfig */; };
+		856488ED1D03DAAD001C9D05 /* Pods-Add To My Wish List.debug.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = E5BA797E3F6265C3A12466C4 /* Pods-Add To My Wish List.debug.xcconfig */; };
 		856997241C8B8EFA003642AD /* GetWishLink.js in Resources */ = {isa = PBXBuildFile; fileRef = 856997231C8B8EFA003642AD /* GetWishLink.js */; };
 		8569973F1C8BB80E003642AD /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8528B8DF1C7BE59600B1BD7C /* User.swift */; };
 		856997401C8BB80E003642AD /* Wish.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8528B8E11C7BEA0F00B1BD7C /* Wish.swift */; };
@@ -50,7 +54,6 @@
 		85F5A7791CDE51F400C8EE9C /* MyWishList.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 85F5A7771CDE51F400C8EE9C /* MyWishList.xcdatamodeld */; };
 		85F5A7851CDE53D500C8EE9C /* WishEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85F5A77F1CDE53D500C8EE9C /* WishEntity.swift */; };
 		85F5A7871CDE7A6900C8EE9C /* CoreDataClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85F5A7861CDE7A6900C8EE9C /* CoreDataClient.swift */; };
-		D4B2B76A487C84E85D0492B9 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C6C09340972D1EB21F8EEEE9 /* libPods.a */; };
 		DA09E7021CD912012EBA05D1 /* Pods_MyWishList.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 19225BC6C783F8A76971F667 /* Pods_MyWishList.framework */; };
 /* End PBXBuildFile section */
 
@@ -94,7 +97,6 @@
 
 /* Begin PBXFileReference section */
 		19225BC6C783F8A76971F667 /* Pods_MyWishList.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MyWishList.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		66A5000EF693EF38E1963C06 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 		8500D4041C6FC428001EA0E7 /* FacebookClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FacebookClient.swift; sourceTree = "<group>"; };
 		85036F731C70F1D0004C13A2 /* ImageService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageService.swift; sourceTree = "<group>"; };
 		85036F791C7104F3004C13A2 /* FriendTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FriendTableViewCell.swift; sourceTree = "<group>"; };
@@ -147,7 +149,6 @@
 		A8AED6C136B7B201295B1364 /* Pods-MyWishList.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MyWishList.release.xcconfig"; path = "Pods/Target Support Files/Pods-MyWishList/Pods-MyWishList.release.xcconfig"; sourceTree = "<group>"; };
 		C6C09340972D1EB21F8EEEE9 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		D11A4346295D816813ADB95E /* Pods-Add To My Wish List.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Add To My Wish List.release.xcconfig"; path = "Pods/Target Support Files/Pods-Add To My Wish List/Pods-Add To My Wish List.release.xcconfig"; sourceTree = "<group>"; };
-		D26DF7D30E22E3E8C72A85B5 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		DF40D0134D7283177080F398 /* Pods-MyWishList.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MyWishList.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MyWishList/Pods-MyWishList.debug.xcconfig"; sourceTree = "<group>"; };
 		E5BA797E3F6265C3A12466C4 /* Pods-Add To My Wish List.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Add To My Wish List.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Add To My Wish List/Pods-Add To My Wish List.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -157,7 +158,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D4B2B76A487C84E85D0492B9 /* libPods.a in Frameworks */,
 				DA09E7021CD912012EBA05D1 /* Pods_MyWishList.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -362,8 +362,6 @@
 		8D7D0F499CF0BE7B46511EC2 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				66A5000EF693EF38E1963C06 /* Pods.debug.xcconfig */,
-				D26DF7D30E22E3E8C72A85B5 /* Pods.release.xcconfig */,
 				DF40D0134D7283177080F398 /* Pods-MyWishList.debug.xcconfig */,
 				A8AED6C136B7B201295B1364 /* Pods-MyWishList.release.xcconfig */,
 				E5BA797E3F6265C3A12466C4 /* Pods-Add To My Wish List.debug.xcconfig */,
@@ -519,7 +517,9 @@
 			files = (
 				856488E51D03D5D8001C9D05 /* SF-UI-Display-Semibold.otf in Resources */,
 				856488E61D03D5D8001C9D05 /* SF-UI-Display-Heavy.otf in Resources */,
+				856488E91D03DAA0001C9D05 /* Pods-MyWishList.debug.xcconfig in Resources */,
 				8552B7C21C53D46F0022D41C /* LaunchScreen.storyboard in Resources */,
+				856488EA1D03DAA3001C9D05 /* Pods-MyWishList.release.xcconfig in Resources */,
 				8552B7BF1C53D46F0022D41C /* Assets.xcassets in Resources */,
 				8552B7BA1C53D46F0022D41C /* Main.storyboard in Resources */,
 			);
@@ -543,9 +543,11 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				856488ED1D03DAAD001C9D05 /* Pods-Add To My Wish List.debug.xcconfig in Resources */,
 				856997241C8B8EFA003642AD /* GetWishLink.js in Resources */,
 				851A1E731CB603C700BA5B0D /* Assets.xcassets in Resources */,
 				85814A431C8B883B00440703 /* MainInterface.storyboard in Resources */,
+				856488EC1D03DAAA001C9D05 /* Pods-Add To My Wish List.release.xcconfig in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -842,16 +844,10 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = MyWishList/MyWishList.entitlements;
 				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
-				FRAMEWORK_SEARCH_PATHS = (
-					/Users/victorguthrie/Documents/FacebookSDK,
-					"/Users/victorguthrie/Code/iOS/UdacityNanodegree/MyWishList/Pods/Firebase/**",
-				);
+				FRAMEWORK_SEARCH_PATHS = "";
 				INFOPLIST_FILE = MyWishList/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/build/Debug-iphoneos",
-				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -881,16 +877,10 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = MyWishList/MyWishList.entitlements;
 				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
-				FRAMEWORK_SEARCH_PATHS = (
-					/Users/victorguthrie/Documents/FacebookSDK,
-					"/Users/victorguthrie/Code/iOS/UdacityNanodegree/MyWishList/Pods/Firebase/**",
-				);
+				FRAMEWORK_SEARCH_PATHS = "";
 				INFOPLIST_FILE = MyWishList/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/build/Debug-iphoneos",
-				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",

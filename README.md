@@ -32,9 +32,9 @@ An iOS app that allows users to create and share wish lists with their friends.
 
 ### Test Instructions:
 
-  The following two test users have been configured with some data to allow testing the app. You can sign into the app using the following two Facebook accounts.  Dat is staged for each of them
+  Two test users have been configured with some data to allow testing the app.  You can use the email and passwords below to log into the app.
 
-  | Email                               | Password |
-  |-------------------------------------|----------|
-  | joe_ylfwhbi_tester@tfbnw.net        | pass123  |     
-  | charlie_fmvuwoq_fallerman@tfbnw.net | pass123  |
+| Email | Password |
+| --- | -------- |
+| joe_ylfwhbi_tester@tfbnw.net         | pass123  |     
+| charlie_fmvuwoq_fallerman@tfbnw.net  | pass123  |
