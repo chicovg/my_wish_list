@@ -48,7 +48,7 @@ extension FriendWishListViewController : UITableViewDataSource, UITableViewDeleg
     private func setupTableView(){
         tableView.dataSource = self
         tableView.delegate = self
-        syncService.queryWishes(forUser: friend) { (wishes, syncError) -> Void in
+        syncService.queryUngrantedWishes(forUser: friend) { (wishes, syncError) -> Void in
             if let _ = syncError where syncError == .UserNotLoggedIn {
                 self.returnToLoginView(shouldLogout: false, showLoggedOutAlert: true)
             }

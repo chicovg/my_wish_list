@@ -13,17 +13,22 @@ struct User {
     struct Keys {
         static let id = "id"
         static let name = "name"
-        static let pictureUrl = "picture_url"
+        static let pictureUrl = "pictureUrl"
         static let picture = "picture"
         static let data = "data"
         static let url = "url"
         static let provider = "provider"
         static let fb_name = "displayName"
+        static let user = "user"
     }
     
     let id: String
     let name: String
     let pictureUrl: String
+    
+    var attributes: [String : AnyObject] {
+        return [Keys.id : id, Keys.name : name, Keys.pictureUrl : pictureUrl]
+    }
     
     init(id: String, name: String, pictureUrl: String) {
         self.id = id
@@ -49,10 +54,6 @@ struct User {
         self.id = snapshot.key
         self.name = snapshot.childSnapshotForPath(Keys.name).value as! String
         self.pictureUrl = snapshot.childSnapshotForPath(Keys.pictureUrl).value as! String
-    }
-    
-    func toValuesDictionary() -> [String : AnyObject] {
-        return [Keys.name : self.name, Keys.pictureUrl : self.pictureUrl]
     }
     
 }

@@ -41,21 +41,29 @@ class LoginViewController: UIViewController {
 
     func logout() {
         syncService.logoutFromFacebook()
+        syncService.stopListeningForUpdates()
     }
     
     private func loginWithFacebook(){
-        syncService.loginWithFacebook(self) { (error) -> Void in
+        syncService.loginWithFacebook(self) { (user, error) -> Void in
             if let err = error where err == .UserLoginFailed {
                 // todo display error
                 print("Login failed")
-            } else {
-                dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                    let tabVC = self.storyboard?.instantiateViewControllerWithIdentifier(tabBarControllerId) as! UITabBarController
-                    self.presentViewController(tabVC, animated: true, completion: { () -> Void in
-                        print("Logged in successfully!")
-                    })
-                })
+                return
             }
+            
+            guard let user = user else {
+                print("user not returned from login")
+                return
+            }
+            
+            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                DataSyncService.sharedInstance.listenForUpdates(user)
+                let tabVC = self.storyboard?.instantiateViewControllerWithIdentifier(tabBarControllerId) as! UITabBarController
+                self.presentViewController(tabVC, animated: true, completion: { () -> Void in
+                    print("Logged in successfully!")
+                })
+            })
         }
     }
     

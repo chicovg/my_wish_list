@@ -24,6 +24,21 @@ struct Wish {
     var detail: String?
     var granted: Bool
     
+    var attributes: [String : AnyObject] {
+        var dict: [String : AnyObject] = [Keys.title : self.title,
+                                          Keys.granted : self.granted]
+        if let id = self.id {
+            dict[Keys.id] = id
+        }
+        if let detail = self.detail {
+            dict[Keys.detail] = detail
+        }
+        if let link = self.link {
+            dict[Keys.link] = link
+        }
+        return dict
+    }
+    
     init(id: String?, title: String, link: String?, detail: String?, granted: Bool){
         self.id = id
         self.title = title
@@ -58,17 +73,5 @@ struct Wish {
         } else {
             self.granted = false
         }
-    }
-    
-    func toValuesDictionary() -> [String : AnyObject] {
-        var dict: [String : AnyObject] = [Keys.title : self.title,
-                                        Keys.granted : self.granted]
-        if let detail = self.detail {
-            dict[Keys.detail] = detail
-        }
-        if let link = self.link {
-            dict[Keys.link] = link
-        }
-        return dict
     }
 }

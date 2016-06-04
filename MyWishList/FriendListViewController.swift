@@ -18,17 +18,29 @@ class FriendListViewController: MyWishListParentViewController {
     
     @IBOutlet weak var tableView: UITableView!
     
-    var allFriends: [User] = []
     var friends: [User] = []
-    
     var user: User!
+    
+    lazy var fetchedResultsController: NSFetchedResultsController = {
+        let fetchRequest = NSFetchRequest(entityName: FriendEntity.ENTITY_NAME)
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: User.Keys.name, ascending: true)]
+        let fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest,
+                                                                  managedObjectContext: self.sharedContext,
+                                                                  sectionNameKeyPath: nil,
+                                                                  cacheName: nil)
+        fetchedResultsController.delegate = self
+        
+        return fetchedResultsController
+    }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
+        fetchFriends()
         setupTableView()
         setupSearchController()
+        fetch()
     }
 
     override func didReceiveMemoryWarning() {
@@ -39,7 +51,7 @@ class FriendListViewController: MyWishListParentViewController {
     // MARK: Navigation
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if let identifier = segue.identifier where identifier == kSegueToFriendWishList, let fWishListVC = segue.destinationViewController as? FriendWishListViewController, indexPath = tableView.indexPathForSelectedRow {
-            fWishListVC.friend = friends[indexPath.row]
+            fWishListVC.friend = friendAtIndexPath(indexPath)
         }
     }
     
@@ -49,50 +61,74 @@ class FriendListViewController: MyWishListParentViewController {
 
 }
 
+extension FriendListViewController : NSFetchedResultsControllerDelegate {
+    
+    private func setupFetchResultsController(){
+        fetchedResultsController.delegate = self
+    }
+    
+    private func updateFetchRequest(user: UserEntity) {
+        if let searchText = searchController.searchBar.text where
+            searchController.active && searchController.searchBar.text != "" {
+            fetchedResultsController.fetchRequest.predicate = NSPredicate(format: "(user == %@) AND (title CONTAINS[cd] %@)", user.id, searchText)
+        } else {
+            fetchedResultsController.fetchRequest.predicate = NSPredicate(format: "user == %@", user)
+        }
+    }
+    
+    private func fetchFriends() {
+        guard let user = currentUser else {
+            returnToLoginView(shouldLogout: false, showLoggedOutAlert: true)
+            return
+        }
+        
+        syncService.fetchFriends(user)
+    }
+    
+    private func fetch() {
+        guard let userEntity = currentUser else {
+            returnToLoginView(shouldLogout: false, showLoggedOutAlert: true)
+            return
+        }
+        updateFetchRequest(userEntity)
+        
+        do {
+            try fetchedResultsController.performFetch()
+        } catch let error as NSError {
+            print("Error in fetch(): \(error)")
+        }
+        tableView.reloadData()
+    }
+    
+    func controllerDidChangeContent(controller: NSFetchedResultsController) {
+        fetch()
+    }
+}
+
 extension FriendListViewController : UITableViewDataSource, UITableViewDelegate {
     
     private func setupTableView(){
         tableView.dataSource = self
         tableView.delegate = self
-        syncService.fetchFriends { (syncError) -> Void in
-            if let _ = syncError where syncError == .UserNotLoggedIn {
-                self.returnToLoginView(shouldLogout: false, showLoggedOutAlert: true)
-            } else {
-                self.syncService.queryFriends({ (friends, syncError) -> Void in
-                    if let _ = syncError where syncError == .UserNotLoggedIn {
-                        self.returnToLoginView(shouldLogout: false, showLoggedOutAlert: true)
-                    } else {
-                        self.allFriends = friends
-                        self.updateFriends()
-                        self.tableView.reloadData()
-                    }
-                })
-            }
-        }
-    }
-    
-    private func updateFriends() {
-        if let searchText = searchController.searchBar.text where
-            searchController.active && searchController.searchBar.text != "" {
-            friends = allFriends.filter({ (friend) -> Bool in
-                return friend.name.lowercaseString.containsString(searchText.lowercaseString)
-            })
-        } else {
-            friends = allFriends
-        }
     }
 
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        return 1
+        guard let sections = fetchedResultsController.sections else {
+            return 0
+        }
+        return sections.count
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return friends.count
+        guard let sections = fetchedResultsController.sections else {
+            return 0
+        }
+        return sections[section].numberOfObjects
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier(kReuseIdentifier, forIndexPath: indexPath) as! FriendTableViewCell
-        let friend = friends[indexPath.row]
+        let friend = friendAtIndexPath(indexPath)
         cell.nameLabel.text = friend.name
         cell.photoImageView.image = UIImage(named: "PhotoPlaceholder")
         ImageService.sharedInstance.getImage(byUrlString: friend.pictureUrl) { (image) -> Void in
@@ -110,6 +146,9 @@ extension FriendListViewController : UITableViewDataSource, UITableViewDelegate 
         performSegueWithIdentifier(kSegueToFriendWishList, sender: nil)
     }
     
+    private func friendAtIndexPath(indexPath: NSIndexPath) -> User {
+        return (fetchedResultsController.objectAtIndexPath(indexPath) as! FriendEntity).userValue
+    }
 }
 
 // MARK  UISearchResultsUpdating
@@ -124,7 +163,6 @@ extension FriendListViewController : UISearchResultsUpdating {
     }
     
     func updateSearchResultsForSearchController(searchController: UISearchController) {
-        updateFriends()
-        tableView.reloadData()
+        fetch()
     }
 }

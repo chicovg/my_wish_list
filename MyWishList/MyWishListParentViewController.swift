@@ -7,11 +7,20 @@
 //
 
 import UIKit
+import CoreData
 
 class MyWishListParentViewController: UIViewController {
     
     var syncService: DataSyncService {
         return DataSyncService.sharedInstance
+    }
+    
+    var sharedContext: NSManagedObjectContext {
+        return CoreDataManager.sharedInstance.managedObjectContext
+    }
+    
+    var currentUser: UserEntity? {
+        return syncService.currentUser()
     }
     
     func returnToLoginView(shouldLogout logout: Bool, showLoggedOutAlert: Bool){

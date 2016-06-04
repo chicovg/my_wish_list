@@ -1,0 +1,100 @@
+query("UINavigationButton marked:'Save' enabled:false")
+query("UINavigationButton marked:'Save' enabled")
+query("UINavigationButton marked:'Save' enabled")
+query("UINavigationButton marked:'Save' enabled:true")
+query("UINavigationButton marked:'Save'").enabled
+query("UINavigationButton marked:'Save'").enabled?
+query("UINavigationButton marked:'Save'")[0]
+query("UINavigationButton marked:'Save'")[0].enabled
+query("UINavigationButton marked:'Save'")[0].enabled?
+query("UINavigationButton marked:'Save'")[0][enabled]
+query("UINavigationButton marked:'Save'")[0]['enabled']
+exit
+marks
+exit
+marks
+exit
+touch("barButton marked:'Add'")
+touch("button marked:'Add'")
+query("button marked:'Add'")
+start_test_server_in_background
+touch("button marked:'Add'")
+touch("UINavigationButton index:1")
+start_test_server_in_background
+touch("UINavigationButton index:1")
+exit
+query("*")
+query("*")
+ids
+marks
+exit
+exit
+marks
+swipe('left',{:query => "view marked:'An iPad Mini 2'"})
+query("view marked:'An iPad Mini 2'")
+start_test_server_in_background
+swipe('left',{:query => "view marked:'An iPad Mini 2'"})
+query("view marked:'An iPad Mini 2'")
+query("view marked:'An iPad Mini 2'")
+swipe('left',{:query => "view marked:'An iPad Mini 2'"})
+swipe(:left, {:query => "view marked:'An iPad Mini 2'"})
+swipe('right', {:query => "view marked:'An iPad Mini 2'"})
+swipe('left', {:query => "view marked:'An iPad Mini 2'"})
+swipe('left', {:query => "view marked:'An iPad Mini 2'"})
+cell_swipe('left', {:query => "view marked:'An iPad Mini 2'"})
+cell_swipe({:query => "view marked:'An iPad Mini 2'"})
+cell_swipe("view marked:'An iPad Mini 2'")
+swipe("view marked:'An iPad Mini 2'")
+swipe("left","view marked:'An iPad Mini 2'")
+swipe(:left, "view marked:'An iPad Mini 2'")
+swipe :left, :query => "view marked:'An iPad Mini 2'" 
+cell_swipe()
+swipe(:lwft, "view marked:'An iPad Mini 2'")
+swipe(:left, "view marked:'An iPad Mini 2'")
+swipe(:left, "view marked:'An iPad Mini 2'")
+swipe(:left, "view marked:'An iPad Mini 2'", "")
+swipe(:left)
+swipe(:left)
+swipe(:left)
+swipe(:left, :query => "view marked:'An iPad Mini 2'")
+swipe(:left, :query:"view marked:'An iPad Mini 2'")
+swipe(:left, query:"view marked:'An iPad Mini 2'")
+swipe(:left, query:"view marked:'An iPad Mini 2'")
+swipe :left, query:"view marked:'An iPad Mini 2'"
+marks
+swipe :left, query:"view marked:'An iPad Mini 2'"
+swipe :left, query: "UITableViewLabel marked:'An iPad Mini 2'"
+query("* marked:'An iPad Mini 2'")
+query("* marked:'An iPad Mini 2'")
+swipe :left, query: "* marked:'An iPad Mini 2'"
+swipe :left, query:"view marked:'An iPad Mini 2'"
+swipe :left
+query("* marked:'An iPad Mini 2'")
+start_test_server_in_background
+query("* marked:'An iPad Mini 2'")
+query("* marked:'An iPad Mini 2'")
+query("* marked:'An iPad Mini 2'")
+
+scroll_to_row_with_mark('An iPad Mini 2', {:scroll_position => :top})
+swipe :left, query:"view marked:'An iPad Mini 2'"
+
+swipe :left
+scroll_to_row_with_mark('An iPad Mini 2', {:scroll_position => :bottom})
+scroll_to_row_with_mark('An iPad Mini 2', {:scroll_position => :bottom})
+swipe :left
+scroll_to_row_with_mark('An iPad Mini 2', {:scroll_position => :top})
+scroll_to_row_with_mark('An iPad Mini 2', {:scroll_position => :middle})
+scroll_to_row_with_mark('An iPad Mini 2', {:scroll_position => :middle})
+swipe :left
+scroll_to_row_with_mark('An iPad Mini 2', {:scroll_position => :top})
+scroll_to_row_with_mark('An iPad Mini 2', {:scroll_position => :bottom})
+scroll_to_row_with_mark('An iPad Mini 2', {:scroll_position => :middle})
+
+swipe :left, offset:{x:10,y:50}, query:"* marked:'An iPad Mini 2'"
+swipe :left, offset:{x:0,y:0}, query:"* marked:'An iPad Mini 2'"
+swipe :left, offset:{x:0,y:10}, query:"* marked:'An iPad Mini 2'"
+swipe :left, offset:{x:10,y:10}, query:"* marked:'An iPad Mini 2'"
+swipe(:left, offset:{x:10,y:10}, query:"* marked:'An iPad Mini 2'")
+query("* marked:'Delete'")
+touch("* marked:'Delete'")
+exit

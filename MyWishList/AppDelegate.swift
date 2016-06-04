@@ -24,9 +24,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         FBSDKApplicationDelegate.sharedInstance().application(application, didFinishLaunchingWithOptions: launchOptions)
         
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        if DataSyncService.sharedInstance.userIsLoggedIn() {
+        if let user = DataSyncService.sharedInstance.currentUser() {
             dispatch_async(dispatch_get_main_queue(), {() -> Void in
-                self.window?.rootViewController = self.instantiateTabBarController(storyboard)
+                DataSyncService.sharedInstance.listenForUpdates(user)
+                self.window?.rootViewController = storyboard.instantiateViewControllerWithIdentifier(tabBarControllerId) as! UITabBarController
                 self.window?.makeKeyAndVisible()
             })
         } else {
@@ -35,17 +36,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
         
         return true
-    }
-    
-    private func instantiateTabBarController(storyboard: UIStoryboard) -> UIViewController {
-        let tabVC = storyboard.instantiateViewControllerWithIdentifier(tabBarControllerId) as! UITabBarController
-        let tabBar = tabVC.tabBar
-        
-//        let wishlistTBItem = tabBar.items![0];
-//        wishlistTBItem.image = UIImage(named: "WishlistTabIconInactive")
-//        wishlistTBItem.selectedImage = UIImage(named: "WishlistTabIconActive")
-        
-        return tabVC
     }
     
     func application(application: UIApplication, openURL url: NSURL, sourceApplication: String?, annotation: AnyObject) -> Bool {

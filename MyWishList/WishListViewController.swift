@@ -20,16 +20,32 @@ class WishListViewController: MyWishListParentViewController {
     @IBOutlet weak var editButton: UIBarButtonItem!
     @IBOutlet weak var addButton: UIBarButtonItem!
     
-    var allWishes: [Wish] = []
     var wishes: [Wish] = []
     var grantedWishes: [Wish] = []
+    
+    lazy var fetchedResultsController: NSFetchedResultsController = {
+        let fetchRequest = NSFetchRequest(entityName: WishEntity.ENTITY_NAME)
+        fetchRequest.sortDescriptors = [
+            NSSortDescriptor(key: Wish.Keys.granted, ascending: true),
+            NSSortDescriptor(key: Wish.Keys.title, ascending: true, selector: #selector(NSString.localizedCaseInsensitiveCompare(_:))),
+        ]
+        let fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest,
+                                                                  managedObjectContext: self.sharedContext,
+                                                                  sectionNameKeyPath: "granted",
+                                                                  cacheName: nil)
+        fetchedResultsController.delegate = self
+        
+        return fetchedResultsController
+    }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
         setupTableView()
+        setupFetchResultsController()
         setupSearchController()
+        fetch()
     }
 
     override func didReceiveMemoryWarning() {
@@ -72,58 +88,76 @@ class WishListViewController: MyWishListParentViewController {
     
 }
 
+extension WishListViewController : NSFetchedResultsControllerDelegate {
+    
+    private func setupFetchResultsController(){
+        fetchedResultsController.delegate = self
+    }
+    
+    private func updateFetchRequest(user: UserEntity) {
+        if let searchText = searchController.searchBar.text where
+            searchController.active && searchController.searchBar.text != "" {
+            fetchedResultsController.fetchRequest.predicate = NSPredicate(format: "(user == %@) AND (title CONTAINS[cd] %@)", user, searchText)
+        } else {
+            fetchedResultsController.fetchRequest.predicate = NSPredicate(format: "user == %@", user)
+        }
+    }
+    
+    private func fetch() {
+        guard let userEntity = currentUser else {
+            returnToLoginView(shouldLogout: false, showLoggedOutAlert: true)
+            return
+        }
+        updateFetchRequest(userEntity)
+        
+        do {
+            try fetchedResultsController.performFetch()
+        } catch let error as NSError {
+            print("Error in fetch(): \(error)")
+        }
+        
+        tableView.reloadData()
+    }
+    
+    func controller(controller: NSFetchedResultsController, sectionIndexTitleForSectionName sectionName: String) -> String? {
+        return sectionName == "0" ? "Wished" : "Granted"
+    }
+    
+    func controllerDidChangeContent(controller: NSFetchedResultsController) {
+        fetch()
+    }
+}
+
 // MARK: UITableViewDataSource, UITableViewDelegate
 extension WishListViewController : UITableViewDataSource, UITableViewDelegate {
     
     private func setupTableView(){
         tableView.dataSource = self
         tableView.delegate = self
-        syncService.queryWishes { (wishes, syncError) -> Void in
-            if let _ = syncError where syncError == .UserNotLoggedIn {
-                self.returnToLoginView(shouldLogout: false, showLoggedOutAlert: true)
-            }
-            
-            self.allWishes = wishes
-            self.updateWishes()
-            self.tableView.reloadData()
-        }
-    }
-    
-    private func updateWishes() {
-        if let searchText = searchController.searchBar.text where
-            searchController.active && searchController.searchBar.text != "" {
-            let filteredWishes = allWishes.filter({ (wish) -> Bool in
-                return wish.title.lowercaseString.containsString(searchText.lowercaseString)
-            })
-            wishes = filteredWishes.filter({ (wish) -> Bool in return !wish.granted})
-            grantedWishes = filteredWishes.filter({ (wish) -> Bool in return wish.granted})
-        } else {
-            wishes = allWishes.filter({ (wish) -> Bool in return !wish.granted})
-            grantedWishes = allWishes.filter({ (wish) -> Bool in return wish.granted})
-        }
     }
     
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        return grantedWishes.count > 0
-            ? (wishes.count > 0 ? 2 : 1)
-            : (wishes.count > 0 ? 1 : 0)
+        guard let sections = fetchedResultsController.sections else {
+            return 0
+        }
+        return sections.count
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return section == 0 && wishes.count > 0
-            ? wishes.count
-            : grantedWishes.count
+        guard let sections = fetchedResultsController.sections else {
+            return 0
+        }
+        return sections[section].numberOfObjects
     }
     
     func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return section == 0 && wishes.count > 0
-            ? "Wished"
-            : "Granted"
+        return fetchedResultsController.sections?[section].indexTitle
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier(kReuseIdentifier, forIndexPath: indexPath)
         let wish = wishAtIndexPath(indexPath)
+        
         if wish.granted {
             cell.imageView?.image = UIImage(named: "Checkmark")
         } else {
@@ -148,9 +182,9 @@ extension WishListViewController : UITableViewDataSource, UITableViewDelegate {
     }
     
     private func wishAtIndexPath(indexPath: NSIndexPath) -> Wish {
-        return indexPath.section == 0 && wishes.count > 0
-            ? wishes[indexPath.row]
-            : grantedWishes[indexPath.row]
+        let entity = (fetchedResultsController.objectAtIndexPath(indexPath) as! WishEntity)
+        print("user.id = \(entity.user.id)")
+        return entity.wishValue()
     }
 
     // MARK: UITableViewDelegate
@@ -160,6 +194,10 @@ extension WishListViewController : UITableViewDataSource, UITableViewDelegate {
     
     func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
         return true
+    }
+    
+    func tableView(tableView: UITableView, editingStyleForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCellEditingStyle {
+        return .Delete
     }
 }
 
@@ -175,8 +213,7 @@ extension WishListViewController : UISearchResultsUpdating {
     }
     
     func updateSearchResultsForSearchController(searchController: UISearchController) {
-        updateWishes()
-        tableView.reloadData()
+        fetch()
     }
 }
 
