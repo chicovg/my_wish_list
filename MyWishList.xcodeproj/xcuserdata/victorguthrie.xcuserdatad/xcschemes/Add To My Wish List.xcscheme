@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "0720"
+   LastUpgradeVersion = "0730"
    wasCreatedForAppExtension = "YES"
    version = "2.0">
    <BuildAction
@@ -15,7 +15,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "85814A181C8B846000440703"
+               BlueprintIdentifier = "85814A3C1C8B883B00440703"
                BuildableName = "Add To My Wish List.appex"
                BlueprintName = "Add To My Wish List"
                ReferencedContainer = "container:MyWishList.xcodeproj">
@@ -47,7 +47,7 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "85814A181C8B846000440703"
+            BlueprintIdentifier = "85814A3C1C8B883B00440703"
             BuildableName = "Add To My Wish List.appex"
             BlueprintName = "Add To My Wish List"
             ReferencedContainer = "container:MyWishList.xcodeproj">

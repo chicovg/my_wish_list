@@ -29,12 +29,11 @@ class CoreDataClient {
         }
     }
     
-    func grant(wish wish: Wish, grantedBy user: UserEntity, forFriend friend: FriendEntity) -> GrantedWishEntity? {
-        let obj = upsert(GrantedWishEntity.ENTITY_NAME, idAttributeName: Wish.Keys.id, idValue: wish.id!,
-               attributes: attributesWithFriend(
-                attributesWithGrantedByUser(wish.attributes, user: user),
-                friend: friend))
-        return obj as? GrantedWishEntity
+    func grant(wish wish: Wish, grantedBy user: UserEntity, forFriend friend: UserEntity) -> GrantedWishEntity? {
+        if let wishEntity = upsert(wish: wish, forUser: friend) {
+            return upsertGrantedWish(wishEntity, grantedBy: user)
+        }
+        return nil
     }
     
     // MARK: UserEntity functions
@@ -43,11 +42,12 @@ class CoreDataClient {
                       attributes: user.attributes) as? UserEntity
     }
     
-    func upsert(friends friends: [User], ofUser user: UserEntity) {
-        friends.forEach { (friend) in
-            upsert(FriendEntity.ENTITY_NAME, idAttributeName: User.Keys.id, idValue: friend.id,
-                attributes: attributesWithUser(friend.attributes, user: user))
+    func upsert(friend friend: User, ofUser user: UserEntity) -> FriendshipEntity? {
+        if let friendEntity = upsert(UserEntity.ENTITY_NAME, idAttributeName: User.Keys.id, idValue: friend.id,
+                                     attributes: friend.attributes) as? UserEntity {
+            return upsertFriendship(user, friend: friendEntity)
         }
+        return nil
     }
         
     func find(userById userId: String) -> UserEntity? {
@@ -70,7 +70,7 @@ class CoreDataClient {
         return attributesWithUser
     }
     
-    private func attributesWithFriend(attributes: [String:  AnyObject], friend: FriendEntity) -> [String : AnyObject] {
+    private func attributesWithFriend(attributes: [String:  AnyObject], friend: UserEntity) -> [String : AnyObject] {
         var attributesWithFriend: [String : AnyObject] = [Wish.Keys.friend: friend]
         attributes.forEach({ (key, value) in
             attributesWithFriend[key] = value
@@ -103,19 +103,44 @@ class CoreDataClient {
         }
     }
     
+    private func upsertFriendship(user: UserEntity, friend: UserEntity) -> FriendshipEntity? {
+        guard let existing = findOne(FriendshipEntity.ENTITY_NAME, predicateFormat: "%K = %@ AND %K = %@", arguments: ["user", user, "friend", friend]) else {
+            return FriendshipEntity(user: user, friend: friend, insertIntoManagedObjectContext: sharedContext)
+        }
+        
+        return existing as? FriendshipEntity
+    }
+    
+    private func upsertGrantedWish(wish: WishEntity, grantedBy: UserEntity) -> GrantedWishEntity? {
+        guard let existing = findOne(GrantedWishEntity.ENTITY_NAME, predicateFormat: "%K = %@ AND %K = %@", arguments: ["wish", wish, "grantedBy", grantedBy]) else {
+            return GrantedWishEntity(wish: wish, grantedBy: grantedBy, insertIntoManagedObjectContext: sharedContext)
+        }
+        
+        return existing as? GrantedWishEntity
+    }
+    
     private func findOne(entityName: String, idAttributeName: String, idValue: String) -> NSManagedObject? {
+        return findOne(entityName, predicateFormat: "%K = %@", arguments: [idAttributeName, idValue])
+    }
+
+    private func findOne(entityName: String, predicateFormat: String, arguments: [AnyObject]) -> NSManagedObject? {
         let fetchRequest = NSFetchRequest()
         fetchRequest.entity = NSEntityDescription.entityForName(entityName, inManagedObjectContext: sharedContext)
-        fetchRequest.predicate = NSPredicate(format: "%K = %@", idAttributeName, idValue)
+        fetchRequest.predicate = NSPredicate(format: predicateFormat, argumentArray: arguments)
         
         do {
             let result = try sharedContext.executeFetchRequest(fetchRequest)
             return result.count > 0 ? result[0] as? NSManagedObject : nil
         } catch {
             let fetchError = error as NSError
-            print("Error fetching \(entityName) \(idAttributeName)=\(idValue): \(fetchError)")
+            print("Error fetching \(entityName) args: \(arguments) error: \(fetchError)")
             return nil
         }
+        
     }
+    
+    
+    
+    
     
 }

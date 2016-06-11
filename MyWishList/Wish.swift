@@ -21,18 +21,18 @@ struct Wish {
         static let friend = "friend"
     }
     
-    static let dateFormatter: NSDateFormatter = {
-        var formatter = NSDateFormatter()
-        formatter.dateFormat = "yyyy'-'MM'-'dd'T'HH':'mm':'ss"
-        return formatter
-    }()
-    
     var id: String?
     let title: String
     var link: String?
     var detail: String?
     var granted: Bool
     var grantedOn: NSDate?
+    
+    static let dateFormatter: NSDateFormatter = {
+        var formatter = NSDateFormatter()
+        formatter.dateFormat = "yyyy'-'MM'-'dd'T'HH':'mm':'ss"
+        return formatter
+    }()
     
     var attributes: [String : AnyObject] {
         var dict: [String : AnyObject] = [Keys.title : self.title,
@@ -51,6 +51,14 @@ struct Wish {
         }
         
         return dict
+    }
+    
+    var attributesForFirebase: [String: AnyObject] {
+        var attr = self.attributes
+        if let grantedOn = grantedOn {
+            attr[Keys.grantedOn] = Wish.dateFormatter.stringFromDate(grantedOn)
+        }
+        return attr
     }
     
     init(id: String?, title: String, link: String?, detail: String?, granted: Bool, grantedOn: NSDate?){
@@ -88,8 +96,8 @@ struct Wish {
         } else {
             self.granted = false
         }
-        if snapshot.hasChild(Keys.grantedOn) {
-            self.grantedOn = snapshot.childSnapshotForPath(Keys.grantedOn).value as? NSDate
+        if let grantedOnString = snapshot.childSnapshotForPath(Keys.grantedOn).value as? String where snapshot.hasChild(Keys.grantedOn) {
+            self.grantedOn = Wish.dateFormatter.dateFromString(grantedOnString)
         }
     }
 }

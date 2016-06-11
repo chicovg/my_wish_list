@@ -188,19 +188,22 @@ class DataSyncService {
             handler(syncError: DataSyncError.UserNotLoggedIn, saveError: nil)
         }
     }
-    func grantWish(wish wish: Wish, forFriend friend: FriendEntity, handler: (syncError: DataSyncError?, saveError: NSError?) -> Void) {
+    func grantWish(wish wish: Wish, forFriend friend: UserEntity, handler: (syncError: DataSyncError?, saveError: NSError?) -> Void) {
         if let user = currentUser() {
             toggleNetworkIndicator()
             
-            firebaseClient.grantWish(friend.id, wishId: wish.id!, completionHandler: { (saveError) -> Void in
+            let grantedOnDate = NSDate()
+            
+            firebaseClient.grantWish(friend.id, wishId: wish.id!, grantedOn: grantedOnDate) { (saveError) -> Void in
                 self.toggleNetworkIndicator()
                 
                 if saveError == nil {
+                    let wish = Wish(id: wish.id, title: wish.title, link: wish.link, detail: wish.detail, granted: true, grantedOn: grantedOnDate)
                     self.coreDataClient.grant(wish: wish, grantedBy: user, forFriend: friend)
                     self.coreDataClient.saveContext()
                 }
                 handler(syncError: nil, saveError: saveError)
-            })
+            }
         } else {
             handler(syncError: DataSyncError.UserNotLoggedIn, saveError: nil)
         }
@@ -213,9 +216,12 @@ class DataSyncService {
         facebookClient.getFriends({ (friends) -> Void in
             self.toggleNetworkIndicator()
             
-            self.coreDataClient.upsert(friends: friends.map({ (friend) in
+            friends.map({ (friend) in
                 return User(id: "\(FACEBOOK_AUTH_PREFIX):\(friend.id)", name: friend.name, pictureUrl: friend.pictureUrl)
-            }), ofUser: user)
+            }).forEach({ (friend) in
+                self.coreDataClient.upsert(friend: friend, ofUser: user)
+            })
+            
             self.coreDataClient.saveContext()
         })
     }

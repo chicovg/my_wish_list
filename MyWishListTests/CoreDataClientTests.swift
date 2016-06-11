@@ -101,11 +101,76 @@ class CoreDataClientTests: XCTestCase {
         
     }
     
-    func testPerformanceExample() {
-        // This is an example of a performance test case.
-        self.measureBlock {
-            // Put the code you want to measure the time of here.
+    func testSaveFriend() {
+        let user = User(id: "testSaveFriend", name: "Test User", pictureUrl: "http://picture.com")
+        guard let userEntity = coreDataClient.upsert(user: user) else {
+            XCTFail("User not created")
+            return
         }
+        
+        XCTAssert(userEntity.friends.count == 0)
+        
+        let friend = User(id: "testFriend", name: "Bob Slidell", pictureUrl: "http://gifrific.com/wp-content/uploads/2013/04/Bob-Office-Space-Licking-Upper-Lip-320x320.gif")
+        coreDataClient.upsert(friend: friend, ofUser: userEntity)
+        coreDataClient.saveContext()
+        
+        XCTAssert(userEntity.friends.count == 1)
+        
+        coreDataClient.upsert(friend: friend, ofUser: userEntity)
+        coreDataClient.saveContext()
+        
+        XCTAssert(userEntity.friends.count == 1)
+        
+        let friendshipEntity = userEntity.friends[0]
+        let friendEntity = friendshipEntity.friend
+        
+        XCTAssert(friendEntity.id == friend.id)
+        XCTAssert(friendEntity.name == friend.name)
+        XCTAssert(friendEntity.pictureUrl == friend.pictureUrl)
+        
+        coreDataClient.delete(friendEntity)
+        coreDataClient.delete(userEntity)
+        coreDataClient.saveContext()
+
+    }
+    
+    func testGrantWish() {
+        let user1 = User(id: "testGrantWish1", name: "Test User 1", pictureUrl: "http://picture.com")
+        guard let userEntity1 = coreDataClient.upsert(user: user1) else {
+            XCTFail("User not created")
+            return
+        }
+        let user2 = User(id: "testGrantWish2", name: "Test User 2", pictureUrl: "http://picture.com")
+        guard let userEntity2 = coreDataClient.upsert(user: user2) else {
+            XCTFail("User not created")
+            return
+        }
+        coreDataClient.saveContext()
+        
+        let wish = Wish(id: "testWish1", title: "test wish 1", link: "http://wish/url", detail: "A test wish for a test user")
+        guard let wishEntity = coreDataClient.upsert(wish: wish, forUser: userEntity1) else {
+            XCTFail("wish not created")
+            return
+        }
+        coreDataClient.saveContext()
+        
+        XCTAssert(userEntity1.wishes.count == 1)
+        
+        coreDataClient.grant(wish: wish, grantedBy: userEntity2, forFriend: userEntity1)
+        coreDataClient.saveContext()
+        
+        let wishes = userEntity1.wishes
+        XCTAssert(userEntity1.wishes.count == 1)
+        XCTAssert(userEntity2.wishesGranted.count == 1)
+        
+        let grantedWish = userEntity2.wishesGranted.first!
+        XCTAssert(grantedWish.wish.id == wish.id)
+        XCTAssert(grantedWish.wish.title == wish.title)
+        XCTAssert(grantedWish.wish.detail == wish.detail)
+        
+        coreDataClient.delete(userEntity1)
+        coreDataClient.delete(userEntity2)
+        coreDataClient.saveContext()
     }
     
 }

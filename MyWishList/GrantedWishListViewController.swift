@@ -20,8 +20,8 @@ class GrantedWishListViewController: MyWishListParentViewController {
     lazy var fetchedResultsController: NSFetchedResultsController = {
         let fetchRequest = NSFetchRequest(entityName: GrantedWishEntity.ENTITY_NAME)
         fetchRequest.sortDescriptors = [
-            NSSortDescriptor(key: Wish.Keys.grantedOn, ascending: false),
-            NSSortDescriptor(key: Wish.Keys.title, ascending: true, selector: #selector(NSString.localizedCaseInsensitiveCompare(_:))),
+            NSSortDescriptor(key: "wish.\(Wish.Keys.grantedOn)", ascending: false),
+            NSSortDescriptor(key: "wish.\(Wish.Keys.title)", ascending: true, selector: #selector(NSString.localizedCaseInsensitiveCompare(_:))),
         ]
         let fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest,
                                                                   managedObjectContext: self.sharedContext,
@@ -136,7 +136,7 @@ extension GrantedWishListViewController : UITableViewDataSource, UITableViewDele
     }
     
     private func wishAtIndexPath(indexPath: NSIndexPath) -> Wish {
-        let entity = (fetchedResultsController.objectAtIndexPath(indexPath) as! GrantedWishEntity)
+        let entity = (fetchedResultsController.objectAtIndexPath(indexPath) as! GrantedWishEntity).wish
         return entity.wishValue()
     }
     

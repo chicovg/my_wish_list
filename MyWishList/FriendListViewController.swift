@@ -22,8 +22,8 @@ class FriendListViewController: MyWishListParentViewController {
     var user: User!
     
     lazy var fetchedResultsController: NSFetchedResultsController = {
-        let fetchRequest = NSFetchRequest(entityName: FriendEntity.ENTITY_NAME)
-        fetchRequest.sortDescriptors = [NSSortDescriptor(key: User.Keys.name, ascending: true)]
+        let fetchRequest = NSFetchRequest(entityName: FriendshipEntity.ENTITY_NAME)
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "friend.\(User.Keys.name)", ascending: true)]
         let fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest,
                                                                   managedObjectContext: self.sharedContext,
                                                                   sectionNameKeyPath: nil,
@@ -146,8 +146,8 @@ extension FriendListViewController : UITableViewDataSource, UITableViewDelegate 
         performSegueWithIdentifier(kSegueToFriendWishList, sender: nil)
     }
     
-    private func friendAtIndexPath(indexPath: NSIndexPath) -> FriendEntity {
-        return fetchedResultsController.objectAtIndexPath(indexPath) as! FriendEntity
+    private func friendAtIndexPath(indexPath: NSIndexPath) -> UserEntity {
+        return (fetchedResultsController.objectAtIndexPath(indexPath) as! FriendshipEntity).friend
     }
 }
 

@@ -19,7 +19,7 @@ class FriendWishListViewController: MyWishListParentViewController {
 
     var allWishes : [Wish] = []
     var wishes : [Wish] = []
-    var friend : FriendEntity!
+    var friend : UserEntity!
     
     override func viewDidLoad() {
         super.viewDidLoad()

@@ -130,11 +130,11 @@ class FirebaseClient {
     func save(wish wish: Wish, completionHandler: (error: NSError?, key: String) -> Void) {
         if let ref = currentUserWishesRef() {
             if let id = wish.id {
-                ref.childByAppendingPath(id).updateChildValues(wish.attributes, withCompletionBlock: { (error, ref) -> Void in
+                ref.childByAppendingPath(id).updateChildValues(wish.attributesForFirebase, withCompletionBlock: { (error, ref) -> Void in
                     completionHandler(error: error, key: ref.key)
                 })
             } else {
-                ref.childByAutoId().updateChildValues(wish.attributes, withCompletionBlock: { (error, ref) -> Void in
+                ref.childByAutoId().updateChildValues(wish.attributesForFirebase, withCompletionBlock: { (error, ref) -> Void in
                     completionHandler(error: error, key: ref.key)
                 })
             }
@@ -202,9 +202,11 @@ class FirebaseClient {
         }
     }
     
-    func grantWish(userId: String, wishId: String, completionHandler: (NSError?) -> Void) {
+    func grantWish(userId: String, wishId: String, grantedOn: NSDate, completionHandler: (NSError?) -> Void) {
         if let ref = userWishesRef(userId) {
-            ref.childByAppendingPath(wishId).updateChildValues([Wish.Keys.granted : true])
+            ref.childByAppendingPath(wishId).updateChildValues([
+                Wish.Keys.granted : true,
+                Wish.Keys.grantedOn : Wish.dateFormatter.stringFromDate(grantedOn)])
             completionHandler(nil)
         } else {
             completionHandler(NSError(domain: MyWishListFirebaseClientDomain,
