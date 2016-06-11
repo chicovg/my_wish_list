@@ -179,7 +179,7 @@ class DataSyncService {
                 self.toggleNetworkIndicator()
                 
                 if saveError == nil {
-                    self.coreDataClient.upsert(wish: Wish(id: key, title: wish.title, link: wish.link, detail: wish.detail, granted: wish.granted), forUser: user)
+                    self.coreDataClient.upsert(wish: Wish(id: key, title: wish.title, link: wish.link, detail: wish.detail, granted: wish.granted, grantedOn: wish.grantedOn), forUser: user)
                     self.coreDataClient.saveContext()
                 }
                 handler(syncError: nil, saveError: saveError)
@@ -188,13 +188,17 @@ class DataSyncService {
             handler(syncError: DataSyncError.UserNotLoggedIn, saveError: nil)
         }
     }
-    func grantWish(userId: String, wishId: String, handler: (syncError: DataSyncError?, saveError: NSError?) -> Void) {
-        if userIsLoggedIn() {
+    func grantWish(wish wish: Wish, forFriend friend: FriendEntity, handler: (syncError: DataSyncError?, saveError: NSError?) -> Void) {
+        if let user = currentUser() {
             toggleNetworkIndicator()
             
-            firebaseClient.grantWish(userId, wishId: wishId, completionHandler: { (saveError) -> Void in
+            firebaseClient.grantWish(friend.id, wishId: wish.id!, completionHandler: { (saveError) -> Void in
                 self.toggleNetworkIndicator()
                 
+                if saveError == nil {
+                    self.coreDataClient.grant(wish: wish, grantedBy: user, forFriend: friend)
+                    self.coreDataClient.saveContext()
+                }
                 handler(syncError: nil, saveError: saveError)
             })
         } else {

@@ -1,44 +1,41 @@
 //
-//  FriendListViewController.swift
+//  GrantedWishListViewController.swift
 //  MyWishList
 //
-//  Created by Victor Guthrie on 2/7/16.
+//  Created by Victor Guthrie on 6/7/16.
 //  Copyright © 2016 chicovg. All rights reserved.
 //
 
 import UIKit
 import CoreData
 
-class FriendListViewController: MyWishListParentViewController {
+class GrantedWishListViewController: MyWishListParentViewController {
     
-    let kReuseIdentifier = "friendListTableViewCell"
-    let kSegueToFriendWishList = "segueToFriendWishList"
+    let kReuseIdentifier = "grantedWishTableViewCell"
     
     let searchController = UISearchController(searchResultsController: nil)
     
     @IBOutlet weak var tableView: UITableView!
     
-    var friends: [User] = []
-    var user: User!
-    
     lazy var fetchedResultsController: NSFetchedResultsController = {
-        let fetchRequest = NSFetchRequest(entityName: FriendEntity.ENTITY_NAME)
-        fetchRequest.sortDescriptors = [NSSortDescriptor(key: User.Keys.name, ascending: true)]
+        let fetchRequest = NSFetchRequest(entityName: GrantedWishEntity.ENTITY_NAME)
+        fetchRequest.sortDescriptors = [
+            NSSortDescriptor(key: Wish.Keys.grantedOn, ascending: false),
+            NSSortDescriptor(key: Wish.Keys.title, ascending: true, selector: #selector(NSString.localizedCaseInsensitiveCompare(_:))),
+        ]
         let fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest,
                                                                   managedObjectContext: self.sharedContext,
                                                                   sectionNameKeyPath: nil,
-                                                                  cacheName: nil)
-        fetchedResultsController.delegate = self
-        
+                                                                  cacheName: nil)        
         return fetchedResultsController
     }()
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
-        fetchFriends()
         setupTableView()
+        setupFetchResultsController()
         setupSearchController()
         fetch()
     }
@@ -47,21 +44,10 @@ class FriendListViewController: MyWishListParentViewController {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    
-    // MARK: Navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        if let identifier = segue.identifier where identifier == kSegueToFriendWishList, let fWishListVC = segue.destinationViewController as? FriendWishListViewController, indexPath = tableView.indexPathForSelectedRow {
-            fWishListVC.friend = friendAtIndexPath(indexPath)
-        }
-    }
-    
-    @IBAction func logout(sender: AnyObject) {
-        returnToLoginView(shouldLogout: true, showLoggedOutAlert: false)
-    }
 
 }
 
-extension FriendListViewController : NSFetchedResultsControllerDelegate {
+extension GrantedWishListViewController : NSFetchedResultsControllerDelegate {
     
     private func setupFetchResultsController(){
         fetchedResultsController.delegate = self
@@ -70,19 +56,10 @@ extension FriendListViewController : NSFetchedResultsControllerDelegate {
     private func updateFetchRequest(user: UserEntity) {
         if let searchText = searchController.searchBar.text where
             searchController.active && searchController.searchBar.text != "" {
-            fetchedResultsController.fetchRequest.predicate = NSPredicate(format: "(user == %@) AND (title CONTAINS[cd] %@)", user.id, searchText)
+            fetchedResultsController.fetchRequest.predicate = NSPredicate(format: "(grantedBy == %@) AND (title CONTAINS[cd] %@)", user, searchText)
         } else {
-            fetchedResultsController.fetchRequest.predicate = NSPredicate(format: "user == %@", user)
+            fetchedResultsController.fetchRequest.predicate = NSPredicate(format: "grantedBy == %@", user)
         }
-    }
-    
-    private func fetchFriends() {
-        guard let user = currentUser else {
-            returnToLoginView(shouldLogout: false, showLoggedOutAlert: true)
-            return
-        }
-        
-        syncService.fetchFriends(user)
     }
     
     private func fetch() {
@@ -97,7 +74,12 @@ extension FriendListViewController : NSFetchedResultsControllerDelegate {
         } catch let error as NSError {
             print("Error in fetch(): \(error)")
         }
+        
         tableView.reloadData()
+    }
+    
+    func controller(controller: NSFetchedResultsController, sectionIndexTitleForSectionName sectionName: String) -> String? {
+        return sectionName == "0" ? "Wished" : "Granted"
     }
     
     func controllerDidChangeContent(controller: NSFetchedResultsController) {
@@ -105,13 +87,14 @@ extension FriendListViewController : NSFetchedResultsControllerDelegate {
     }
 }
 
-extension FriendListViewController : UITableViewDataSource, UITableViewDelegate {
+// MARK: UITableViewDataSource, UITableViewDelegate
+extension GrantedWishListViewController : UITableViewDataSource, UITableViewDelegate {
     
     private func setupTableView(){
         tableView.dataSource = self
         tableView.delegate = self
     }
-
+    
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         guard let sections = fetchedResultsController.sections else {
             return 0
@@ -126,33 +109,48 @@ extension FriendListViewController : UITableViewDataSource, UITableViewDelegate 
         return sections[section].numberOfObjects
     }
     
+    func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        return fetchedResultsController.sections?[section].indexTitle
+    }
+    
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier(kReuseIdentifier, forIndexPath: indexPath) as! FriendTableViewCell
-        let friend = friendAtIndexPath(indexPath)
-        cell.nameLabel.text = friend.name
-        cell.photoImageView.image = UIImage(named: "PhotoPlaceholder")
-        ImageService.sharedInstance.getImage(byUrlString: friend.pictureUrl) { (image) -> Void in
-            if let image = image {
-                dispatch_async(dispatch_get_main_queue(), {() -> Void in
-                    cell.photoImageView.image = image
-                })
-            }
-        }
+        let cell = tableView.dequeueReusableCellWithIdentifier(kReuseIdentifier, forIndexPath: indexPath)
+        let wish = wishAtIndexPath(indexPath)
         
+        cell.textLabel?.text = wish.title
+        cell.detailTextLabel?.text = wish.detail
         return cell
     }
     
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        performSegueWithIdentifier(kSegueToFriendWishList, sender: nil)
+    func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
+        if editingStyle == .Delete {
+            let wish = wishAtIndexPath(indexPath)
+            syncService.deleteWish(wish, handler: { (syncError, deleteError) -> Void in
+                if let _ = syncError where syncError == .UserNotLoggedIn {
+                    self.returnToLoginView(shouldLogout: false, showLoggedOutAlert: true)
+                } else if let err = deleteError {
+                    print("delete failed \(err)")
+                }
+            })
+        }
     }
     
-    private func friendAtIndexPath(indexPath: NSIndexPath) -> FriendEntity {
-        return fetchedResultsController.objectAtIndexPath(indexPath) as! FriendEntity
+    private func wishAtIndexPath(indexPath: NSIndexPath) -> Wish {
+        let entity = (fetchedResultsController.objectAtIndexPath(indexPath) as! GrantedWishEntity)
+        return entity.wishValue()
+    }
+    
+    func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
+        return true
+    }
+    
+    func tableView(tableView: UITableView, editingStyleForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCellEditingStyle {
+        return .Delete
     }
 }
 
 // MARK  UISearchResultsUpdating
-extension FriendListViewController : UISearchResultsUpdating {
+extension GrantedWishListViewController : UISearchResultsUpdating {
     private func setupSearchController() {
         searchController.searchResultsUpdater = self
         searchController.dimsBackgroundDuringPresentation = false

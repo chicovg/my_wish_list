@@ -20,6 +20,7 @@
 		851B07D91C946FB30089F0D5 /* KeychainClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 851B07D81C946FB30089F0D5 /* KeychainClient.swift */; };
 		851B07DA1C946FB30089F0D5 /* KeychainClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 851B07D81C946FB30089F0D5 /* KeychainClient.swift */; };
 		851B07DB1C9474690089F0D5 /* FirebaseClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8528B8D81C7A109900B1BD7C /* FirebaseClient.swift */; };
+		8522525C1D079EC600C45F81 /* GrantedWishListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8522525B1D079EC600C45F81 /* GrantedWishListViewController.swift */; };
 		8528B8D91C7A109900B1BD7C /* FirebaseClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8528B8D81C7A109900B1BD7C /* FirebaseClient.swift */; };
 		8528B8DD1C7AC45200B1BD7C /* DataSyncService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8528B8DC1C7AC45200B1BD7C /* DataSyncService.swift */; };
 		8528B8E01C7BE59600B1BD7C /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8528B8DF1C7BE59600B1BD7C /* User.swift */; };
@@ -50,6 +51,7 @@
 		85814A401C8B883B00440703 /* ActionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85814A3F1C8B883B00440703 /* ActionViewController.swift */; };
 		85814A431C8B883B00440703 /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 85814A411C8B883B00440703 /* MainInterface.storyboard */; };
 		85814A471C8B883B00440703 /* Add To My Wish List.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 85814A3D1C8B883B00440703 /* Add To My Wish List.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		85DC5A3B1D0B45F200494470 /* GrantedWishEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85DC5A3A1D0B45F200494470 /* GrantedWishEntity.swift */; };
 		85F5A7761CDE51B900C8EE9C /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85F5A7751CDE51B900C8EE9C /* CoreDataManager.swift */; };
 		85F5A7791CDE51F400C8EE9C /* MyWishList.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 85F5A7771CDE51F400C8EE9C /* MyWishList.xcdatamodeld */; };
 		85F5A7851CDE53D500C8EE9C /* WishEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85F5A77F1CDE53D500C8EE9C /* WishEntity.swift */; };
@@ -109,6 +111,7 @@
 		851B07D41C8E8A110089F0D5 /* Add To My Wish List.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = "Add To My Wish List.entitlements"; sourceTree = "<group>"; };
 		851B07D51C8E8A260089F0D5 /* MyWishList.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = MyWishList.entitlements; sourceTree = "<group>"; };
 		851B07D81C946FB30089F0D5 /* KeychainClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeychainClient.swift; sourceTree = "<group>"; };
+		8522525B1D079EC600C45F81 /* GrantedWishListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GrantedWishListViewController.swift; sourceTree = "<group>"; };
 		8528B8D81C7A109900B1BD7C /* FirebaseClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FirebaseClient.swift; sourceTree = "<group>"; };
 		8528B8DA1C7A175E00B1BD7C /* libFirebase.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libFirebase.a; path = "Pods/../build/Debug-iphoneos/libFirebase.a"; sourceTree = "<group>"; };
 		8528B8DC1C7AC45200B1BD7C /* DataSyncService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataSyncService.swift; sourceTree = "<group>"; };
@@ -141,6 +144,7 @@
 		85814A3F1C8B883B00440703 /* ActionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionViewController.swift; sourceTree = "<group>"; };
 		85814A421C8B883B00440703 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainInterface.storyboard; sourceTree = "<group>"; };
 		85814A441C8B883B00440703 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		85DC5A3A1D0B45F200494470 /* GrantedWishEntity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GrantedWishEntity.swift; sourceTree = "<group>"; };
 		85F5A7751CDE51B900C8EE9C /* CoreDataManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataManager.swift; sourceTree = "<group>"; };
 		85F5A7781CDE51F400C8EE9C /* MyWishList.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = MyWishList.xcdatamodel; sourceTree = "<group>"; };
 		85F5A77F1CDE53D500C8EE9C /* WishEntity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WishEntity.swift; sourceTree = "<group>"; };
@@ -316,11 +320,12 @@
 			isa = PBXGroup;
 			children = (
 				8503A0AE1C5552F600A98D67 /* LoginViewController.swift */,
+				854B56DB1C835FAD00EBEC4F /* MyWishListParentViewController.swift */,
 				8552B7E71C53DA5C0022D41C /* WishListViewController.swift */,
 				8552B7B61C53D46F0022D41C /* EditWishViewController.swift */,
 				85703DE81C677F320046669D /* FriendListViewController.swift */,
 				85036F7C1C712C51004C13A2 /* FriendWishListViewController.swift */,
-				854B56DB1C835FAD00EBEC4F /* MyWishListParentViewController.swift */,
+				8522525B1D079EC600C45F81 /* GrantedWishListViewController.swift */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -355,6 +360,7 @@
 				8518A7451CE7BE8300516E4D /* FriendEntity.swift */,
 				8518A7471CE7BE8300516E4D /* UserEntity.swift */,
 				85F5A77F1CDE53D500C8EE9C /* WishEntity.swift */,
+				85DC5A3A1D0B45F200494470 /* GrantedWishEntity.swift */,
 			);
 			name = CoreData;
 			sourceTree = "<group>";
@@ -652,6 +658,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8503A0AF1C5552F600A98D67 /* LoginViewController.swift in Sources */,
+				8522525C1D079EC600C45F81 /* GrantedWishListViewController.swift in Sources */,
 				8518A74D1CE7BE8300516E4D /* UserEntity.swift in Sources */,
 				8552B7F21C54226B0022D41C /* WishTableViewCell.swift in Sources */,
 				8518A74B1CE7BE8300516E4D /* FriendEntity.swift in Sources */,
@@ -673,6 +680,7 @@
 				85F5A7851CDE53D500C8EE9C /* WishEntity.swift in Sources */,
 				85703DE91C677F320046669D /* FriendListViewController.swift in Sources */,
 				8500D4051C6FC428001EA0E7 /* FacebookClient.swift in Sources */,
+				85DC5A3B1D0B45F200494470 /* GrantedWishEntity.swift in Sources */,
 				8552B7B51C53D46F0022D41C /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

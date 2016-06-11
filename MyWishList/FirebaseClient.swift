@@ -12,6 +12,12 @@ import Firebase
 
 let FACEBOOK_AUTH_PREFIX = "facebook"
 
+let MyWishListFirebaseClientDomain = "MyWishListFirebaseClientDomain"
+
+enum FirebaseClientErrorCode: Int {
+    case RefNotCreated = 1
+}
+
 class FirebaseClient {
     
     static let sharedInstance = FirebaseClient()
@@ -95,8 +101,6 @@ class FirebaseClient {
                 return dict
             }
             ref.updateChildValues(friendsValues)
-        } else {
-            // handle
         }
     }
     
@@ -135,7 +139,11 @@ class FirebaseClient {
                 })
             }
         } else {
-            // handle
+            completionHandler(error: NSError(domain: MyWishListFirebaseClientDomain,
+                code: FirebaseClientErrorCode.RefNotCreated.rawValue,
+                userInfo: [NSLocalizedDescriptionKey : "Unable to save wish: Firebase location reference not created",
+                    NSLocalizedFailureReasonErrorKey : "current user wishes ref not present, wishId: \(wish.id)"
+                ]), key: "")
         }
     }
     
@@ -147,7 +155,11 @@ class FirebaseClient {
                 })
             }
         } else {
-            // handle
+            completionHandler(NSError(domain: MyWishListFirebaseClientDomain,
+                code: FirebaseClientErrorCode.RefNotCreated.rawValue,
+                userInfo: [NSLocalizedDescriptionKey : "Unable to delete wish: Firebase location reference not created",
+                    NSLocalizedFailureReasonErrorKey : "current user wishes ref not present, wishId: \(wish.id)"
+                ]))
         }
     }
     
@@ -193,6 +205,13 @@ class FirebaseClient {
     func grantWish(userId: String, wishId: String, completionHandler: (NSError?) -> Void) {
         if let ref = userWishesRef(userId) {
             ref.childByAppendingPath(wishId).updateChildValues([Wish.Keys.granted : true])
+            completionHandler(nil)
+        } else {
+            completionHandler(NSError(domain: MyWishListFirebaseClientDomain,
+                code: FirebaseClientErrorCode.RefNotCreated.rawValue,
+                userInfo: [NSLocalizedDescriptionKey : "Unable to grant wish: Firebase location reference not created",
+                    NSLocalizedFailureReasonErrorKey : "userWishes ref not present, userId \(userId) wishId: \(wishId)"
+                ]))
         }
     }
     

@@ -16,13 +16,23 @@ struct Wish {
         static let link = "link"
         static let detail = "detail"
         static let granted = "granted"
+        static let grantedOn = "grantedOn"
+        static let grantedBy = "grantedBy"
+        static let friend = "friend"
     }
+    
+    static let dateFormatter: NSDateFormatter = {
+        var formatter = NSDateFormatter()
+        formatter.dateFormat = "yyyy'-'MM'-'dd'T'HH':'mm':'ss"
+        return formatter
+    }()
     
     var id: String?
     let title: String
     var link: String?
     var detail: String?
     var granted: Bool
+    var grantedOn: NSDate?
     
     var attributes: [String : AnyObject] {
         var dict: [String : AnyObject] = [Keys.title : self.title,
@@ -36,27 +46,32 @@ struct Wish {
         if let link = self.link {
             dict[Keys.link] = link
         }
+        if let grantedOn = self.grantedOn {
+            dict[Keys.grantedOn] = grantedOn
+        }
+        
         return dict
     }
     
-    init(id: String?, title: String, link: String?, detail: String?, granted: Bool){
+    init(id: String?, title: String, link: String?, detail: String?, granted: Bool, grantedOn: NSDate?){
         self.id = id
         self.title = title
         self.link = link
         self.detail = detail
         self.granted = granted
+        self.grantedOn = grantedOn
     }
     
     init(id: String?, title: String, link: String?, detail: String?){
-        self.init(id: id, title: title, link: link, detail: detail, granted: false)
+        self.init(id: id, title: title, link: link, detail: detail, granted: false, grantedOn: nil)
     }
     
     init(title: String, link: String?, detail: String?){
-        self.init(id: nil, title: title, link: link, detail: detail, granted: false)
+        self.init(id: nil, title: title, link: link, detail: detail, granted: false, grantedOn: nil)
     }
     
     init(title: String){
-        self.init(id: nil, title: title, link: nil, detail: nil, granted: false)
+        self.init(id: nil, title: title, link: nil, detail: nil, granted: false, grantedOn: nil)
     }
     
     init(fromFDataSnapshot snapshot: FDataSnapshot){
@@ -72,6 +87,9 @@ struct Wish {
             self.granted = snapshot.childSnapshotForPath(Keys.granted).value as! Bool
         } else {
             self.granted = false
+        }
+        if snapshot.hasChild(Keys.grantedOn) {
+            self.grantedOn = snapshot.childSnapshotForPath(Keys.grantedOn).value as? NSDate
         }
     }
 }

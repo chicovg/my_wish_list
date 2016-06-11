@@ -1,29 +1,45 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="10171" systemVersion="15E65" minimumToolsVersion="Xcode 7.0">
+<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="10174" systemVersion="15F34" minimumToolsVersion="Xcode 7.0">
     <entity name="FriendEntity" representedClassName=".FriendEntity" syncable="YES">
         <attribute name="id" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="pictureUrl" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="grantedWishes" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="GrantedWishEntity" inverseName="friend" inverseEntity="GrantedWishEntity" syncable="YES"/>
         <relationship name="user" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="UserEntity" inverseName="friends" inverseEntity="UserEntity" syncable="YES"/>
+    </entity>
+    <entity name="Friendship" syncable="YES"/>
+    <entity name="GrantedWishEntity" representedClassName=".GrantedWishEntity" syncable="YES">
+        <attribute name="detail" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="granted" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="grantedOn" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="id" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="link" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="title" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="friend" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="FriendEntity" inverseName="grantedWishes" inverseEntity="FriendEntity" syncable="YES"/>
+        <relationship name="grantedBy" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="UserEntity" inverseName="grantedWishes" inverseEntity="UserEntity" syncable="YES"/>
     </entity>
     <entity name="UserEntity" representedClassName=".UserEntity" syncable="YES">
         <attribute name="id" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="pictureUrl" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="friends" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="FriendEntity" inverseName="user" inverseEntity="FriendEntity" syncable="YES"/>
+        <relationship name="grantedWishes" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="GrantedWishEntity" inverseName="grantedBy" inverseEntity="GrantedWishEntity" syncable="YES"/>
         <relationship name="wishes" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="WishEntity" inverseName="user" inverseEntity="WishEntity" syncable="YES"/>
     </entity>
     <entity name="WishEntity" representedClassName=".WishEntity" syncable="YES">
         <attribute name="detail" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="granted" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="grantedOn" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="id" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="link" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="title" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="user" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="UserEntity" inverseName="wishes" inverseEntity="UserEntity" syncable="YES"/>
     </entity>
     <elements>
-        <element name="FriendEntity" positionX="-45" positionY="45" width="128" height="105"/>
-        <element name="UserEntity" positionX="-63" positionY="-18" width="128" height="120"/>
-        <element name="WishEntity" positionX="-54" positionY="-9" width="128" height="135"/>
+        <element name="FriendEntity" positionX="-45" positionY="45" width="128" height="120"/>
+        <element name="UserEntity" positionX="-63" positionY="-18" width="128" height="135"/>
+        <element name="WishEntity" positionX="-54" positionY="-9" width="128" height="150"/>
+        <element name="GrantedWishEntity" positionX="-63" positionY="54" width="128" height="165"/>
+        <element name="Friendship" positionX="-45" positionY="90" width="128" height="45"/>
     </elements>
 </model>

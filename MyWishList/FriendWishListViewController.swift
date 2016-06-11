@@ -10,16 +10,16 @@ import UIKit
 import CoreData
 
 class FriendWishListViewController: MyWishListParentViewController {
-
-    @IBOutlet weak var tableView: UITableView!
     
     let kReuseIdentifier = "friendWishListTableViewCell"
     
     let searchController = UISearchController(searchResultsController: nil)
+    
+    @IBOutlet weak var tableView: UITableView!
 
     var allWishes : [Wish] = []
     var wishes : [Wish] = []
-    var friend : User!
+    var friend : FriendEntity!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -48,7 +48,7 @@ extension FriendWishListViewController : UITableViewDataSource, UITableViewDeleg
     private func setupTableView(){
         tableView.dataSource = self
         tableView.delegate = self
-        syncService.queryUngrantedWishes(forUser: friend) { (wishes, syncError) -> Void in
+        syncService.queryUngrantedWishes(forUser: friend.userValue) { (wishes, syncError) -> Void in
             if let _ = syncError where syncError == .UserNotLoggedIn {
                 self.returnToLoginView(shouldLogout: false, showLoggedOutAlert: true)
             }
@@ -90,7 +90,7 @@ extension FriendWishListViewController : UITableViewDataSource, UITableViewDeleg
         let alert = UIAlertController(title: "Grant Wish?", message: "Do you want to grant this wish for your friend?", preferredStyle: UIAlertControllerStyle.Alert)
         alert.addAction(UIAlertAction(title: "Not now", style: UIAlertActionStyle.Cancel, handler: nil))
         alert.addAction(UIAlertAction(title: "Yes", style: UIAlertActionStyle.Default, handler: { (action) -> Void in
-            self.syncService.grantWish(self.friend.id, wishId: wish.id!, handler: { (syncError, saveError) -> Void in
+            self.syncService.grantWish(wish: wish, forFriend: self.friend, handler: { (syncError, saveError) -> Void in
                 if let _ = syncError where syncError == .UserNotLoggedIn {
                     self.returnToLoginView(shouldLogout: false, showLoggedOutAlert: true)
                 } else if let err = saveError {

@@ -61,7 +61,7 @@ class EditWishViewController: MyWishListParentViewController {
                 detail = desc
             }
             
-            let wish = Wish(id: id, title: title, link: link, detail: detail, granted: granted)
+            let wish = Wish(id: id, title: title, link: link, detail: detail, granted: granted, grantedOn: nil)
             syncService.save(wish: wish, handler: { (syncError, saveError) -> Void in
                 if let _ = syncError where syncError == .UserNotLoggedIn {
                     self.returnToLoginView(shouldLogout: false, showLoggedOutAlert: true)

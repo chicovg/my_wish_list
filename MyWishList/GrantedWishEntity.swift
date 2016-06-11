@@ -1,24 +1,24 @@
 //
-//  WishEntity.swift
+//  GrantedWishEntity.swift
 //  MyWishList
 //
-//  Created by Victor Guthrie on 5/7/16.
+//  Created by Victor Guthrie on 6/10/16.
 //  Copyright © 2016 chicovg. All rights reserved.
 //
 
 import Foundation
 import CoreData
 
-class WishEntity: NSManagedObject {
+class GrantedWishEntity: NSManagedObject {
     
-    static let ENTITY_NAME = "WishEntity"
+    static let ENTITY_NAME = "GrantedWishEntity"
     
     override init(entity: NSEntityDescription, insertIntoManagedObjectContext context: NSManagedObjectContext?) {
         super.init(entity: entity, insertIntoManagedObjectContext: context)
     }
     
-    convenience init(user: UserEntity, wish: Wish, insertIntoManagedObjectContext context: NSManagedObjectContext?) {
-        let entity = NSEntityDescription.entityForName(WishEntity.ENTITY_NAME, inManagedObjectContext: context!)!
+    convenience init(user: UserEntity, friend: FriendEntity, wish: Wish, insertIntoManagedObjectContext context: NSManagedObjectContext?) {
+        let entity = NSEntityDescription.entityForName(GrantedWishEntity.ENTITY_NAME, inManagedObjectContext: context!)!
         self.init(entity: entity, insertIntoManagedObjectContext: context)
         
         self.id = wish.id
@@ -27,7 +27,8 @@ class WishEntity: NSManagedObject {
         self.link = wish.link
         self.granted = wish.granted
         self.grantedOn = wish.grantedOn
-        self.user = user
+        self.grantedBy = user
+        self.friend = friend
     }
     
     func wishValue() -> Wish {
@@ -37,10 +38,10 @@ class WishEntity: NSManagedObject {
         }
         return Wish(id: id, title: title, link: link, detail: detail, granted: gtd, grantedOn: grantedOn)
     }
-
+    
 }
 
-extension WishEntity {
+extension GrantedWishEntity {
     
     @NSManaged var id: String?
     @NSManaged var title: String
@@ -48,6 +49,7 @@ extension WishEntity {
     @NSManaged var link: String?
     @NSManaged var granted: NSNumber?
     @NSManaged var grantedOn: NSDate?
-    @NSManaged var user: UserEntity
+    @NSManaged var grantedBy: UserEntity
+    @NSManaged var friend: FriendEntity
     
 }

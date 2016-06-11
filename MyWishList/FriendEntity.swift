@@ -25,6 +25,7 @@ class FriendEntity: NSManagedObject {
         self.name = user.name
         self.pictureUrl = user.pictureUrl
         self.user = friendOf
+        self.grantedWishes = []
     }
 
 }
@@ -35,6 +36,7 @@ extension FriendEntity {
     @NSManaged var name: String
     @NSManaged var pictureUrl: String
     @NSManaged var user: UserEntity
+    @NSManaged var grantedWishes: [GrantedWishEntity]
     
     var userValue: User {
         return User(id: id, name: name, pictureUrl: pictureUrl)

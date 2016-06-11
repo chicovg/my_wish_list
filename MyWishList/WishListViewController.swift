@@ -32,9 +32,7 @@ class WishListViewController: MyWishListParentViewController {
         let fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest,
                                                                   managedObjectContext: self.sharedContext,
                                                                   sectionNameKeyPath: "granted",
-                                                                  cacheName: nil)
-        fetchedResultsController.delegate = self
-        
+                                                                  cacheName: nil)        
         return fetchedResultsController
     }()
     
