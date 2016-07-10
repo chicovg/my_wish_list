@@ -18,9 +18,9 @@ class GrantedWishListViewController: MyWishListParentViewController {
     @IBOutlet weak var tableView: UITableView!
     
     lazy var fetchedResultsController: NSFetchedResultsController = {
-        let fetchRequest = NSFetchRequest(entityName: GrantedWishEntity.ENTITY_NAME)
+        let fetchRequest = NSFetchRequest(entityName: WishPromiseEntity.ENTITY_NAME)
         fetchRequest.sortDescriptors = [
-            NSSortDescriptor(key: "wish.\(Wish.Keys.grantedOn)", ascending: false),
+            NSSortDescriptor(key: "wish.\(Wish.Keys.promisedOn)", ascending: false),
             NSSortDescriptor(key: "wish.\(Wish.Keys.title)", ascending: true, selector: #selector(NSString.localizedCaseInsensitiveCompare(_:))),
         ]
         let fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest,
@@ -53,12 +53,12 @@ extension GrantedWishListViewController : NSFetchedResultsControllerDelegate {
         fetchedResultsController.delegate = self
     }
     
-    private func updateFetchRequest(user: UserEntity) {
+    private func updateFetchRequest(user: User) {
         if let searchText = searchController.searchBar.text where
             searchController.active && searchController.searchBar.text != "" {
-            fetchedResultsController.fetchRequest.predicate = NSPredicate(format: "(grantedBy == %@) AND (title CONTAINS[cd] %@)", user, searchText)
+            fetchedResultsController.fetchRequest.predicate = NSPredicate(format: "(promisedBy.id == %@) AND (title CONTAINS[cd] %@)", user.id, searchText)
         } else {
-            fetchedResultsController.fetchRequest.predicate = NSPredicate(format: "grantedBy == %@", user)
+            fetchedResultsController.fetchRequest.predicate = NSPredicate(format: "promisedBy.id == %@", user.id)
         }
     }
     
@@ -124,20 +124,13 @@ extension GrantedWishListViewController : UITableViewDataSource, UITableViewDele
     
     func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
         if editingStyle == .Delete {
-            let wish = wishAtIndexPath(indexPath)
-            syncService.deleteWish(wish, handler: { (syncError, deleteError) -> Void in
-                if let _ = syncError where syncError == .UserNotLoggedIn {
-                    self.returnToLoginView(shouldLogout: false, showLoggedOutAlert: true)
-                } else if let err = deleteError {
-                    print("delete failed \(err)")
-                }
-            })
+            
         }
     }
     
     private func wishAtIndexPath(indexPath: NSIndexPath) -> Wish {
-        let entity = (fetchedResultsController.objectAtIndexPath(indexPath) as! GrantedWishEntity).wish
-        return entity.wishValue()
+        let entity = (fetchedResultsController.objectAtIndexPath(indexPath) as! WishPromiseEntity).wish
+        return entity.wishValue
     }
     
     func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {

@@ -9,7 +9,7 @@
 import UIKit
 import CoreData
 
-class MyWishListParentViewController: UIViewController {
+class ParentViewController: UIViewController {
     
     var syncService: DataSyncService {
         return DataSyncService.sharedInstance
@@ -19,7 +19,7 @@ class MyWishListParentViewController: UIViewController {
         return CoreDataManager.sharedInstance.managedObjectContext
     }
     
-    var currentUser: UserEntity? {
+    var currentUser: User? {
         return syncService.currentUser()
     }
     
