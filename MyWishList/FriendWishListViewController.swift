@@ -12,6 +12,7 @@ import CoreData
 class FriendWishListViewController: MyWishListParentViewController {
     
     let kReuseIdentifier = "friendWishListTableViewCell"
+    let kSegueToPromiseWish = "segueToPromiseWish"
     
     let searchController = UISearchController(searchResultsController: nil)
     
@@ -19,7 +20,7 @@ class FriendWishListViewController: MyWishListParentViewController {
 
     var allWishes : [Wish] = []
     var wishes : [Wish] = []
-    var friend : UserEntity!
+    var friend : User!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -27,11 +28,15 @@ class FriendWishListViewController: MyWishListParentViewController {
         // Do any additional setup after loading the view.
         setupTableView()
         setupSearchController()
+        
+        navigationItem.title = friend.name
     }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if let promiseVC = segue.destinationViewController as? PromiseWishViewController, indexPath = sender as? NSIndexPath where segue.identifier == kSegueToPromiseWish {
+            promiseVC.friend = friend
+            promiseVC.wish = wishes[indexPath.row]
+        }
     }
     
     // MARK: Actions
@@ -39,6 +44,8 @@ class FriendWishListViewController: MyWishListParentViewController {
         // save edits
         dismissViewControllerAnimated(true) { () -> Void in }
     }
+    
+    
 
 }
 
@@ -48,7 +55,7 @@ extension FriendWishListViewController : UITableViewDataSource, UITableViewDeleg
     private func setupTableView(){
         tableView.dataSource = self
         tableView.delegate = self
-        syncService.queryUngrantedWishes(forUser: friend.userValue) { (wishes, syncError) -> Void in
+        syncService.queryWishedWishes(forUser: friend) { (wishes, syncError) in
             if let _ = syncError where syncError == .UserNotLoggedIn {
                 self.returnToLoginView(shouldLogout: false, showLoggedOutAlert: true)
             }
@@ -86,20 +93,7 @@ extension FriendWishListViewController : UITableViewDataSource, UITableViewDeleg
     }
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        let wish = wishes[indexPath.row]
-        let alert = UIAlertController(title: "Grant Wish?", message: "Do you want to grant this wish for your friend?", preferredStyle: UIAlertControllerStyle.Alert)
-        alert.addAction(UIAlertAction(title: "Not now", style: UIAlertActionStyle.Cancel, handler: nil))
-        alert.addAction(UIAlertAction(title: "Yes", style: UIAlertActionStyle.Default, handler: { (action) -> Void in
-            self.syncService.grantWish(wish: wish, forFriend: self.friend, handler: { (syncError, saveError) -> Void in
-                if let _ = syncError where syncError == .UserNotLoggedIn {
-                    self.returnToLoginView(shouldLogout: false, showLoggedOutAlert: true)
-                } else if let err = saveError {
-                    self.displayErrorAlert("There was an issue updating your friend's wish list", actionHandler: { (action) in }, presentHandler: {})
-                    print("save failed \(err)")
-                }
-            })
-        }))
-        presentViewController(alert, animated: true, completion: nil)
+        performSegueWithIdentifier(kSegueToPromiseWish, sender: indexPath)
     }
 }
 

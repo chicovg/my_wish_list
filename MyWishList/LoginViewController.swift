@@ -32,7 +32,7 @@ class LoginViewController: UIViewController {
     }
 
     @IBAction func didTouchLoginWithFacebook(sender: UIButton) {
-        if syncService.userIsLoggedIn() {
+        if let _ = syncService.currentUser() {
             logout()
         } else {
             loginWithFacebook()
@@ -41,7 +41,6 @@ class LoginViewController: UIViewController {
 
     func logout() {
         syncService.logoutFromFacebook()
-        syncService.stopListeningForUpdates()
     }
     
     private func loginWithFacebook(){
@@ -52,14 +51,14 @@ class LoginViewController: UIViewController {
                 return
             }
             
-            guard let user = user else {
+            if user == nil {
                 print("user not returned from login")
                 return
             }
             
             dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                DataSyncService.sharedInstance.listenForUpdates(user)
                 let tabVC = self.storyboard?.instantiateViewControllerWithIdentifier(tabBarControllerId) as! UITabBarController
+                print(tabVC)
                 self.presentViewController(tabVC, animated: true, completion: { () -> Void in
                     print("Logged in successfully!")
                 })

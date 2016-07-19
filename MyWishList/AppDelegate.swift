@@ -24,9 +24,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         FBSDKApplicationDelegate.sharedInstance().application(application, didFinishLaunchingWithOptions: launchOptions)
         
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        if let user = DataSyncService.sharedInstance.currentUser() {
+        let syncService = DataSyncService.sharedInstance
+        if let user = syncService.currentUser() {
+            syncService.listenForUpdates(user)
             dispatch_async(dispatch_get_main_queue(), {() -> Void in
-                DataSyncService.sharedInstance.listenForUpdates(user)
                 self.window?.rootViewController = storyboard.instantiateViewControllerWithIdentifier(tabBarControllerId) as! UITabBarController
                 self.window?.makeKeyAndVisible()
             })
@@ -34,6 +35,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             self.window?.rootViewController = storyboard.instantiateViewControllerWithIdentifier(loginViewControllerId)
             self.window?.makeKeyAndVisible()
         }
+        
+        application.registerUserNotificationSettings(UIUserNotificationSettings(forTypes: [.Alert, .Badge, .Sound], categories: nil))
+        application.setMinimumBackgroundFetchInterval(UIApplicationBackgroundFetchIntervalMinimum)
         
         return true
     }
@@ -63,6 +67,32 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationWillTerminate(application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
         // Saves changes in the application's managed object context before the application terminates.
+    }
+    
+    func application(application: UIApplication, performFetchWithCompletionHandler completionHandler: (UIBackgroundFetchResult) -> Void) {
+        let syncService = DataSyncService.sharedInstance
+        syncService.fetchNotifications { (notifications, syncError) in
+            if let error = syncError where error == .UserNotLoggedIn {
+                completionHandler(UIBackgroundFetchResult.Failed)
+            } else if notifications.count == 0 {
+                completionHandler(UIBackgroundFetchResult.NoData)
+            } else {
+                for notification in notifications {
+                    syncService.notifyUser(notification)
+                    syncService.deleteNotification(notification)
+                }
+                completionHandler(UIBackgroundFetchResult.NewData)
+            }
+        }
+    }
+    
+    func application(application: UIApplication, didReceiveLocalNotification notification: UILocalNotification) {
+        if application.applicationState == UIApplicationState.Active {
+            let alert = UIAlertController(title: "Great News!", message: notification.alertBody, preferredStyle: UIAlertControllerStyle.Alert)
+            alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default, handler:
+                nil))
+            self.window?.rootViewController?.presentViewController(alert, animated: true, completion: {})
+        }
     }
 }
 

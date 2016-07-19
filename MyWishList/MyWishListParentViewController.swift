@@ -9,7 +9,7 @@
 import UIKit
 import CoreData
 
-class ParentViewController: UIViewController {
+class MyWishListParentViewController: UIViewController {
     
     var syncService: DataSyncService {
         return DataSyncService.sharedInstance
@@ -39,6 +39,14 @@ class ParentViewController: UIViewController {
         let alert = UIAlertController(title: "Error", message: message, preferredStyle: UIAlertControllerStyle.Alert)
         alert.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.Default, handler: actionHandler))
         presentViewController(alert, animated: true, completion: presentHandler)
+    }
+    
+    func displayConfirmDialogue(title: String, message: String, confirmLabel: String, denyLabel: String, confirmAction: ((UIAlertAction) -> Void)) {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.Alert)
+        alert.addAction(UIAlertAction(title: confirmLabel, style: UIAlertActionStyle.Default, handler: confirmAction))
+        alert.addAction(UIAlertAction(title: denyLabel, style: UIAlertActionStyle.Cancel, handler: nil))
+        
+        presentViewController(alert, animated: true, completion: nil)
     }
 
 }

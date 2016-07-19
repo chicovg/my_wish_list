@@ -9,7 +9,6 @@
 import Foundation
 import Firebase
 
-
 let FACEBOOK_AUTH_PREFIX = "facebook"
 
 let MyWishListFirebaseClientDomain = "MyWishListFirebaseClientDomain"
@@ -25,6 +24,7 @@ class FirebaseClient {
     let USERS_PATH = "users"
     let FRIENDS_PATH = "friends"
     let WISHES_PATH = "wishes"
+    let NOTIFICATIONS_PATH = "notifications"
             
     lazy var rootRef: Firebase = {
         Firebase.defaultConfig().persistenceEnabled = true
@@ -65,12 +65,19 @@ class FirebaseClient {
         return rootRef.childByAppendingPath(WISHES_PATH).childByAppendingPath(userId)
     }
     
+    private func userNotificationsRef(userId: String) -> Firebase? {
+        return rootRef.childByAppendingPath(NOTIFICATIONS_PATH).childByAppendingPath(userId)
+    }
+    
     func removeAllObservers() {
         rootRef.removeAllObservers()
     }
     
     // MARK: user functions
     func authenticateWithFacebook(accessToken: String, handler: (user: User?, error: NSError?) -> Void) {
+//        let credential = FIRFacebookAuthProvider.credentialWithAccessToken(FBSDKAccessToken.currentAccessToken().tokenString)
+        
+        
         rootRef.authWithOAuthProvider(FACEBOOK_AUTH_PREFIX, token: accessToken, withCompletionBlock: { error, authData in
             if let authData = authData {
                 print("Logged in! \(authData)")
@@ -119,16 +126,10 @@ class FirebaseClient {
     }
     
     // MARK: wishes functions
-    func save(wish wish: Wish) {
-        save(wish: wish) { (error, key) -> Void in
-            if let error = error {
-                print("Save failed: \(error)")
-            }
-        }
-    }
     
-    func save(wish wish: Wish, completionHandler: (error: NSError?, key: String) -> Void) {
-        if let ref = currentUserWishesRef() {
+    /** creates or updates a wish */
+    func save(wish wish: Wish, forUser user: User, completionHandler: (error: NSError?, key: String) -> Void) {
+        if let ref = userWishesRef(user.id) {
             if let id = wish.id {
                 ref.childByAppendingPath(id).updateChildValues(wish.attributesForFirebase, withCompletionBlock: { (error, ref) -> Void in
                     completionHandler(error: error, key: ref.key)
@@ -147,6 +148,21 @@ class FirebaseClient {
         }
     }
     
+    /** updates wish attributes without over-writing the entire wish */
+    func updateWishAttributes(userId: String, wishId: String, attributes: [String : AnyObject], completionHandler: (NSError?) -> Void) {
+        if let ref = userWishesRef(userId) {
+            ref.childByAppendingPath(wishId).updateChildValues(attributes)
+            completionHandler(nil)
+        } else {
+            completionHandler(NSError(domain: MyWishListFirebaseClientDomain,
+                code: FirebaseClientErrorCode.RefNotCreated.rawValue,
+                userInfo: [NSLocalizedDescriptionKey : "Unable to update wish attributes: Firebase location reference not created",
+                    NSLocalizedFailureReasonErrorKey : "userWishes ref not present, userId \(userId) wishId: \(wishId)"
+                ]))
+        }
+    }
+    
+    /** deleted the wish if it exists */
     func deleteWish(wish wish: Wish, completionHandler: (NSError?) -> Void) {
         if let ref = currentUserWishesRef() {
             if let wishId = wish.id {
@@ -163,58 +179,75 @@ class FirebaseClient {
         }
     }
     
-    func queryWishes(completionHandler: (wishes: [Wish]) -> Void) {
-        if let ref = currentUserWishesRef() {
-            queryWishes(ref, completionHandler: completionHandler)
-        } else {
-            completionHandler(wishes: [])
-        }
-    }
-    
-    func queryWishes(forUser user: User, completionHandler: (wishes: [Wish]) -> Void) {
+    /** Queries wishes passes results to handler */
+    func queryWishes(forUser user: User, filter: (Wish) -> Bool = {(Wish) -> Bool in return true }, listenForUpdates: Bool = true, completionHandler: (wishes: [Wish]) -> Void) {
         if let ref = userWishesRef(user.id) {
-            queryWishes(ref, completionHandler: completionHandler)
-        } else {
-            completionHandler(wishes: [])
-        }
-    }
-    
-    func queryUngrantedWishes(forUser user: User, completionHandler: (wishes: [Wish]) -> Void) {
-        if let ref = userWishesRef(user.id) {
-            queryWishes(ref) { (wishes: [Wish]) -> Void in
-                completionHandler(wishes: wishes.filter({ (wish: Wish) -> Bool in
-                    return wish.granted == false
-                }))
+            if listenForUpdates {
+                ref.queryOrderedByChild(Wish.Keys.title).observeEventType(FEventType.Value) { (snapshot: FDataSnapshot!) -> Void in
+                    var wishes: [Wish] = []
+                    for item in snapshot.children {
+                        wishes.append(Wish(fromFDataSnapshot: item as! FDataSnapshot))
+                    }
+                    wishes = wishes.filter(filter)
+                    completionHandler(wishes: wishes)
+                }
+            } else {
+                ref.queryOrderedByChild(Wish.Keys.title).observeSingleEventOfType(FEventType.Value) { (snapshot: FDataSnapshot!) -> Void in
+                    var wishes: [Wish] = []
+                    for item in snapshot.children {
+                        wishes.append(Wish(fromFDataSnapshot: item as! FDataSnapshot))
+                    }
+                    wishes = wishes.filter(filter)
+                    completionHandler(wishes: wishes)
+                }
             }
         } else {
             completionHandler(wishes: [])
         }
     }
     
-    private func queryWishes(ref: FQuery, filter: (Wish) -> Bool = {(Wish) -> Bool in return true }, completionHandler: (wishes: [Wish]) -> Void) {
-        ref.queryOrderedByChild(Wish.Keys.title).observeEventType(FEventType.Value) { (snapshot: FDataSnapshot!) -> Void in
-            var wishes: [Wish] = []
-            for item in snapshot.children {
-                wishes.append(Wish(fromFDataSnapshot: item as! FDataSnapshot))
+    /** listens for any wishes removed from firebase and returns them to the handler */
+    func listenForWishDeletes(forUser user: User, completionHandler: (wish: Wish) -> Void) {
+        if let ref = userWishesRef(user.id) {
+            ref.observeEventType(FEventType.ChildRemoved, withBlock: { (dataSnapshot) in
+                completionHandler(wish: Wish(fromFDataSnapshot: dataSnapshot))
+            })
+        }
+    }
+    
+    func queryNotifications(forUser user: User, listenForUpdates: Bool = true, completionHandler: (notifications: [Notification]) -> Void) {
+        if let ref = userNotificationsRef(user.id) {
+            if listenForUpdates {
+                ref.queryOrderedByKey().observeEventType(FEventType.Value) { (snapshot: FDataSnapshot!) -> Void in
+                    var notifications: [Notification] = []
+                    for item in snapshot.children {
+                        notifications.append(Notification(fromFDataSnapshot: item as! FDataSnapshot))
+                    }
+                    completionHandler(notifications: notifications)
+                }
+            } else {
+                ref.queryOrderedByKey().observeSingleEventOfType(FEventType.Value) { (snapshot: FDataSnapshot!) -> Void in
+                    var notifications: [Notification] = []
+                    for item in snapshot.children {
+                        notifications.append(Notification(fromFDataSnapshot: item as! FDataSnapshot))
+                    }
+                    completionHandler(notifications: notifications)
+                }
             }
-            wishes = wishes.filter(filter)
-            completionHandler(wishes: wishes)
         }
     }
     
-    func grantWish(userId: String, wishId: String, grantedOn: NSDate, completionHandler: (NSError?) -> Void) {
-        if let ref = userWishesRef(userId) {
-            ref.childByAppendingPath(wishId).updateChildValues([
-                Wish.Keys.granted : true,
-                Wish.Keys.grantedOn : Wish.dateFormatter.stringFromDate(grantedOn)])
-            completionHandler(nil)
-        } else {
-            completionHandler(NSError(domain: MyWishListFirebaseClientDomain,
-                code: FirebaseClientErrorCode.RefNotCreated.rawValue,
-                userInfo: [NSLocalizedDescriptionKey : "Unable to grant wish: Firebase location reference not created",
-                    NSLocalizedFailureReasonErrorKey : "userWishes ref not present, userId \(userId) wishId: \(wishId)"
-                ]))
+    func sendNotification(withType type: NotificationType, toUser user: User) {
+        if let ref = userNotificationsRef(user.id) {
+            ref.childByAutoId().updateChildValues([ Notification.MESSAGE: type.notification.message ], withCompletionBlock: { (error, ref) in
+                print("\(error) \(ref)")
+            })
         }
     }
     
+    func deleteNotification(notification: Notification, forUser user: User) {
+        if let ref = userNotificationsRef(user.id) {
+            ref.childByAppendingPath(notification.id!).removeValue()
+        }
+    }
 }

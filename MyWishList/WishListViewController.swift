@@ -12,6 +12,8 @@ import CoreData
 class WishListViewController: MyWishListParentViewController {
     
     let kSegueToEditWish = "segueToEditWish"
+    let kSegueToViewWish = "segueToViewWish"
+
     let kReuseIdentifier = "wishListTableViewCell"
     
     let searchController = UISearchController(searchResultsController: nil)
@@ -20,19 +22,17 @@ class WishListViewController: MyWishListParentViewController {
     @IBOutlet weak var editButton: UIBarButtonItem!
     @IBOutlet weak var addButton: UIBarButtonItem!
     
-    var wishes: [Wish] = []
-    var grantedWishes: [Wish] = []
-    
     lazy var fetchedResultsController: NSFetchedResultsController = {
         let fetchRequest = NSFetchRequest(entityName: WishEntity.ENTITY_NAME)
         fetchRequest.sortDescriptors = [
-            NSSortDescriptor(key: Wish.Keys.granted, ascending: true),
+            NSSortDescriptor(key: Wish.Keys.status, ascending: false),
             NSSortDescriptor(key: Wish.Keys.title, ascending: true, selector: #selector(NSString.localizedCaseInsensitiveCompare(_:))),
         ]
         let fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest,
-                                                                  managedObjectContext: self.sharedContext,
-                                                                  sectionNameKeyPath: "granted",
-                                                                  cacheName: nil)        
+                                                                  managedObjectContext: CoreDataClient.sharedInstance.sharedContext,
+                                                                  sectionNameKeyPath: Wish.Keys.status,
+                                                                  cacheName: nil)
+        fetchedResultsController.delegate = self
         return fetchedResultsController
     }()
     
@@ -41,14 +41,8 @@ class WishListViewController: MyWishListParentViewController {
 
         // Do any additional setup after loading the view.
         setupTableView()
-        setupFetchResultsController()
         setupSearchController()
         fetch()
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
     
     // MARK: Navigation
@@ -60,6 +54,13 @@ class WishListViewController: MyWishListParentViewController {
                 } else {
                     editVC.wishToEdit = nil
                 }
+        }
+        
+        if let identifier = segue.identifier where identifier == kSegueToViewWish,
+            let viewVC = segue.destinationViewController as? ViewWishViewController {
+            if let indexPath = sender as? NSIndexPath {
+                viewVC.wish = wishAtIndexPath(indexPath)
+            }
         }
     }
     
@@ -88,25 +89,21 @@ class WishListViewController: MyWishListParentViewController {
 
 extension WishListViewController : NSFetchedResultsControllerDelegate {
     
-    private func setupFetchResultsController(){
-        fetchedResultsController.delegate = self
-    }
-    
-    private func updateFetchRequest(user: UserEntity) {
+    private func updateFetchRequest(user: User) {
         if let searchText = searchController.searchBar.text where
             searchController.active && searchController.searchBar.text != "" {
-            fetchedResultsController.fetchRequest.predicate = NSPredicate(format: "(user == %@) AND (title CONTAINS[cd] %@)", user, searchText)
+            fetchedResultsController.fetchRequest.predicate = NSPredicate(format: "(user.id == %@) AND (title CONTAINS[cd] %@)", user.id, searchText)
         } else {
-            fetchedResultsController.fetchRequest.predicate = NSPredicate(format: "user == %@", user)
+            fetchedResultsController.fetchRequest.predicate = NSPredicate(format: "user.id == %@", user.id)
         }
     }
     
     private func fetch() {
-        guard let userEntity = currentUser else {
+        guard let user = currentUser else {
             returnToLoginView(shouldLogout: false, showLoggedOutAlert: true)
             return
         }
-        updateFetchRequest(userEntity)
+        updateFetchRequest(user)
         
         do {
             try fetchedResultsController.performFetch()
@@ -118,7 +115,7 @@ extension WishListViewController : NSFetchedResultsControllerDelegate {
     }
     
     func controller(controller: NSFetchedResultsController, sectionIndexTitleForSectionName sectionName: String) -> String? {
-        return sectionName == "0" ? "Wished" : "Granted"
+        return sectionName
     }
     
     func controllerDidChangeContent(controller: NSFetchedResultsController) {
@@ -155,39 +152,53 @@ extension WishListViewController : UITableViewDataSource, UITableViewDelegate {
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier(kReuseIdentifier, forIndexPath: indexPath)
         let wish = wishAtIndexPath(indexPath)
-        
-        if wish.granted {
-            cell.imageView?.image = UIImage(named: "Checkmark")
-        } else {
-            cell.imageView?.image = UIImage(named: "Checkmark-unchecked")
-        }
         cell.textLabel?.text = wish.title
         cell.detailTextLabel?.text = wish.detail
         return cell
     }
     
-    func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
-        if editingStyle == .Delete {
-            let wish = wishAtIndexPath(indexPath)
-            syncService.deleteWish(wish, handler: { (syncError, deleteError) -> Void in
+    func tableView(tableView: UITableView, editActionsForRowAtIndexPath indexPath: NSIndexPath) -> [UITableViewRowAction]? {
+        let wish = wishAtIndexPath(indexPath)
+        let deleteWishAction = UITableViewRowAction(style: UITableViewRowActionStyle.Destructive, title: "Delete" ) { (action, indexPath) in
+            self.syncService.deleteWish(wish, handler: { (syncError, deleteError) in
                 if let _ = syncError where syncError == .UserNotLoggedIn {
                     self.returnToLoginView(shouldLogout: false, showLoggedOutAlert: true)
                 } else if let err = deleteError {
                     print("delete failed \(err)")
+                    self.displayErrorAlert("There was an problem deleting the wish!", actionHandler: { (action) in }, presentHandler: {})
                 }
             })
         }
+        let markGrantedAction = UITableViewRowAction(style: UITableViewRowActionStyle.Normal, title: "Mark Granted" ) { (action, indexPath) in
+            self.syncService.granted(wish: wish, handler: { (syncError, saveError) in
+                if let _ = syncError where syncError == .UserNotLoggedIn {
+                    self.returnToLoginView(shouldLogout: false, showLoggedOutAlert: true)
+                } else if let err = saveError {
+                    print("save failed \(err)")
+                    self.displayErrorAlert("There was an problem updating the wish!", actionHandler: { (action) in },presentHandler: {})
+                }
+            })
+        }
+        markGrantedAction.backgroundColor = UIColor.init(red: 0.16, green: 0.64, blue: 0.39, alpha: 1.00)
+        
+        if wish.status == Wish.Status.Promised {
+            return [markGrantedAction]
+        }
+        
+        return [deleteWishAction]
     }
     
     private func wishAtIndexPath(indexPath: NSIndexPath) -> Wish {
-        let entity = (fetchedResultsController.objectAtIndexPath(indexPath) as! WishEntity)
-        print("user.id = \(entity.user.id)")
-        return entity.wishValue()
+        return (fetchedResultsController.objectAtIndexPath(indexPath) as! WishEntity).wishValue
     }
 
     // MARK: UITableViewDelegate
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        performSegueWithIdentifier(kSegueToEditWish, sender: indexPath)
+        if wishAtIndexPath(indexPath).wished() {
+            performSegueWithIdentifier(kSegueToEditWish, sender: indexPath)
+        } else {
+            performSegueWithIdentifier(kSegueToViewWish, sender: indexPath)
+        }
     }
     
     func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {

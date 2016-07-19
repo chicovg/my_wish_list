@@ -18,20 +18,30 @@ class CoreDataClient {
     }
     
     // MARK: WishEntity functions
-    func upsert(wish wish: Wish, forUser user: UserEntity) -> WishEntity? {
-        return upsert(WishEntity.ENTITY_NAME, idAttributeName: Wish.Keys.id, idValue: wish.id!,
-               attributes: attributesWithUser(wish.attributes, user: user)) as? WishEntity
+    func upsert(wish wish: Wish, forUser user: User) -> WishEntity? {
+        if let userEntity = upsert(user: user) {
+            if let wishEntity = upsert(WishEntity.ENTITY_NAME, idAttributeName: Wish.Keys.id, idValue: wish.id!,
+                                       attributes: attributes(wish.attributes, withUser: userEntity)) as? WishEntity {
+                if let promisedBy = wish.promisedBy, promisedByEntity = upsert(user: promisedBy), promisedOn = wish.promisedOn {
+                    upsertWishPromise(wishEntity, promisedBy: promisedByEntity, promisedOn: promisedOn)
+                } else if let wishPromiseEntity = wishEntity.wishPromise {
+                    delete(wishPromiseEntity)
+                }
+                return wishEntity
+            }
+        }
+        return nil
     }
     
-    func delete(wish wish: Wish) {
-        if let entity = findOne(WishEntity.ENTITY_NAME, idAttributeName: Wish.Keys.id, idValue: wish.id!) {
+    func delete(wish wish: Wish, forUser user: User) {
+        if let _ = upsert(user: user), entity = findOne(WishEntity.ENTITY_NAME, idAttributeName: Wish.Keys.id, idValue: wish.id!) {
             delete(entity)
         }
     }
     
-    func grant(wish wish: Wish, grantedBy user: UserEntity, forFriend friend: UserEntity) -> GrantedWishEntity? {
-        if let wishEntity = upsert(wish: wish, forUser: friend) {
-            return upsertGrantedWish(wishEntity, grantedBy: user)
+    func promise(wish wish: Wish, promisedBy user: User, forFriend friend: User) -> WishPromiseEntity? {
+        if let _ = upsert(user: user), wishEntity = upsert(wish: wish, forUser: friend), promisedBy = wish.promisedBy, promisedByEntity = upsert(user: promisedBy), promisedOn = wish.promisedOn {
+            return upsertWishPromise(wishEntity, promisedBy: promisedByEntity, promisedOn: promisedOn)
         }
         return nil
     }
@@ -42,40 +52,40 @@ class CoreDataClient {
                       attributes: user.attributes) as? UserEntity
     }
     
-    func upsert(friend friend: User, ofUser user: UserEntity) -> FriendshipEntity? {
-        if let friendEntity = upsert(UserEntity.ENTITY_NAME, idAttributeName: User.Keys.id, idValue: friend.id,
-                                     attributes: friend.attributes) as? UserEntity {
-            return upsertFriendship(user, friend: friendEntity)
+    func upsert(friend friend: User, ofUser user: User) -> FriendshipEntity? {
+        if let userEntity = upsert(user: user), friendEntity = upsert(UserEntity.ENTITY_NAME, idAttributeName: User.Keys.id, idValue: friend.id, attributes: friend.attributes) as? UserEntity {
+            return upsertFriendship(userEntity, friend: friendEntity)
         }
         return nil
     }
-        
+    
     func find(userById userId: String) -> UserEntity? {
         return findOne(UserEntity.ENTITY_NAME, idAttributeName: User.Keys.id, idValue: userId) as? UserEntity
     }
     
-    private func attributesWithUser(attributes: [String:  AnyObject], user: UserEntity) -> [String : AnyObject] {
-        var attributesWithUser: [String : AnyObject] = [User.Keys.user: user]
-        attributes.forEach({ (key, value) in
-            attributesWithUser[key] = value
-        })
-        return attributesWithUser
+    func delete(user: User) {
+        if let userEntity = find(userById: user.id) {
+            delete(userEntity)
+        }
     }
     
-    private func attributesWithGrantedByUser(attributes: [String:  AnyObject], user: UserEntity) -> [String : AnyObject] {
-        var attributesWithUser: [String : AnyObject] = [Wish.Keys.grantedBy: user]
-        attributes.forEach({ (key, value) in
-            attributesWithUser[key] = value
-        })
-        return attributesWithUser
+    private func attributes(attributes: [String:  AnyObject], withUser user: UserEntity) -> [String : AnyObject] {
+        return appendedAttributes(attributes, additionalAttributes: [User.Keys.user: user])
     }
     
-    private func attributesWithFriend(attributes: [String:  AnyObject], friend: UserEntity) -> [String : AnyObject] {
-        var attributesWithFriend: [String : AnyObject] = [Wish.Keys.friend: friend]
+    private func attributes(attributes: [String:  AnyObject], withFriend friend: UserEntity) -> [String : AnyObject] {
+        return appendedAttributes(attributes, additionalAttributes: [Wish.Keys.friend: friend])
+    }
+    
+    private func appendedAttributes(attributes: [String : AnyObject], additionalAttributes: [String : AnyObject]) -> [String : AnyObject] {
+        var appendedAttributes: [String: AnyObject] = [:]
         attributes.forEach({ (key, value) in
-            attributesWithFriend[key] = value
+            appendedAttributes[key] = value
         })
-        return attributesWithFriend
+        additionalAttributes.forEach({ (key, value) in
+            appendedAttributes[key] = value
+        })
+        return appendedAttributes
     }
     
     // MARK: General Core Data functions
@@ -111,12 +121,12 @@ class CoreDataClient {
         return existing as? FriendshipEntity
     }
     
-    private func upsertGrantedWish(wish: WishEntity, grantedBy: UserEntity) -> GrantedWishEntity? {
-        guard let existing = findOne(GrantedWishEntity.ENTITY_NAME, predicateFormat: "%K = %@ AND %K = %@", arguments: ["wish", wish, "grantedBy", grantedBy]) else {
-            return GrantedWishEntity(wish: wish, grantedBy: grantedBy, insertIntoManagedObjectContext: sharedContext)
+    private func upsertWishPromise(wish: WishEntity, promisedBy: UserEntity, promisedOn: NSDate) -> WishPromiseEntity? {
+        guard let existing = findOne(WishPromiseEntity.ENTITY_NAME, predicateFormat: "%K = %@ AND %K = %@", arguments: ["wish", wish, "promisedBy", promisedBy]) else {
+            return WishPromiseEntity(wish: wish, promisedBy: promisedBy, promisedOn: promisedOn, grantedOn: nil, insertIntoManagedObjectContext: sharedContext)
         }
         
-        return existing as? GrantedWishEntity
+        return existing as? WishPromiseEntity
     }
     
     private func findOne(entityName: String, idAttributeName: String, idValue: String) -> NSManagedObject? {
@@ -138,9 +148,4 @@ class CoreDataClient {
         }
         
     }
-    
-    
-    
-    
-    
 }

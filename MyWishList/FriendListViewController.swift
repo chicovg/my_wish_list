@@ -67,12 +67,12 @@ extension FriendListViewController : NSFetchedResultsControllerDelegate {
         fetchedResultsController.delegate = self
     }
     
-    private func updateFetchRequest(user: UserEntity) {
+    private func updateFetchRequest(user: User) {
         if let searchText = searchController.searchBar.text where
             searchController.active && searchController.searchBar.text != "" {
-            fetchedResultsController.fetchRequest.predicate = NSPredicate(format: "(user == %@) AND (title CONTAINS[cd] %@)", user.id, searchText)
+            fetchedResultsController.fetchRequest.predicate = NSPredicate(format: "(user.id == %@) AND (title CONTAINS[cd] %@)", user.id, searchText)
         } else {
-            fetchedResultsController.fetchRequest.predicate = NSPredicate(format: "user == %@", user)
+            fetchedResultsController.fetchRequest.predicate = NSPredicate(format: "user.id == %@", user.id)
         }
     }
     
@@ -146,8 +146,8 @@ extension FriendListViewController : UITableViewDataSource, UITableViewDelegate 
         performSegueWithIdentifier(kSegueToFriendWishList, sender: nil)
     }
     
-    private func friendAtIndexPath(indexPath: NSIndexPath) -> UserEntity {
-        return (fetchedResultsController.objectAtIndexPath(indexPath) as! FriendshipEntity).friend
+    private func friendAtIndexPath(indexPath: NSIndexPath) -> User {
+        return (fetchedResultsController.objectAtIndexPath(indexPath) as! FriendshipEntity).friend.userValue
     }
 }
 

@@ -8,10 +8,12 @@
 
 import UIKit
 
-class WishTableViewCell: UITableViewCell {
-
+class PromisedWishTableViewCell: UITableViewCell {
+    
     @IBOutlet weak var titleLabel: UILabel!
-    @IBOutlet weak var subtitleLabel: UILabel!
+    @IBOutlet weak var friendsImage: UIImageView!
+    @IBOutlet weak var detailLabel: UILabel!
+    @IBOutlet weak var promisedLabel: UILabel!
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -22,6 +24,12 @@ class WishTableViewCell: UITableViewCell {
         super.setSelected(selected, animated: animated)
 
         // Configure the view for the selected state
+    }
+    
+    func setPromsedLabel(friend: String, promisedOn: NSDate) {
+        let timeBetween = promisedOn.timeIntervalSinceNow
+        let daysSince = Int(0 - round(timeBetween/(60 * 60 * 24)))
+        promisedLabel.text = "Promised to \(friend) \(daysSince > 0 ? "\(daysSince) days ago" : "today")"
     }
 
 }

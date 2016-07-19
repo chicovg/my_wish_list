@@ -9,7 +9,7 @@
 import Foundation
 import Firebase
 
-struct User {
+struct User : Equatable {
     struct Keys {
         static let id = "id"
         static let name = "name"
@@ -56,4 +56,8 @@ struct User {
         self.pictureUrl = snapshot.childSnapshotForPath(Keys.pictureUrl).value as! String
     }
     
+}
+
+func ==(lhs: User, rhs: User) -> Bool {
+    return lhs.id == rhs.id && lhs.name == rhs.name && lhs.pictureUrl == rhs.pictureUrl
 }

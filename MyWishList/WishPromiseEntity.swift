@@ -17,13 +17,14 @@ class WishPromiseEntity: NSManagedObject {
         super.init(entity: entity, insertIntoManagedObjectContext: context)
     }
     
-    convenience init(wish: WishEntity, promisedBy: UserEntity, promisedOn: NSDate, insertIntoManagedObjectContext context: NSManagedObjectContext?) {
+    convenience init(wish: WishEntity, promisedBy: UserEntity, promisedOn: NSDate, grantedOn: NSDate?, insertIntoManagedObjectContext context: NSManagedObjectContext?) {
         let entity = NSEntityDescription.entityForName(WishPromiseEntity.ENTITY_NAME, inManagedObjectContext: context!)!
         self.init(entity: entity, insertIntoManagedObjectContext: context)
         
         self.promisedBy = promisedBy
         self.wish = wish
         self.promisedOn = promisedOn
+        self.grantedOn = grantedOn
     }
 }
 
@@ -32,5 +33,6 @@ extension WishPromiseEntity {
     @NSManaged var promisedBy: UserEntity
     @NSManaged var wish: WishEntity
     @NSManaged var promisedOn: NSDate
+    @NSManaged var grantedOn: NSDate?
     
 }

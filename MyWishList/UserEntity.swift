@@ -27,7 +27,7 @@ class UserEntity: NSManagedObject {
         self.friends = []
         self.wishes = []
         self.friendOf = []
-        self.wishesGranted = []
+        self.wishesPromised = []
     }
     
     convenience init(user: User, insertIntoManagedObjectContext context: NSManagedObjectContext?) {
@@ -44,8 +44,7 @@ extension UserEntity {
     @NSManaged var pictureUrl: String
     @NSManaged var friends: [FriendshipEntity] // these are my friends
     @NSManaged var friendOf: [FriendshipEntity] // these are people who i am a friend of
-    @NSManaged var wishesGranted: [GrantedWishEntity]
-
+    @NSManaged var wishesPromised: [WishPromiseEntity]
     @NSManaged var wishes: [WishEntity]
     
     var userValue: User {
@@ -54,7 +53,7 @@ extension UserEntity {
     
     var wishValues: [Wish] {
         return wishes.map({ (entity) -> Wish in
-            return entity.wishValue()
+            return entity.wishValue
         })
     }
     

@@ -65,7 +65,16 @@ class CoreDataManager {
     func saveContext () {
         if managedObjectContext.hasChanges {
             do {
+                let fetchRequest = NSFetchRequest(entityName: WishEntity.ENTITY_NAME)
+                var count = managedObjectContext.countForFetchRequest(fetchRequest, error: nil)
+                print("wishes: \(count)")
+                
                 try managedObjectContext.save()
+                
+                count = managedObjectContext.countForFetchRequest(fetchRequest, error: nil)
+                print("wishes: \(count)")
+                
+                print("managed object context \(managedObjectContext)")
             } catch {
                 // Replace this implementation with code to handle the error appropriately.
                 // abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.

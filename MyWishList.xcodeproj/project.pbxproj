@@ -14,27 +14,29 @@
 		85036F7D1C712C51004C13A2 /* FriendWishListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85036F7C1C712C51004C13A2 /* FriendWishListViewController.swift */; };
 		8503A0AF1C5552F600A98D67 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8503A0AE1C5552F600A98D67 /* LoginViewController.swift */; };
 		8503A0B21C55878400A98D67 /* HTTPClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8503A0B11C55878400A98D67 /* HTTPClient.swift */; };
+		8503DF5B1D3AF87B00FC33FB /* NotificationType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8503DF5A1D3AF87B00FC33FB /* NotificationType.swift */; };
 		8518A74D1CE7BE8300516E4D /* UserEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8518A7471CE7BE8300516E4D /* UserEntity.swift */; };
 		851A1E731CB603C700BA5B0D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 851A1E721CB603C700BA5B0D /* Assets.xcassets */; };
 		851B07D91C946FB30089F0D5 /* KeychainClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 851B07D81C946FB30089F0D5 /* KeychainClient.swift */; };
 		851B07DA1C946FB30089F0D5 /* KeychainClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 851B07D81C946FB30089F0D5 /* KeychainClient.swift */; };
 		851B07DB1C9474690089F0D5 /* FirebaseClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8528B8D81C7A109900B1BD7C /* FirebaseClient.swift */; };
-		8522525C1D079EC600C45F81 /* GrantedWishListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8522525B1D079EC600C45F81 /* GrantedWishListViewController.swift */; };
+		8522525C1D079EC600C45F81 /* PromisedWishListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8522525B1D079EC600C45F81 /* PromisedWishListViewController.swift */; };
 		8528B8D91C7A109900B1BD7C /* FirebaseClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8528B8D81C7A109900B1BD7C /* FirebaseClient.swift */; };
 		8528B8DD1C7AC45200B1BD7C /* DataSyncService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8528B8DC1C7AC45200B1BD7C /* DataSyncService.swift */; };
 		8528B8E01C7BE59600B1BD7C /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8528B8DF1C7BE59600B1BD7C /* User.swift */; };
 		8528B8E21C7BEA0F00B1BD7C /* Wish.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8528B8E11C7BEA0F00B1BD7C /* Wish.swift */; };
+		853332CF1D319EE400DFCD67 /* PromiseWishViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 853332CE1D319EE400DFCD67 /* PromiseWishViewController.swift */; };
+		853332D21D31A00C00DFCD67 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 853332D01D31A00C00DFCD67 /* Main.storyboard */; };
 		85348C871CFB250C002A6286 /* CoreDataClientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85348C861CFB250C002A6286 /* CoreDataClientTests.swift */; };
 		854B56DC1C835FAD00EBEC4F /* MyWishListParentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 854B56DB1C835FAD00EBEC4F /* MyWishListParentViewController.swift */; };
 		8552B7B51C53D46F0022D41C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8552B7B41C53D46F0022D41C /* AppDelegate.swift */; };
 		8552B7B71C53D46F0022D41C /* EditWishViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8552B7B61C53D46F0022D41C /* EditWishViewController.swift */; };
-		8552B7BA1C53D46F0022D41C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8552B7B81C53D46F0022D41C /* Main.storyboard */; };
 		8552B7BF1C53D46F0022D41C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8552B7BE1C53D46F0022D41C /* Assets.xcassets */; };
 		8552B7C21C53D46F0022D41C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8552B7C01C53D46F0022D41C /* LaunchScreen.storyboard */; };
 		8552B7CD1C53D46F0022D41C /* MyWishListTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8552B7CC1C53D46F0022D41C /* MyWishListTests.swift */; };
 		8552B7D81C53D46F0022D41C /* MyWishListUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8552B7D71C53D46F0022D41C /* MyWishListUITests.swift */; };
 		8552B7E81C53DA5C0022D41C /* WishListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8552B7E71C53DA5C0022D41C /* WishListViewController.swift */; };
-		8552B7F21C54226B0022D41C /* WishTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8552B7F11C54226B0022D41C /* WishTableViewCell.swift */; };
+		8552B7F21C54226B0022D41C /* PromisedWishTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8552B7F11C54226B0022D41C /* PromisedWishTableViewCell.swift */; };
 		855E5E3D1C8BBDE7007CCE1C /* Firebase.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 855E5E3B1C8BBDE7007CCE1C /* Firebase.framework */; };
 		855E5E3E1C8BBDE7007CCE1C /* Pods_MyWishList.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 855E5E3C1C8BBDE7007CCE1C /* Pods_MyWishList.framework */; };
 		856488E51D03D5D8001C9D05 /* SF-UI-Display-Semibold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 856488E31D03D5D8001C9D05 /* SF-UI-Display-Semibold.otf */; };
@@ -43,10 +45,13 @@
 		8569973F1C8BB80E003642AD /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8528B8DF1C7BE59600B1BD7C /* User.swift */; };
 		856997401C8BB80E003642AD /* Wish.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8528B8E11C7BEA0F00B1BD7C /* Wish.swift */; };
 		85703DE91C677F320046669D /* FriendListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85703DE81C677F320046669D /* FriendListViewController.swift */; };
+		858136491D3B1D3C00236483 /* NotificationType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8503DF5A1D3AF87B00FC33FB /* NotificationType.swift */; };
 		85814A401C8B883B00440703 /* ActionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85814A3F1C8B883B00440703 /* ActionViewController.swift */; };
 		85814A431C8B883B00440703 /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 85814A411C8B883B00440703 /* MainInterface.storyboard */; };
 		85814A471C8B883B00440703 /* Add To My Wish List.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 85814A3D1C8B883B00440703 /* Add To My Wish List.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
-		85DC5A3B1D0B45F200494470 /* GrantedWishEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85DC5A3A1D0B45F200494470 /* GrantedWishEntity.swift */; };
+		85960C501D2015E200E3B396 /* ViewWishViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85960C4F1D2015E200E3B396 /* ViewWishViewController.swift */; };
+		859CA5481D1F0D2A00BB6364 /* DataSyncServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 859CA5471D1F0D2A00BB6364 /* DataSyncServiceTests.swift */; };
+		85DC5A3B1D0B45F200494470 /* WishPromiseEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85DC5A3A1D0B45F200494470 /* WishPromiseEntity.swift */; };
 		85DC5A3F1D0CA84000494470 /* FriendshipEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85DC5A3D1D0CA84000494470 /* FriendshipEntity.swift */; };
 		85F5A7761CDE51B900C8EE9C /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85F5A7751CDE51B900C8EE9C /* CoreDataManager.swift */; };
 		85F5A7791CDE51F400C8EE9C /* MyWishList.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 85F5A7771CDE51F400C8EE9C /* MyWishList.xcdatamodeld */; };
@@ -101,23 +106,25 @@
 		85036F7C1C712C51004C13A2 /* FriendWishListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FriendWishListViewController.swift; sourceTree = "<group>"; };
 		8503A0AE1C5552F600A98D67 /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		8503A0B11C55878400A98D67 /* HTTPClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HTTPClient.swift; sourceTree = "<group>"; };
+		8503DF5A1D3AF87B00FC33FB /* NotificationType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotificationType.swift; sourceTree = "<group>"; };
 		8518A7471CE7BE8300516E4D /* UserEntity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserEntity.swift; sourceTree = "<group>"; };
 		851A1E721CB603C700BA5B0D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		851B07D41C8E8A110089F0D5 /* Add To My Wish List.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = "Add To My Wish List.entitlements"; sourceTree = "<group>"; };
 		851B07D51C8E8A260089F0D5 /* MyWishList.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = MyWishList.entitlements; sourceTree = "<group>"; };
 		851B07D81C946FB30089F0D5 /* KeychainClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeychainClient.swift; sourceTree = "<group>"; };
-		8522525B1D079EC600C45F81 /* GrantedWishListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GrantedWishListViewController.swift; sourceTree = "<group>"; };
+		8522525B1D079EC600C45F81 /* PromisedWishListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PromisedWishListViewController.swift; sourceTree = "<group>"; };
 		8528B8D81C7A109900B1BD7C /* FirebaseClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FirebaseClient.swift; sourceTree = "<group>"; };
 		8528B8DA1C7A175E00B1BD7C /* libFirebase.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libFirebase.a; path = "Pods/../build/Debug-iphoneos/libFirebase.a"; sourceTree = "<group>"; };
 		8528B8DC1C7AC45200B1BD7C /* DataSyncService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataSyncService.swift; sourceTree = "<group>"; };
 		8528B8DF1C7BE59600B1BD7C /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		8528B8E11C7BEA0F00B1BD7C /* Wish.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Wish.swift; sourceTree = "<group>"; };
+		853332CE1D319EE400DFCD67 /* PromiseWishViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PromiseWishViewController.swift; sourceTree = "<group>"; };
+		853332D11D31A00C00DFCD67 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		85348C861CFB250C002A6286 /* CoreDataClientTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataClientTests.swift; sourceTree = "<group>"; };
 		854B56DB1C835FAD00EBEC4F /* MyWishListParentViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyWishListParentViewController.swift; sourceTree = "<group>"; };
 		8552B7B11C53D46F0022D41C /* MyWishList.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MyWishList.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8552B7B41C53D46F0022D41C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		8552B7B61C53D46F0022D41C /* EditWishViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditWishViewController.swift; sourceTree = "<group>"; };
-		8552B7B91C53D46F0022D41C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		8552B7BE1C53D46F0022D41C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		8552B7C11C53D46F0022D41C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		8552B7C31C53D46F0022D41C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -128,7 +135,7 @@
 		8552B7D71C53D46F0022D41C /* MyWishListUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyWishListUITests.swift; sourceTree = "<group>"; };
 		8552B7D91C53D46F0022D41C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8552B7E71C53DA5C0022D41C /* WishListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WishListViewController.swift; sourceTree = "<group>"; };
-		8552B7F11C54226B0022D41C /* WishTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WishTableViewCell.swift; sourceTree = "<group>"; };
+		8552B7F11C54226B0022D41C /* PromisedWishTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PromisedWishTableViewCell.swift; sourceTree = "<group>"; };
 		855E5E3B1C8BBDE7007CCE1C /* Firebase.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Firebase.framework; path = "Pods/../build/Debug-iphoneos/Firebase.framework"; sourceTree = "<group>"; };
 		855E5E3C1C8BBDE7007CCE1C /* Pods_MyWishList.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Pods_MyWishList.framework; path = "Pods/../build/Debug-iphoneos/Pods_MyWishList.framework"; sourceTree = "<group>"; };
 		856488E31D03D5D8001C9D05 /* SF-UI-Display-Semibold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "SF-UI-Display-Semibold.otf"; path = "Resources/SF-UI-Display-Semibold.otf"; sourceTree = "<group>"; };
@@ -139,7 +146,9 @@
 		85814A3F1C8B883B00440703 /* ActionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionViewController.swift; sourceTree = "<group>"; };
 		85814A421C8B883B00440703 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainInterface.storyboard; sourceTree = "<group>"; };
 		85814A441C8B883B00440703 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		85DC5A3A1D0B45F200494470 /* GrantedWishEntity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GrantedWishEntity.swift; sourceTree = "<group>"; };
+		85960C4F1D2015E200E3B396 /* ViewWishViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewWishViewController.swift; sourceTree = "<group>"; };
+		859CA5471D1F0D2A00BB6364 /* DataSyncServiceTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataSyncServiceTests.swift; sourceTree = "<group>"; };
+		85DC5A3A1D0B45F200494470 /* WishPromiseEntity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WishPromiseEntity.swift; sourceTree = "<group>"; };
 		85DC5A3D1D0CA84000494470 /* FriendshipEntity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FriendshipEntity.swift; sourceTree = "<group>"; };
 		85F5A7751CDE51B900C8EE9C /* CoreDataManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataManager.swift; sourceTree = "<group>"; };
 		85F5A7781CDE51F400C8EE9C /* MyWishList.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = MyWishList.xcdatamodel; sourceTree = "<group>"; };
@@ -228,6 +237,7 @@
 			children = (
 				8528B8DF1C7BE59600B1BD7C /* User.swift */,
 				8528B8E11C7BEA0F00B1BD7C /* Wish.swift */,
+				8503DF5A1D3AF87B00FC33FB /* NotificationType.swift */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -276,8 +286,8 @@
 				85036F7B1C71284B004C13A2 /* Client */,
 				85F5A7741CDE51A100C8EE9C /* CoreData */,
 				8552B7B41C53D46F0022D41C /* AppDelegate.swift */,
-				8552B7B81C53D46F0022D41C /* Main.storyboard */,
 				8552B7BE1C53D46F0022D41C /* Assets.xcassets */,
+				853332D01D31A00C00DFCD67 /* Main.storyboard */,
 				8552B7C01C53D46F0022D41C /* LaunchScreen.storyboard */,
 				8552B7C31C53D46F0022D41C /* Info.plist */,
 			);
@@ -289,6 +299,7 @@
 			children = (
 				8552B7CC1C53D46F0022D41C /* MyWishListTests.swift */,
 				85348C861CFB250C002A6286 /* CoreDataClientTests.swift */,
+				859CA5471D1F0D2A00BB6364 /* DataSyncServiceTests.swift */,
 				8552B7CE1C53D46F0022D41C /* Info.plist */,
 			);
 			path = MyWishListTests;
@@ -321,7 +332,9 @@
 				8552B7B61C53D46F0022D41C /* EditWishViewController.swift */,
 				85703DE81C677F320046669D /* FriendListViewController.swift */,
 				85036F7C1C712C51004C13A2 /* FriendWishListViewController.swift */,
-				8522525B1D079EC600C45F81 /* GrantedWishListViewController.swift */,
+				8522525B1D079EC600C45F81 /* PromisedWishListViewController.swift */,
+				85960C4F1D2015E200E3B396 /* ViewWishViewController.swift */,
+				853332CE1D319EE400DFCD67 /* PromiseWishViewController.swift */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -329,7 +342,7 @@
 		858149EF1C8B4D2100440703 /* TableViewCell */ = {
 			isa = PBXGroup;
 			children = (
-				8552B7F11C54226B0022D41C /* WishTableViewCell.swift */,
+				8552B7F11C54226B0022D41C /* PromisedWishTableViewCell.swift */,
 				85036F791C7104F3004C13A2 /* FriendTableViewCell.swift */,
 			);
 			name = TableViewCell;
@@ -356,7 +369,7 @@
 				8518A7471CE7BE8300516E4D /* UserEntity.swift */,
 				85DC5A3D1D0CA84000494470 /* FriendshipEntity.swift */,
 				85F5A77F1CDE53D500C8EE9C /* WishEntity.swift */,
-				85DC5A3A1D0B45F200494470 /* GrantedWishEntity.swift */,
+				85DC5A3A1D0B45F200494470 /* WishPromiseEntity.swift */,
 			);
 			name = CoreData;
 			sourceTree = "<group>";
@@ -467,6 +480,9 @@
 						CreatedOnToolsVersion = 7.2;
 						DevelopmentTeam = 49D7CLEGDK;
 						SystemCapabilities = {
+							com.apple.BackgroundModes = {
+								enabled = 1;
+							};
 							com.apple.Keychain = {
 								enabled = 1;
 							};
@@ -518,10 +534,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				856488E51D03D5D8001C9D05 /* SF-UI-Display-Semibold.otf in Resources */,
+				853332D21D31A00C00DFCD67 /* Main.storyboard in Resources */,
 				856488E61D03D5D8001C9D05 /* SF-UI-Display-Heavy.otf in Resources */,
 				8552B7C21C53D46F0022D41C /* LaunchScreen.storyboard in Resources */,
 				8552B7BF1C53D46F0022D41C /* Assets.xcassets in Resources */,
-				8552B7BA1C53D46F0022D41C /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -650,16 +666,18 @@
 			buildActionMask = 2147483647;
 			files = (
 				8503A0AF1C5552F600A98D67 /* LoginViewController.swift in Sources */,
-				8522525C1D079EC600C45F81 /* GrantedWishListViewController.swift in Sources */,
+				8522525C1D079EC600C45F81 /* PromisedWishListViewController.swift in Sources */,
 				85DC5A3F1D0CA84000494470 /* FriendshipEntity.swift in Sources */,
 				8518A74D1CE7BE8300516E4D /* UserEntity.swift in Sources */,
-				8552B7F21C54226B0022D41C /* WishTableViewCell.swift in Sources */,
+				85960C501D2015E200E3B396 /* ViewWishViewController.swift in Sources */,
+				8552B7F21C54226B0022D41C /* PromisedWishTableViewCell.swift in Sources */,
 				8528B8E21C7BEA0F00B1BD7C /* Wish.swift in Sources */,
 				8552B7E81C53DA5C0022D41C /* WishListViewController.swift in Sources */,
 				85F5A7791CDE51F400C8EE9C /* MyWishList.xcdatamodeld in Sources */,
 				85036F7D1C712C51004C13A2 /* FriendWishListViewController.swift in Sources */,
 				854B56DC1C835FAD00EBEC4F /* MyWishListParentViewController.swift in Sources */,
 				85F5A7761CDE51B900C8EE9C /* CoreDataManager.swift in Sources */,
+				853332CF1D319EE400DFCD67 /* PromiseWishViewController.swift in Sources */,
 				8528B8D91C7A109900B1BD7C /* FirebaseClient.swift in Sources */,
 				8552B7B71C53D46F0022D41C /* EditWishViewController.swift in Sources */,
 				8528B8E01C7BE59600B1BD7C /* User.swift in Sources */,
@@ -671,8 +689,9 @@
 				85036F741C70F1D0004C13A2 /* ImageService.swift in Sources */,
 				85F5A7851CDE53D500C8EE9C /* WishEntity.swift in Sources */,
 				85703DE91C677F320046669D /* FriendListViewController.swift in Sources */,
+				8503DF5B1D3AF87B00FC33FB /* NotificationType.swift in Sources */,
 				8500D4051C6FC428001EA0E7 /* FacebookClient.swift in Sources */,
-				85DC5A3B1D0B45F200494470 /* GrantedWishEntity.swift in Sources */,
+				85DC5A3B1D0B45F200494470 /* WishPromiseEntity.swift in Sources */,
 				8552B7B51C53D46F0022D41C /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -681,6 +700,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				859CA5481D1F0D2A00BB6364 /* DataSyncServiceTests.swift in Sources */,
 				8552B7CD1C53D46F0022D41C /* MyWishListTests.swift in Sources */,
 				85348C871CFB250C002A6286 /* CoreDataClientTests.swift in Sources */,
 			);
@@ -702,6 +722,7 @@
 				8569973F1C8BB80E003642AD /* User.swift in Sources */,
 				856997401C8BB80E003642AD /* Wish.swift in Sources */,
 				851B07DA1C946FB30089F0D5 /* KeychainClient.swift in Sources */,
+				858136491D3B1D3C00236483 /* NotificationType.swift in Sources */,
 				85814A401C8B883B00440703 /* ActionViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -727,10 +748,10 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
-		8552B7B81C53D46F0022D41C /* Main.storyboard */ = {
+		853332D01D31A00C00DFCD67 /* Main.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
-				8552B7B91C53D46F0022D41C /* Base */,
+				853332D11D31A00C00DFCD67 /* Base */,
 			);
 			name = Main.storyboard;
 			sourceTree = "<group>";

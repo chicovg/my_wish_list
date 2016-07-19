@@ -37,28 +37,20 @@ class DataSyncService {
     }
     
     // MARK: Auth functions
-    func userIsLoggedIn() -> Bool {
-        guard let _ = facebookClient.currentAccessToken(), _ = firebaseClient.currentUser() else {
-            return false
-            // TODO check for saved token
-        }
-        return true
-    }
     
-    func currentUser() -> UserEntity? {        
-        guard let user = firebaseClient.currentUser() else {
+    /** Returns the currently authenticated user or nil if the is no active session */
+    func currentUser() -> User? {
+        guard let _ = facebookClient.currentAccessToken(), user = firebaseClient.currentUser() else {
             return nil
         }
         
-        guard let userEntity = coreDataClient.find(userById: user.id) else {
-            return nil
-        }
-        
-        return userEntity
+        return user
     }
         
     // MARK: Facebook Auth
-    func loginWithFacebook(viewController: UIViewController, handler: (user: UserEntity?, error: DataSyncError?) -> Void) {
+    
+    /** Logs in using facebook authentication */
+    func loginWithFacebook(viewController: UIViewController, handler: (user: User?, error: DataSyncError?) -> Void) {
         toggleNetworkIndicator()
         
         facebookClient.login(viewController) { (facebookResult, facebookError) -> Void in
@@ -86,13 +78,16 @@ class DataSyncService {
         }
     }
     
+    /** Log out from facebook */
     func logoutFromFacebook() {
         toggleNetworkIndicator()
         facebookClient.logout()
+        stopListeningForUpdates()
         toggleNetworkIndicator()
     }
     
-    func userDidLoginWithFacebook(token: String, handler: (user: UserEntity?, error: NSError?) -> Void) {
+    /** After logging in via facebook, establish a firebase session and listen for updates from firebase */
+    private func userDidLoginWithFacebook(token: String, handler: (user: User?, error: NSError?) -> Void) {
         toggleNetworkIndicator()
         
         firebaseClient.authenticateWithFacebook(token) { (user, error) -> Void in
@@ -104,69 +99,67 @@ class DataSyncService {
             }
             
             self.keychainClient.saveAccessToken(token)
-            let userEntity = self.coreDataClient.upsert(user: user)
+            self.coreDataClient.upsert(user: user)
             self.coreDataClient.saveContext()
-            handler(user: userEntity, error: nil)
+            self.listenForUpdates(user)
+            handler(user: user, error: nil)
         }
     }
-
-    func listenForUpdates(user: UserEntity) {
-        toggleNetworkIndicator()
-        
-        firebaseClient.queryWishes { (wishes) in
-            self.toggleNetworkIndicator()
-
+    
+    /** Listen for updates to wish data in firebase */
+    func listenForUpdates(user: User) {        
+        firebaseClient.queryWishes(forUser: user) { (wishes) in
             wishes.forEach({ (wish) in
                 self.coreDataClient.upsert(wish: wish, forUser: user)
             })
             self.coreDataClient.saveContext()
         }
+        
+        firebaseClient.listenForWishDeletes(forUser: user) { (wish) in
+            self.coreDataClient.delete(wish: wish, forUser: user)
+            self.coreDataClient.saveContext()
+        }
+        
+        firebaseClient.queryNotifications(forUser: user) { (notifications) in
+            for notification in notifications {
+                self.notifyUser(notification)
+                self.deleteNotification(notification)
+            }
+        }
     }
     
-    func stopListeningForUpdates() {
+    /** Remove all firebase listeners */
+    private func stopListeningForUpdates() {
         firebaseClient.removeAllObservers()
     }
     
     // MARK: Wish list functions
-    func queryWishes(forUser user: User, handler: (wishes: [Wish], syncError: DataSyncError?) -> Void) {
-        if userIsLoggedIn() {
+    
+    /** Queries for "Wished" wishes for a particular user */
+    func queryWishedWishes(forUser user: User, handler: (wishes: [Wish], syncError: DataSyncError?) -> Void) {
+        if let _ = currentUser() {
             toggleNetworkIndicator()
 
-            firebaseClient.queryWishes(forUser: user) { (wishes) -> Void in
+            firebaseClient.queryWishes(forUser: user, filter: { (wish) -> Bool in
+                    return wish.status == Wish.Status.Wished
+            }, completionHandler: { (wishes) in
                 self.toggleNetworkIndicator()
-
+                
                 handler(wishes: wishes, syncError: nil)
-            }
-        } else {
-            handler(wishes: [], syncError: DataSyncError.UserNotLoggedIn)
-        }
-    }
-    func queryUngrantedWishes(forUser user: User, handler: (wishes: [Wish], syncError: DataSyncError?) -> Void) {
-        if userIsLoggedIn() {
-            toggleNetworkIndicator()
-
-            firebaseClient.queryUngrantedWishes(forUser: user) { (wishes) -> Void in
-                self.toggleNetworkIndicator()
-
-                handler(wishes: wishes, syncError: nil)
-            }
+            })
         } else {
             handler(wishes: [], syncError: DataSyncError.UserNotLoggedIn)
         }
     }
     func deleteWish(wish: Wish, handler: (syncError: DataSyncError?, deleteError: NSError?) -> Void) {
-        if userIsLoggedIn() {
+        if let _ = currentUser() {
             toggleNetworkIndicator()
 
-            firebaseClient.deleteWish(wish: wish, completionHandler: { (deleteError) -> Void in
+            firebaseClient.deleteWish(wish: wish) { (deleteError) -> Void in
                 self.toggleNetworkIndicator()
 
-                if deleteError == nil {
-                    self.coreDataClient.delete(wish: wish)
-                    self.coreDataClient.saveContext()
-                }
                 handler(syncError: nil, deleteError: deleteError)
-            })
+            }
         } else {
             handler(syncError: DataSyncError.UserNotLoggedIn, deleteError: nil)
         }
@@ -175,42 +168,78 @@ class DataSyncService {
         if let user = currentUser() {
             toggleNetworkIndicator()
             
-            firebaseClient.save(wish: wish, completionHandler: { (saveError, key) -> Void in
+            firebaseClient.save(wish: wish, forUser: user) { (saveError, key) -> Void in
                 self.toggleNetworkIndicator()
                 
-                if saveError == nil {
-                    self.coreDataClient.upsert(wish: Wish(id: key, title: wish.title, link: wish.link, detail: wish.detail, granted: wish.granted, grantedOn: wish.grantedOn), forUser: user)
-                    self.coreDataClient.saveContext()
-                }
-                handler(syncError: nil, saveError: saveError)
-            })
-        } else {
-            handler(syncError: DataSyncError.UserNotLoggedIn, saveError: nil)
-        }
-    }
-    func grantWish(wish wish: Wish, forFriend friend: UserEntity, handler: (syncError: DataSyncError?, saveError: NSError?) -> Void) {
-        if let user = currentUser() {
-            toggleNetworkIndicator()
-            
-            let grantedOnDate = NSDate()
-            
-            firebaseClient.grantWish(friend.id, wishId: wish.id!, grantedOn: grantedOnDate) { (saveError) -> Void in
-                self.toggleNetworkIndicator()
-                
-                if saveError == nil {
-                    let wish = Wish(id: wish.id, title: wish.title, link: wish.link, detail: wish.detail, granted: true, grantedOn: grantedOnDate)
-                    self.coreDataClient.grant(wish: wish, grantedBy: user, forFriend: friend)
-                    self.coreDataClient.saveContext()
-                }
                 handler(syncError: nil, saveError: saveError)
             }
         } else {
             handler(syncError: DataSyncError.UserNotLoggedIn, saveError: nil)
         }
     }
+    func promise(wish wish: Wish, forFriend friend: User, handler: (syncError: DataSyncError?, saveError: NSError?) -> Void) {
+        if let user = currentUser() {
+            let promisedWish = Wish(fromPrevious: wish, withUpdates:
+                [Wish.Keys.status : Wish.Status.Promised,
+                    Wish.Keys.promisedOn : NSDate(),
+                    Wish.Keys.promisedBy : user
+                ]
+            )
+            firebaseClient.save(wish: promisedWish, forUser: friend) { (error, key) in
+                if let error = error {
+                    handler(syncError: nil, saveError: error)
+                } else {
+                    self.coreDataClient.upsert(wish: promisedWish, forUser: friend)
+                    handler(syncError: nil, saveError: nil)
+                }
+            }
+        } else {
+            handler(syncError: DataSyncError.UserNotLoggedIn, saveError: nil)
+        }
+    }
+    func unpromise(wish wish: Wish, forFriend friend: User, handler: (syncError: DataSyncError?, saveError: NSError?) -> Void) {
+        if let _ = currentUser() {
+            let promisedWish = Wish(fromPrevious: wish, withUpdates:
+                [Wish.Keys.status : Wish.Status.Wished,
+                    Wish.Keys.promisedBy : nil,
+                    Wish.Keys.promisedOn : nil
+                ]
+            )
+            firebaseClient.save(wish: promisedWish, forUser: friend) { (error, key) in
+                if let error = error {
+                    handler(syncError: nil, saveError: error)
+                } else {
+                    // get wish entity
+                    self.coreDataClient.upsert(wish: promisedWish, forUser: friend)
+                    handler(syncError: nil, saveError: nil)
+                }
+            }
+        } else {
+            handler(syncError: DataSyncError.UserNotLoggedIn, saveError: nil)
+        }
+    }
+    func granted(wish wish: Wish, handler: (syncError: DataSyncError?, saveError: NSError?) -> Void) {
+        if let user = currentUser() {
+            let grantedWish = Wish(fromPrevious: wish, withUpdates:
+                [Wish.Keys.status : Wish.Status.Granted,
+                    Wish.Keys.grantedOn : NSDate()
+                ]
+            )
+            firebaseClient.save(wish: grantedWish, forUser: user, completionHandler: { (error, key) in
+                if let error = error {
+                    handler(syncError: nil, saveError: error)
+                } else {
+                    self.coreDataClient.upsert(wish: grantedWish, forUser: user)
+                    handler(syncError: nil, saveError: nil)
+                }
+            })
+        } else {
+            handler(syncError: DataSyncError.UserNotLoggedIn, saveError: nil)
+        }
+    }
     
     // MARK: Friend functions
-    func fetchFriends(user: UserEntity) {
+    func fetchFriends(user: User) {
         toggleNetworkIndicator()
         
         facebookClient.getFriends({ (friends) -> Void in
@@ -227,7 +256,7 @@ class DataSyncService {
     }
     
     func queryFriends(handler: (friends: [User], syncError: DataSyncError?) -> Void) {
-        if userIsLoggedIn() {
+        if let _ = currentUser() {
             toggleNetworkIndicator()
             
             firebaseClient.queryFriends({ (friends) -> Void in
@@ -243,6 +272,38 @@ class DataSyncService {
     private func toggleNetworkIndicator() {
         UIApplication.sharedApplication().networkActivityIndicatorVisible
             = !UIApplication.sharedApplication().networkActivityIndicatorVisible
+    }
+    
+    // MARK: notification functions
+    func sendNotification(withType type: NotificationType, toUser user: User) {
+        firebaseClient.sendNotification(withType: type, toUser: user)
+    }
+    
+    func fetchNotifications(handler: (notifications: [Notification], syncError: DataSyncError?) -> Void) {
+        if let user = currentUser() {
+            firebaseClient.queryNotifications(forUser: user, listenForUpdates: false) { (notifications) in
+                handler(notifications: notifications, syncError: nil)
+            }
+        } else {
+            handler(notifications: [], syncError: DataSyncError.UserNotLoggedIn)
+        }
+    }
+    
+    func deleteNotification(notification: Notification) {
+        if let user = currentUser() {
+            firebaseClient.deleteNotification(notification, forUser: user)
+        }
+    }
+    
+     func notifyUser(notification: Notification) {
+        // create a corresponding local notification
+        let uiNotification = UILocalNotification()
+        uiNotification.alertBody = notification.message
+        uiNotification.alertAction = "open"
+        uiNotification.fireDate =  NSDate()
+        uiNotification.soundName = UILocalNotificationDefaultSoundName
+        
+        UIApplication.sharedApplication().scheduleLocalNotification(uiNotification)
     }
     
 }

@@ -46,12 +46,6 @@ class EditWishViewController: MyWishListParentViewController {
 
     @IBAction func doneButtonPressed(sender: UIBarButtonItem) {
         if let title = titleTextField.text {
-            var id: String? = nil
-            var granted: Bool = false
-            if let wish = wishToEdit {
-                id = wish.id
-                granted = wish.granted
-            }
             var link: String? = nil
             if let linkTxt = linkTextField.text {
                 link = linkTxt
@@ -61,13 +55,15 @@ class EditWishViewController: MyWishListParentViewController {
                 detail = desc
             }
             
-            let wish = Wish(id: id, title: title, link: link, detail: detail, granted: granted, grantedOn: nil)
+            let wish = Wish(fromPrevious: wishToEdit, withUpdates: (title: title, link: link, detail: detail))
             syncService.save(wish: wish, handler: { (syncError, saveError) -> Void in
                 if let _ = syncError where syncError == .UserNotLoggedIn {
                     self.returnToLoginView(shouldLogout: false, showLoggedOutAlert: true)
                 } else if let err = saveError {
-                    // TODO display an error message
-                    print("save failed \(err)")
+                    print("error saving wish: \(err)")
+                    self.displayErrorAlert("There was a problem saving your wish, please try again.", actionHandler: { (alertAction) in
+                        self.dismissViewControllerAnimated(true, completion: { () -> Void in})
+                    }, presentHandler: {})
                 } else {
                     self.dismissViewControllerAnimated(true, completion: { () -> Void in})
                 }

@@ -8,8 +8,10 @@
 
 import UIKit
 
-class PromiseWishViewController: UIViewController {
-
+class PromiseWishViewController: ViewWishViewController {
+    
+    var friend: User!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -20,16 +22,23 @@ class PromiseWishViewController: UIViewController {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    
 
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+    @IBAction func cancel(sender: UIBarButtonItem) {
+        dismissViewControllerAnimated(true) {}
     }
-    */
-
+    
+    @IBAction func grantWish(sender: UIBarButtonItem) {
+        self.displayConfirmDialogue("Grant Wish?", message: "Do you want to grant this wish for your friend?", confirmLabel: "Yes", denyLabel: "Not now" ) { (alert) in
+            self.syncService.promise(wish: self.wish, forFriend: self.friend) { (syncError, saveError) in
+                if let _ = syncError where syncError == .UserNotLoggedIn {
+                    self.returnToLoginView(shouldLogout: false, showLoggedOutAlert: true)
+                } else if let err = saveError {
+                    self.displayErrorAlert("There was an issue updating your friend's wish list", actionHandler: { (action) in }, presentHandler: {})
+                    print("save failed \(err)")
+                } else {
+                    self.dismissViewControllerAnimated(true, completion: {})
+                }
+            }
+        }
+    }
 }

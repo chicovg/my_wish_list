@@ -25,17 +25,8 @@ class WishEntity: NSManagedObject {
         self.title = wish.title
         self.detail = wish.detail
         self.link = wish.link
-        self.granted = wish.granted
-        self.grantedOn = wish.grantedOn
+        self.status = wish.status
         self.user = user
-    }
-    
-    func wishValue() -> Wish {
-        var gtd = false
-        if let granted = self.granted {
-            gtd = granted.boolValue
-        }
-        return Wish(id: id, title: title, link: link, detail: detail, granted: gtd, grantedOn: grantedOn)
     }
 
 }
@@ -46,8 +37,25 @@ extension WishEntity {
     @NSManaged var title: String
     @NSManaged var detail: String?
     @NSManaged var link: String?
-    @NSManaged var granted: NSNumber?
-    @NSManaged var grantedOn: NSDate?
+    @NSManaged var status: String
     @NSManaged var user: UserEntity
+    @NSManaged var wishPromise: WishPromiseEntity?
+    
+    var wishValue: Wish {
+        var promisedBy: User? = nil
+        var promisedOn: NSDate? = nil
+        var grantedOn: NSDate? = nil
+        if let wishPromise = wishPromise {
+            promisedBy = wishPromise.promisedBy.userValue
+            promisedOn = wishPromise.promisedOn
+            grantedOn = wishPromise.grantedOn
+        }
+        
+        return Wish(id: id, title: title, link: link, detail: detail, status: status, promisedBy: promisedBy, promisedOn: promisedOn, grantedOn: grantedOn)
+    }
+    
+    var statusOrder: Int {
+        return status == Wish.Status.Wished ? 0 : status == Wish.Status.Promised ? 1 : 2
+    }
     
 }

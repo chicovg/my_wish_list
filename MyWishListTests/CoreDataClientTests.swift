@@ -16,7 +16,45 @@ class CoreDataClientTests: XCTestCase {
     
     var coreDataClient = CoreDataClient.sharedInstance
     
-    var createdObjects: [NSManagedObject] = []
+    let testUser = User(id: "test", name: "Test User", pictureUrl: "http://pictures.com")
+    
+    lazy var wishListFRC: NSFetchedResultsController = {
+        let fetchRequest = NSFetchRequest(entityName: WishEntity.ENTITY_NAME)
+        fetchRequest.predicate = NSPredicate(format: "user.id == %@", self.testUser.id)
+        fetchRequest.sortDescriptors = [
+            NSSortDescriptor(key: Wish.Keys.status, ascending: false),
+            NSSortDescriptor(key: Wish.Keys.title, ascending: true, selector: #selector(NSString.localizedCaseInsensitiveCompare(_:))),
+        ]
+        let fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest,
+                                                                  managedObjectContext: self.coreDataClient.sharedContext,
+                                                                  sectionNameKeyPath: Wish.Keys.status,
+                                                                  cacheName: nil)
+        return fetchedResultsController
+    }()
+    
+    lazy var friendsListFRC: NSFetchedResultsController = {
+        let fetchRequest = NSFetchRequest(entityName: FriendshipEntity.ENTITY_NAME)
+        fetchRequest.predicate = NSPredicate(format: "user.id == %@", self.testUser.id)
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "friend.\(User.Keys.name)", ascending: true)]
+        let fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest,
+                                                                  managedObjectContext: self.coreDataClient.sharedContext,
+                                                                  sectionNameKeyPath: nil,
+                                                                  cacheName: nil)
+        return fetchedResultsController
+    }()
+    
+    lazy var promisedWishListFRC: NSFetchedResultsController = {
+        let fetchRequest = NSFetchRequest(entityName: WishPromiseEntity.ENTITY_NAME)
+        fetchRequest.predicate = NSPredicate(format: "promisedBy.id == %@", self.testUser.id)
+        fetchRequest.sortDescriptors = [
+            NSSortDescriptor(key: "\(Wish.Keys.promisedOn)", ascending: false)
+        ]
+        let fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest,
+                                                                  managedObjectContext: self.coreDataClient.sharedContext,
+                                                                  sectionNameKeyPath: nil,
+                                                                  cacheName: nil)
+        return fetchedResultsController
+    }()
     
     override func setUp() {
         super.setUp()
@@ -26,6 +64,75 @@ class CoreDataClientTests: XCTestCase {
     override func tearDown() {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
         super.tearDown()
+        
+        coreDataClient.delete(testUser)
+    }
+    
+    // MARK: WishEntity functions
+    func testCreateWish() {
+        let wish = Wish(id: "testCreateWish", title: "test wish", link: "http://wish/url", detail: "A test wish for a test user")
+        guard let wishEntity = coreDataClient.upsert(wish: wish, forUser: testUser) else {
+            XCTFail("wish not created")
+            return
+        }
+        coreDataClient.saveContext()
+        
+        XCTAssert(wishEntity.title == wish.title)
+        XCTAssert(wishEntity.link == wish.link)
+        XCTAssert(wishEntity.detail == wish.detail)
+        XCTAssert(wishEntity.user.id == testUser.id)
+        
+        XCTAssert(fetch(wishListFRC).fetchedObjects!.count == 1)
+    }
+    
+    func testUpdateWish() {
+        let wish = Wish(id: "testUpdateWish", title: "test wish", link: "http://wish/url", detail: "A test wish for a test user")
+        guard let wishEntity = coreDataClient.upsert(wish: wish, forUser: testUser) else {
+            XCTFail("wish not created")
+            return
+        }
+        coreDataClient.saveContext()
+        
+        let updtWish = Wish(id: wish.id!, title: "test wish updt", link: wish.link!, detail: wish.detail!)
+        guard let wishEntityUpdt = coreDataClient.upsert(wish: updtWish, forUser: testUser) else {
+            XCTFail("wish not updated")
+            return
+        }
+        coreDataClient.saveContext()
+        
+        XCTAssert(wishEntity.objectID == wishEntityUpdt.objectID)
+        XCTAssert(wishEntity.id == wishEntity.id)
+        XCTAssert(wishEntityUpdt.title == updtWish.title)
+        XCTAssert(wishEntityUpdt.link == updtWish.link)
+        XCTAssert(wishEntityUpdt.detail == updtWish.detail)
+        XCTAssert(wishEntityUpdt.link == wish.link)
+        XCTAssert(wishEntityUpdt.detail == wish.detail)
+        XCTAssert(wishEntityUpdt.user.userValue == testUser)
+        
+        XCTAssert(fetch(wishListFRC).fetchedObjects!.count == 1)
+    }
+    
+    func testPromiseWish() {
+        let otherUser = User(id: "other", name: "Other User", pictureUrl: "http://pics.net/123")
+        let promisedOn = NSDate()
+        let wish = Wish(id: "testPromiseWish", title: "test wish", link: nil, detail: nil, status: Wish.Status.Promised, promisedBy: testUser, promisedOn: promisedOn, grantedOn: nil)
+        
+        guard let wishEntity = coreDataClient.upsert(wish: wish, forUser: otherUser) else {
+            XCTFail("wish not created")
+            return
+        }
+        coreDataClient.saveContext()
+        
+        XCTAssert(wishEntity.wishPromise!.promisedBy.userValue == testUser)
+        XCTAssert(wishEntity.wishPromise!.promisedOn == promisedOn)
+        XCTAssert(wishEntity.wishPromise!.wish.id == wish.id)
+        
+        XCTAssert(fetch(promisedWishListFRC).fetchedObjects!.count == 1)
+
+        coreDataClient.delete(otherUser)
+        coreDataClient.saveContext()
+        
+        XCTAssert(fetch(promisedWishListFRC).fetchedObjects!.count == 0)
     }
     
     func testCreateUser() {
@@ -79,98 +186,37 @@ class CoreDataClientTests: XCTestCase {
         coreDataClient.delete(updatedUserEntity)
     }
     
-    func testCreateWish() {
-        let user = User(id: "testCreateWish", name: "Test User", pictureUrl: "http://picture.com")
-        guard let userEntity = coreDataClient.upsert(user: user) else {
-            XCTFail("User not created")
-            return
-        }
-        coreDataClient.saveContext()
-        
-        let wish = Wish(id: "testWish1", title: "test wish 1", link: "http://wish/url", detail: "A test wish for a test user")
-        guard let wishEntity = coreDataClient.upsert(wish: wish, forUser: userEntity) else {
-            XCTFail("wish not created")
-            return
-        }
-        coreDataClient.saveContext()
-        
-        XCTAssert(wishEntity.title == wish.title)
-        XCTAssert(wishEntity.link == wish.link)
-        XCTAssert(wishEntity.detail == wish.detail)
-        XCTAssert(wishEntity.user == userEntity)
-        
-    }
-    
     func testSaveFriend() {
-        let user = User(id: "testSaveFriend", name: "Test User", pictureUrl: "http://picture.com")
-        guard let userEntity = coreDataClient.upsert(user: user) else {
-            XCTFail("User not created")
-            return
-        }
-        
-        XCTAssert(userEntity.friends.count == 0)
-        
         let friend = User(id: "testFriend", name: "Bob Slidell", pictureUrl: "http://gifrific.com/wp-content/uploads/2013/04/Bob-Office-Space-Licking-Upper-Lip-320x320.gif")
-        coreDataClient.upsert(friend: friend, ofUser: userEntity)
+        coreDataClient.upsert(friend: friend, ofUser: testUser)
         coreDataClient.saveContext()
         
-        XCTAssert(userEntity.friends.count == 1)
+        XCTAssert(fetch(friendsListFRC).fetchedObjects?.count == 1)
         
-        coreDataClient.upsert(friend: friend, ofUser: userEntity)
+        coreDataClient.upsert(friend: friend, ofUser: testUser)
         coreDataClient.saveContext()
         
-        XCTAssert(userEntity.friends.count == 1)
+        fetch(friendsListFRC)
+        XCTAssert(friendsListFRC.fetchedObjects!.count == 1)
         
-        let friendshipEntity = userEntity.friends[0]
-        let friendEntity = friendshipEntity.friend
+        let friendshipEntity = friendsListFRC.fetchedObjects![0] as! FriendshipEntity
+        XCTAssert(friendshipEntity.user.id == testUser.id)
+        XCTAssert(friendshipEntity.user.name == testUser.name)
+        XCTAssert(friendshipEntity.user.pictureUrl == testUser.pictureUrl)
+        XCTAssert(friendshipEntity.friend.id == friend.id)
+        XCTAssert(friendshipEntity.friend.name == friend.name)
+        XCTAssert(friendshipEntity.friend.pictureUrl == friend.pictureUrl)
         
-        XCTAssert(friendEntity.id == friend.id)
-        XCTAssert(friendEntity.name == friend.name)
-        XCTAssert(friendEntity.pictureUrl == friend.pictureUrl)
-        
-        coreDataClient.delete(friendEntity)
-        coreDataClient.delete(userEntity)
-        coreDataClient.saveContext()
-
+        XCTAssert(fetch(friendsListFRC).fetchedObjects!.count == 1)
     }
     
-    func testGrantWish() {
-        let user1 = User(id: "testGrantWish1", name: "Test User 1", pictureUrl: "http://picture.com")
-        guard let userEntity1 = coreDataClient.upsert(user: user1) else {
-            XCTFail("User not created")
-            return
+    private func fetch(fetchedResultsController: NSFetchedResultsController) -> NSFetchedResultsController {
+        do {
+            try fetchedResultsController.performFetch()
+        } catch let error as NSError {
+            XCTFail("Error in fetch(): \(error)")
         }
-        let user2 = User(id: "testGrantWish2", name: "Test User 2", pictureUrl: "http://picture.com")
-        guard let userEntity2 = coreDataClient.upsert(user: user2) else {
-            XCTFail("User not created")
-            return
-        }
-        coreDataClient.saveContext()
-        
-        let wish = Wish(id: "testWish1", title: "test wish 1", link: "http://wish/url", detail: "A test wish for a test user")
-        guard let wishEntity = coreDataClient.upsert(wish: wish, forUser: userEntity1) else {
-            XCTFail("wish not created")
-            return
-        }
-        coreDataClient.saveContext()
-        
-        XCTAssert(userEntity1.wishes.count == 1)
-        
-        coreDataClient.grant(wish: wish, grantedBy: userEntity2, forFriend: userEntity1)
-        coreDataClient.saveContext()
-        
-        let wishes = userEntity1.wishes
-        XCTAssert(userEntity1.wishes.count == 1)
-        XCTAssert(userEntity2.wishesGranted.count == 1)
-        
-        let grantedWish = userEntity2.wishesGranted.first!
-        XCTAssert(grantedWish.wish.id == wish.id)
-        XCTAssert(grantedWish.wish.title == wish.title)
-        XCTAssert(grantedWish.wish.detail == wish.detail)
-        
-        coreDataClient.delete(userEntity1)
-        coreDataClient.delete(userEntity2)
-        coreDataClient.saveContext()
+        return fetchedResultsController
     }
     
 }

@@ -52,20 +52,21 @@ class ActionViewController: UIViewController {
     @IBAction func save(sender: UIBarButtonItem) {
         if let accessToken = KeychainClient.sharedInstance.currentAccessToken() {
             FirebaseClient.sharedInstance.authenticateWithFacebook(accessToken, handler: { (user, error) -> Void in
-                if error != nil {
+                guard let user = user where error == nil else {
                     self.displayExtensionReturningAlert("Not Logged In!", message: "Please log in via the MyWishList app first!", actionLabel: "Ok")
-                } else {
-                    self.saveWish({ (success) -> Void in
-                        if success {
-                            self.displayExtensionReturningAlert("Success!", message: "The item was added to your wish list!", actionLabel: "Great!")
-                        }
-                    })
+                    return
+                }
+                
+                self.saveWish(user){ (success) -> Void in
+                    if success {
+                        self.displayExtensionReturningAlert("Success!", message: "The item was added to your wish list!", actionLabel: "Great!")
+                    }
                 }
             })
         }
     }
     
-    private func saveWish(handler: (success: Bool) -> Void) {
+    private func saveWish(user: User, handler: (success: Bool) -> Void) {
         if let title = titleTextField.text {
             var link: String? = nil
             if let linkTxt = linkTextField.text {
@@ -77,7 +78,9 @@ class ActionViewController: UIViewController {
             }
             
             let wish = Wish(title: title, link: link, detail: detail)
-            FirebaseClient.sharedInstance.save(wish: wish)
+            FirebaseClient.sharedInstance.save(wish: wish, forUser: user) { (error, key) in
+                
+            }
             handler(success: true)
         }
     }

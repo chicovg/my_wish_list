@@ -8,28 +8,38 @@
 
 import UIKit
 
-class ViewWishViewController: UIViewController {
+class ViewWishViewController: MyWishListParentViewController {
 
+    @IBOutlet weak var titleLabel: UILabel!
+    @IBOutlet weak var detailTextView: UITextView!
+    @IBOutlet weak var navItem: UINavigationItem!
+    @IBOutlet weak var openLinkButton: UIButton!
+    
+    var wish: Wish!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
+        titleLabel.text = wish.title
+        detailTextView.text = wish.detail
+        if wish.link == nil || wish.link == "" {
+            openLinkButton.hidden = true
+        }
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    
 
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+    @IBAction func close(sender: UIBarButtonItem) {
+        dismissViewControllerAnimated(true) {}
     }
-    */
-
+    
+    @IBAction func openLink(sender: UIButton) {
+        if let urlString = wish.link, url = NSURL(string: urlString) {
+            UIApplication.sharedApplication().openURL(url)
+        }
+    }
 }

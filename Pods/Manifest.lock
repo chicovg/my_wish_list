@@ -15,7 +15,7 @@ PODS:
 DEPENDENCIES:
   - FBSDKCoreKit (>= 4.10.0)
   - FBSDKLoginKit (>= 4.10.0)
-  - Firebase (>= 2.5.0)
+  - Firebase (= 2.5.1)
   - SimpleKeychain
 
 SPEC CHECKSUMS:
