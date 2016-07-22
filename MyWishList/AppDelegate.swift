@@ -88,7 +88,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(application: UIApplication, didReceiveLocalNotification notification: UILocalNotification) {
         if application.applicationState == UIApplicationState.Active {
-            let alert = UIAlertController(title: "Great News!", message: notification.alertBody, preferredStyle: UIAlertControllerStyle.Alert)
+            let alert = UIAlertController(title: notification.alertTitle, message: notification.alertBody, preferredStyle: UIAlertControllerStyle.Alert)
             alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default, handler:
                 nil))
             self.window?.rootViewController?.presentViewController(alert, animated: true, completion: {})

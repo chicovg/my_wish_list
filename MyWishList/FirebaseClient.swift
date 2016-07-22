@@ -75,9 +75,6 @@ class FirebaseClient {
     
     // MARK: user functions
     func authenticateWithFacebook(accessToken: String, handler: (user: User?, error: NSError?) -> Void) {
-//        let credential = FIRFacebookAuthProvider.credentialWithAccessToken(FBSDKAccessToken.currentAccessToken().tokenString)
-        
-        
         rootRef.authWithOAuthProvider(FACEBOOK_AUTH_PREFIX, token: accessToken, withCompletionBlock: { error, authData in
             if let authData = authData {
                 print("Logged in! \(authData)")
@@ -91,11 +88,13 @@ class FirebaseClient {
         })
     }
     
+    func unauthenticate() {
+        rootRef.unauth()
+    }
+    
     func save(user user: User) {
         if let ref = currentUserRef() {
             ref.updateChildValues(user.attributes)
-        } else {
-            // handle
         }
     }
     
@@ -237,9 +236,13 @@ class FirebaseClient {
         }
     }
     
-    func sendNotification(withType type: NotificationType, toUser user: User) {
+    func sendNotification(notification: Notification, toUser user: User) {
         if let ref = userNotificationsRef(user.id) {
-            ref.childByAutoId().updateChildValues([ Notification.MESSAGE: type.notification.message ], withCompletionBlock: { (error, ref) in
+            ref.childByAutoId().updateChildValues([
+                Notification.TYPE: notification.type.rawValue,
+                Notification.TITLE: notification.title,
+                Notification.MESSAGE: notification.message
+            ], withCompletionBlock: { (error, ref) in
                 print("\(error) \(ref)")
             })
         }

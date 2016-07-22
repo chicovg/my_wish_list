@@ -7,8 +7,11 @@
 //
 
 import XCTest
+@testable import MyWishList
 
 class DataSyncServiceTests: XCTestCase {
+    
+    var dataSyncService = DataSyncService.sharedInstance
     
     override func setUp() {
         super.setUp()
@@ -20,9 +23,12 @@ class DataSyncServiceTests: XCTestCase {
         super.tearDown()
     }
     
-    func testExample() {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
+    func testCompleteWishFlow() {
+        // create 2 users
+        dataSyncService.facebookClient
+        
+        
+        
     }
     
     func testPerformanceExample() {

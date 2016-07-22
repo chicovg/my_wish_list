@@ -144,7 +144,8 @@ struct Wish {
             self.link = snapshot.childSnapshotForPath(Keys.link).value as? String
         }
         if let promisedBySnapshot = snapshot.childSnapshotForPath(Keys.promisedBy) where promisedBySnapshot.hasChildren() {
-            self.promisedBy = User(fromFDataSnapshot: promisedBySnapshot)
+            let promisedById = promisedBySnapshot.childSnapshotForPath(Wish.Keys.id).value as! String
+            self.promisedBy = User(fromFDataSnapshot: promisedBySnapshot, withId: promisedById)
         }
         if let promisedOnString = snapshot.childSnapshotForPath(Keys.promisedOn).value as? String {
             self.promisedOn = Wish.dateFormatter.dateFromString(promisedOnString)

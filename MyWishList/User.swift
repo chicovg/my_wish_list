@@ -56,6 +56,12 @@ struct User : Equatable {
         self.pictureUrl = snapshot.childSnapshotForPath(Keys.pictureUrl).value as! String
     }
     
+    init(fromFDataSnapshot snapshot: FDataSnapshot, withId id: String){
+        self.id = id
+        self.name = snapshot.childSnapshotForPath(Keys.name).value as! String
+        self.pictureUrl = snapshot.childSnapshotForPath(Keys.pictureUrl).value as! String
+    }
+    
 }
 
 func ==(lhs: User, rhs: User) -> Bool {

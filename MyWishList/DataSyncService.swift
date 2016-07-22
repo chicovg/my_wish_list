@@ -81,8 +81,9 @@ class DataSyncService {
     /** Log out from facebook */
     func logoutFromFacebook() {
         toggleNetworkIndicator()
-        facebookClient.logout()
         stopListeningForUpdates()
+        firebaseClient.unauthenticate()
+        facebookClient.logout()
         toggleNetworkIndicator()
     }
     
@@ -190,6 +191,8 @@ class DataSyncService {
                     handler(syncError: nil, saveError: error)
                 } else {
                     self.coreDataClient.upsert(wish: promisedWish, forUser: friend)
+                    self.coreDataClient.saveContext()
+                    self.sendNotification(withType: .GiftPromised, toUser: friend, args: promisedWish.title)
                     handler(syncError: nil, saveError: nil)
                 }
             }
@@ -211,6 +214,8 @@ class DataSyncService {
                 } else {
                     // get wish entity
                     self.coreDataClient.upsert(wish: promisedWish, forUser: friend)
+                    self.coreDataClient.saveContext()
+                    self.sendNotification(withType: .GiftUnpromised, toUser: friend, args: promisedWish.title)
                     handler(syncError: nil, saveError: nil)
                 }
             }
@@ -230,6 +235,9 @@ class DataSyncService {
                     handler(syncError: nil, saveError: error)
                 } else {
                     self.coreDataClient.upsert(wish: grantedWish, forUser: user)
+                    self.coreDataClient.saveContext()
+                    self.sendNotification(withType: .GiftReceived, toUser: (grantedWish.promisedBy! as User), args: user.name,
+                    wish.title)
                     handler(syncError: nil, saveError: nil)
                 }
             })
@@ -275,8 +283,8 @@ class DataSyncService {
     }
     
     // MARK: notification functions
-    func sendNotification(withType type: NotificationType, toUser user: User) {
-        firebaseClient.sendNotification(withType: type, toUser: user)
+    func sendNotification(withType type: NotificationType, toUser to: User, args: CVarArgType...) {
+        firebaseClient.sendNotification(type.notification(args), toUser: to)
     }
     
     func fetchNotifications(handler: (notifications: [Notification], syncError: DataSyncError?) -> Void) {
@@ -298,6 +306,7 @@ class DataSyncService {
      func notifyUser(notification: Notification) {
         // create a corresponding local notification
         let uiNotification = UILocalNotification()
+        uiNotification.alertTitle = notification.title
         uiNotification.alertBody = notification.message
         uiNotification.alertAction = "open"
         uiNotification.fireDate =  NSDate()
