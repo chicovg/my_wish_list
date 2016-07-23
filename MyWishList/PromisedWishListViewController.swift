@@ -39,11 +39,6 @@ class PromisedWishListViewController: MyWishListParentViewController {
         fetch()
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-
 }
 
 extension PromisedWishListViewController : NSFetchedResultsControllerDelegate {
@@ -139,7 +134,16 @@ extension PromisedWishListViewController : UITableViewDataSource, UITableViewDel
         let unpromiseAction = UITableViewRowAction(style: UITableViewRowActionStyle.Default, title: "Unpromise" ) { (action, indexPath) in
             self.displayConfirmDialogue("Unpromise?", message: "Are you sure that you no longer want to grant your friend's wish?", confirmLabel: "Yes", denyLabel: "Cancel" ) { (action) in
                 self.syncService.unpromise(wish: wishEntity.wishValue, forFriend: wishEntity.user.userValue) { (syncError, saveError) in
-                    self.fetch()
+                    if let _ = syncError where syncError == .NoNetworkConnection {
+                        self.displayNoNetworkConnectionAlert()
+                    } else if let _ = syncError where syncError == .UserNotLoggedIn {
+                        self.returnToLoginView(shouldLogout: false, showLoggedOutAlert: true)
+                    } else if let err = saveError {
+                        print("unpromise failed \(err)")
+                        self.displayErrorAlert("There was an problem unpromising the wish!", actionHandler: { (action) in }, presentHandler: {})
+                    } else {
+                        self.fetch()
+                    }
                 }
             }
         }

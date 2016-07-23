@@ -57,7 +57,9 @@ class EditWishViewController: MyWishListParentViewController {
             
             let wish = Wish(fromPrevious: wishToEdit, withUpdates: (title: title, link: link, detail: detail))
             syncService.save(wish: wish, handler: { (syncError, saveError) -> Void in
-                if let _ = syncError where syncError == .UserNotLoggedIn {
+                if let _ = syncError where syncError == .NoNetworkConnection {
+                    self.displayNoNetworkConnectionAlert()
+                } else if let _ = syncError where syncError == .UserNotLoggedIn {
                     self.returnToLoginView(shouldLogout: false, showLoggedOutAlert: true)
                 } else if let err = saveError {
                     print("error saving wish: \(err)")

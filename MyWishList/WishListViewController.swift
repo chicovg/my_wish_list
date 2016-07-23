@@ -161,7 +161,9 @@ extension WishListViewController : UITableViewDataSource, UITableViewDelegate {
         let wish = wishAtIndexPath(indexPath)
         let deleteWishAction = UITableViewRowAction(style: UITableViewRowActionStyle.Destructive, title: "Delete" ) { (action, indexPath) in
             self.syncService.deleteWish(wish, handler: { (syncError, deleteError) in
-                if let _ = syncError where syncError == .UserNotLoggedIn {
+                if let _ = syncError where syncError == .NoNetworkConnection {
+                    self.displayNoNetworkConnectionAlert()
+                } else if let _ = syncError where syncError == .UserNotLoggedIn {
                     self.returnToLoginView(shouldLogout: false, showLoggedOutAlert: true)
                 } else if let err = deleteError {
                     print("delete failed \(err)")
@@ -171,7 +173,9 @@ extension WishListViewController : UITableViewDataSource, UITableViewDelegate {
         }
         let markGrantedAction = UITableViewRowAction(style: UITableViewRowActionStyle.Normal, title: "Mark Granted" ) { (action, indexPath) in
             self.syncService.granted(wish: wish, handler: { (syncError, saveError) in
-                if let _ = syncError where syncError == .UserNotLoggedIn {
+                if let _ = syncError where syncError == .NoNetworkConnection {
+                    self.displayNoNetworkConnectionAlert()
+                } else if let _ = syncError where syncError == .UserNotLoggedIn {
                     self.returnToLoginView(shouldLogout: false, showLoggedOutAlert: true)
                 } else if let err = saveError {
                     print("save failed \(err)")

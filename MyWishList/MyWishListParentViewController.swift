@@ -35,6 +35,10 @@ class MyWishListParentViewController: UIViewController {
         })
     }
     
+    func displayNoNetworkConnectionAlert() {
+        displayErrorAlert("Unable to connect to the internet. Check your network settings.", actionHandler: { (action) in }) {}
+    }
+    
     func displayErrorAlert(message: String, actionHandler: ((UIAlertAction) -> Void), presentHandler: (() -> Void)) {
         let alert = UIAlertController(title: "Error", message: message, preferredStyle: UIAlertControllerStyle.Alert)
         alert.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.Default, handler: actionHandler))

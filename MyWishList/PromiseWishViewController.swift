@@ -30,7 +30,9 @@ class PromiseWishViewController: ViewWishViewController {
     @IBAction func grantWish(sender: UIBarButtonItem) {
         self.displayConfirmDialogue("Grant Wish?", message: "Do you want to grant this wish for your friend?", confirmLabel: "Yes", denyLabel: "Not now" ) { (alert) in
             self.syncService.promise(wish: self.wish, forFriend: self.friend) { (syncError, saveError) in
-                if let _ = syncError where syncError == .UserNotLoggedIn {
+                if let _ = syncError where syncError == .NoNetworkConnection {
+                    self.displayNoNetworkConnectionAlert()
+                } else if let _ = syncError where syncError == .UserNotLoggedIn {
                     self.returnToLoginView(shouldLogout: false, showLoggedOutAlert: true)
                 } else if let err = saveError {
                     self.displayErrorAlert("There was an issue updating your friend's wish list", actionHandler: { (action) in }, presentHandler: {})

@@ -14,6 +14,7 @@ import FBSDKCoreKit
 enum DataSyncError: ErrorType {
     case UserNotLoggedIn
     case UserLoginFailed
+    case NoNetworkConnection
 }
 
 class DataSyncService {
@@ -108,7 +109,9 @@ class DataSyncService {
     }
     
     /** Listen for updates to wish data in firebase */
-    func listenForUpdates(user: User) {        
+    func listenForUpdates(user: User) {
+        firebaseClient.observeConnectionStatus()
+        
         firebaseClient.queryWishes(forUser: user) { (wishes) in
             wishes.forEach({ (wish) in
                 self.coreDataClient.upsert(wish: wish, forUser: user)
@@ -149,11 +152,13 @@ class DataSyncService {
                 handler(wishes: wishes, syncError: nil)
             })
         } else {
-            handler(wishes: [], syncError: DataSyncError.UserNotLoggedIn)
+            handler(wishes: [], syncError: .UserNotLoggedIn)
         }
     }
     func deleteWish(wish: Wish, handler: (syncError: DataSyncError?, deleteError: NSError?) -> Void) {
-        if let _ = currentUser() {
+        if !firebaseClient.connected {
+            handler(syncError: .NoNetworkConnection, deleteError: nil)
+        } else if let _ = currentUser() {
             toggleNetworkIndicator()
 
             firebaseClient.deleteWish(wish: wish) { (deleteError) -> Void in
@@ -162,11 +167,13 @@ class DataSyncService {
                 handler(syncError: nil, deleteError: deleteError)
             }
         } else {
-            handler(syncError: DataSyncError.UserNotLoggedIn, deleteError: nil)
+            handler(syncError: .UserNotLoggedIn, deleteError: nil)
         }
     }
     func save(wish wish: Wish, handler: (syncError: DataSyncError?, saveError: NSError?) -> Void) {
-        if let user = currentUser() {
+        if !firebaseClient.connected {
+            handler(syncError: .NoNetworkConnection, saveError: nil)
+        } else if let user = currentUser() {
             toggleNetworkIndicator()
             
             firebaseClient.save(wish: wish, forUser: user) { (saveError, key) -> Void in
@@ -175,11 +182,13 @@ class DataSyncService {
                 handler(syncError: nil, saveError: saveError)
             }
         } else {
-            handler(syncError: DataSyncError.UserNotLoggedIn, saveError: nil)
+            handler(syncError: .UserNotLoggedIn, saveError: nil)
         }
     }
     func promise(wish wish: Wish, forFriend friend: User, handler: (syncError: DataSyncError?, saveError: NSError?) -> Void) {
-        if let user = currentUser() {
+        if !firebaseClient.connected {
+            handler(syncError: .NoNetworkConnection, saveError: nil)
+        } else if let user = currentUser() {
             let promisedWish = Wish(fromPrevious: wish, withUpdates:
                 [Wish.Keys.status : Wish.Status.Promised,
                     Wish.Keys.promisedOn : NSDate(),
@@ -197,11 +206,13 @@ class DataSyncService {
                 }
             }
         } else {
-            handler(syncError: DataSyncError.UserNotLoggedIn, saveError: nil)
+            handler(syncError: .UserNotLoggedIn, saveError: nil)
         }
     }
     func unpromise(wish wish: Wish, forFriend friend: User, handler: (syncError: DataSyncError?, saveError: NSError?) -> Void) {
-        if let _ = currentUser() {
+        if !firebaseClient.connected {
+            handler(syncError: .NoNetworkConnection, saveError: nil)
+        } else if let _ = currentUser() {
             let promisedWish = Wish(fromPrevious: wish, withUpdates:
                 [Wish.Keys.status : Wish.Status.Wished,
                     Wish.Keys.promisedBy : nil,
@@ -220,11 +231,13 @@ class DataSyncService {
                 }
             }
         } else {
-            handler(syncError: DataSyncError.UserNotLoggedIn, saveError: nil)
+            handler(syncError: .UserNotLoggedIn, saveError: nil)
         }
     }
     func granted(wish wish: Wish, handler: (syncError: DataSyncError?, saveError: NSError?) -> Void) {
-        if let user = currentUser() {
+        if !firebaseClient.connected {
+            handler(syncError: .NoNetworkConnection, saveError: nil)
+        } else if let user = currentUser() {
             let grantedWish = Wish(fromPrevious: wish, withUpdates:
                 [Wish.Keys.status : Wish.Status.Granted,
                     Wish.Keys.grantedOn : NSDate()
@@ -242,16 +255,21 @@ class DataSyncService {
                 }
             })
         } else {
-            handler(syncError: DataSyncError.UserNotLoggedIn, saveError: nil)
+            handler(syncError: .UserNotLoggedIn, saveError: nil)
         }
     }
     
     // MARK: Friend functions
-    func fetchFriends(user: User) {
+    func fetchFriends(user: User, completionHandler:(NSError?) -> Void) {
         toggleNetworkIndicator()
         
-        facebookClient.getFriends({ (friends) -> Void in
+        facebookClient.getFriends({ (friends, error) -> Void in
             self.toggleNetworkIndicator()
+            
+            if let error = error {
+                completionHandler(error)
+                return
+            }
             
             friends.map({ (friend) in
                 return User(id: "\(FACEBOOK_AUTH_PREFIX):\(friend.id)", name: friend.name, pictureUrl: friend.pictureUrl)
@@ -273,17 +291,12 @@ class DataSyncService {
                 handler(friends: friends, syncError: nil)
             })
         } else {
-            handler(friends: [], syncError: DataSyncError.UserNotLoggedIn)
+            handler(friends: [], syncError: .UserNotLoggedIn)
         }
     }
     
-    private func toggleNetworkIndicator() {
-        UIApplication.sharedApplication().networkActivityIndicatorVisible
-            = !UIApplication.sharedApplication().networkActivityIndicatorVisible
-    }
-    
     // MARK: notification functions
-    func sendNotification(withType type: NotificationType, toUser to: User, args: CVarArgType...) {
+    private func sendNotification(withType type: NotificationType, toUser to: User, args: CVarArgType...) {
         firebaseClient.sendNotification(type.notification(args), toUser: to)
     }
     
@@ -293,7 +306,7 @@ class DataSyncService {
                 handler(notifications: notifications, syncError: nil)
             }
         } else {
-            handler(notifications: [], syncError: DataSyncError.UserNotLoggedIn)
+            handler(notifications: [], syncError: .UserNotLoggedIn)
         }
     }
     
@@ -313,6 +326,12 @@ class DataSyncService {
         uiNotification.soundName = UILocalNotificationDefaultSoundName
         
         UIApplication.sharedApplication().scheduleLocalNotification(uiNotification)
+    }
+    
+    // MARK: misc functions
+    private func toggleNetworkIndicator() {
+        UIApplication.sharedApplication().networkActivityIndicatorVisible
+            = !UIApplication.sharedApplication().networkActivityIndicatorVisible
     }
     
 }

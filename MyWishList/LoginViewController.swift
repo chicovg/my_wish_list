@@ -10,15 +10,11 @@ import UIKit
 import FBSDKCoreKit
 import FBSDKLoginKit
 
-class LoginViewController: UIViewController {
+class LoginViewController: MyWishListParentViewController {
     
     let kSegueToMainView = "segueToMainView"
     
     @IBOutlet weak var loginWithFacebookButton: UIButton!
-    
-    var syncService: DataSyncService {
-        return DataSyncService.sharedInstance
-    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -67,6 +63,6 @@ class LoginViewController: UIViewController {
     }
     
     func showLoggedOutAlert() {
-        
+        displayErrorAlert("Your session has expired, please log in again.", actionHandler: { (action) in}) { }
     }
 }

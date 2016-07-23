@@ -25,6 +25,8 @@ class FirebaseClient {
     let FRIENDS_PATH = "friends"
     let WISHES_PATH = "wishes"
     let NOTIFICATIONS_PATH = "notifications"
+    
+    var connected: Bool = false
             
     lazy var rootRef: Firebase = {
         Firebase.defaultConfig().persistenceEnabled = true
@@ -69,8 +71,21 @@ class FirebaseClient {
         return rootRef.childByAppendingPath(NOTIFICATIONS_PATH).childByAppendingPath(userId)
     }
     
+    private func connectedRef() -> Firebase {
+        return rootRef.childByAppendingPath(".info").childByAppendingPath("connected")
+    }
+    
+    // MARK: misc functions
     func removeAllObservers() {
         rootRef.removeAllObservers()
+    }
+
+    func observeConnectionStatus() -> Bool {
+        connectedRef().queryOrderedByKey().observeEventType(.Value) { (snapshot: FDataSnapshot!) in
+            self.connected = snapshot.value as! Bool
+            print("\(self.connected ? "Connected to" : "Disconnected from") Firebase")
+        }
+        return true
     }
     
     // MARK: user functions

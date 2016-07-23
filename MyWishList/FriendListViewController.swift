@@ -59,6 +59,9 @@ class FriendListViewController: MyWishListParentViewController {
         returnToLoginView(shouldLogout: true, showLoggedOutAlert: false)
     }
 
+    @IBAction func refreshFriendsList(sender: UIBarButtonItem) {
+        fetchFriends()
+    }
 }
 
 extension FriendListViewController : NSFetchedResultsControllerDelegate {
@@ -82,7 +85,13 @@ extension FriendListViewController : NSFetchedResultsControllerDelegate {
             return
         }
         
-        syncService.fetchFriends(user)
+        syncService.fetchFriends(user) { (error) in
+            if let err = error {
+                self.displayErrorAlert("Unable to get friends list from Facebook.  Please check your network connection.", actionHandler: { (action) in
+                    }, presentHandler: {})
+                print("fetch friends failed \(err)")
+            }
+        }
     }
     
     private func fetch() {
