@@ -4,11 +4,11 @@ An iOS app that allows users to create and share wish lists with their friends.
 
 ### How to use the app
 
-####Log in with Facebook:
+#### Log in with Facebook:
 
 ​	Users can use their existing Facebook account to log into the app.  The user must give the app permissions to view their profile and friends list.
 
-####Add wishes to wish list:
+#### Add wishes to wish list:
 
 1. **From the app:** On the 'Wishlist' tab, press the '+' button and fill in the desired fields in the 'Add To Wish List!' dialog. (Only 'title' is required). 
 
@@ -20,7 +20,7 @@ An iOS app that allows users to create and share wish lists with their friends.
 
 4. The user can edit any wishes by selecting a wish and modifying any of the fields on the edit wish screen.
 
-####Grant friends' wishes:
+#### Grant friends' wishes:
 
 1. On the 'Friends' tab, the user can select any user to see a list of their un-granted wishes.
 2. Selecting a wish triggers opens a read-only view of that wish.  The user can hit the 'Grant Wish' button at the top right of the navigation bar to promise the wish to the friend.
